@@ -11,6 +11,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   exports: [
@@ -26,6 +27,7 @@ import { MatMenuModule } from '@angular/material/menu';
     MatTableModule,
     MatSortModule,
     MatMenuModule,
+    MatPaginatorModule,
   ],
 })
 export class DashBoardMaterials {}

@@ -5,9 +5,10 @@ import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashBoardMaterials } from './material/material.module';
 import { FormsComponent } from './forms/forms.component';
 import { TablesComponent } from './tables/tables.component';
+import { EventsLogComponent } from './events-log/events-log.component';
 
 @NgModule({
-  declarations: [DashboardComponent, FormsComponent, TablesComponent],
+  declarations: [DashboardComponent, FormsComponent, TablesComponent, EventsLogComponent],
   imports: [CommonModule, DashboardRoutingModule, DashBoardMaterials],
 })
 export class DashboardModule {}

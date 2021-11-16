@@ -1,7 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { MediaMatcher } from '@angular/cdk/layout';
 import routes from './routes';
-import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -10,7 +9,6 @@ import { environment } from 'src/environments/environment';
 export class DashboardComponent implements OnInit {
   mobileQuery: MediaQueryList;
   routesList = routes;
-  title = environment.title;
 
   private _mobileQueryListener: () => void;
 

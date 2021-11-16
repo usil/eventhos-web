@@ -10,9 +10,7 @@ fetch('/settings.json')
     if (environment.production) {
       enableProdMode();
     }
-
-    environment.title = config.title;
-
+    environment.api = config.api;
     platformBrowserDynamic()
       .bootstrapModule(AppModule)
       .catch((err) => console.error(err));
