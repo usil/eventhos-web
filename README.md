@@ -1,6 +1,6 @@
-# Template angular 1.0.0
+# Eventhos Web Platform v1.0.0
 
-This is a simple template to use angular with material
+This the web platform to use eventhos.
 
 ## Technologies Used
 
