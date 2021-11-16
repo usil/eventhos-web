@@ -31,15 +31,16 @@ export class EventsLogsService {
 
 export interface ReceivedEvent {
   id: number;
-  producerId: number;
-  producerEventId: number;
-  producerName: string;
-  producerIdentifier: string;
-  producerEventName: string;
-  producerEventIdentifier: string;
+  systemId: number;
+  eventId: number;
+  systemName: string;
+  systemIdentifier: string;
+  eventName: string;
+  eventIdentifier: string;
+  eventDescription: string;
   header: Record<any, any>;
   body?: Record<any, any>;
-  recivedAt: string;
+  recivedAt: Date;
 }
 
 interface ProducerEvent {

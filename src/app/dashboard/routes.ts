@@ -16,14 +16,8 @@ const routes = [
   },
   {
     icon: 'table_chart',
-    path: 'producer-events',
-    name: 'Producer Events',
-    component: TablesComponent,
-  },
-  {
-    icon: 'table_chart',
-    path: 'subscribers',
-    name: 'subscribers',
+    path: 'systems',
+    name: 'Systems',
     component: TablesComponent,
   },
   {

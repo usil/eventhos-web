@@ -22,8 +22,8 @@ import {
 export class EventsLogComponent implements OnInit, OnDestroy, AfterViewInit {
   displayedColumns: string[] = [
     'id',
-    'producerName',
-    'producerEventName',
+    'systemName',
+    'eventName',
     'recivedAt',
     'state',
   ];

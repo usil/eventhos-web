@@ -21,7 +21,7 @@
     </ng-container>
 
     <!-- producerName Column -->
-    <ng-container matColumnDef="producerName">
+    <ng-container matColumnDef="systemName">
       <th
         class="producer-column"
         mat-header-cell
@@ -31,14 +31,14 @@
         Produced At
       </th>
       <td class="producer-column" mat-cell *matCellDef="let row">
-        {{ row.producerName }}
+        {{ row.systemName }}
       </td>
     </ng-container>
 
     <!-- producerEventName Column -->
-    <ng-container matColumnDef="producerEventName">
+    <ng-container matColumnDef="eventName">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Event</th>
-      <td mat-cell *matCellDef="let row">{{ row.producerEventName }}</td>
+      <td mat-cell *matCellDef="let row">{{ row.eventName }}</td>
     </ng-container>
 
     <!-- recivedAt Column -->
