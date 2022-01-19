@@ -12,6 +12,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   exports: [
@@ -28,6 +29,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatSortModule,
     MatMenuModule,
     MatPaginatorModule,
+    MatProgressSpinnerModule,
   ],
 })
 export class DashBoardMaterials {}

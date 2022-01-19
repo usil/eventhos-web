@@ -4,11 +4,17 @@
 }
 .presentation {
   background-color: #252e61;
+  background: url("/assets/login-bg.jpg");
+  background-size: cover;
   width: 100%;
   height: 100%;
 }
 
 .login {
+  h1 {
+    color: #008000;
+    margin: 0;
+  }
   h2 {
     color: #121f6c;
   }
@@ -18,6 +24,16 @@
   .login-btn {
     width: 100%;
     margin-top: 1rem;
+  }
+  .error-display {
+    margin: 1rem 0;
+    background-color: rgba(255, 171, 16, 0.596);
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    h5 {
+      margin: 0;
+      font-size: 16px;
+    }
   }
 }
 

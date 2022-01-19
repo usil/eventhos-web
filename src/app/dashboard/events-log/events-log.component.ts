@@ -8,7 +8,15 @@ import {
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Subscription } from 'rxjs';
+import {
+  catchError,
+  map,
+  merge,
+  of,
+  startWith,
+  Subscription,
+  switchMap,
+} from 'rxjs';
 import {
   EventsLogsService,
   ReceivedEvent,
@@ -27,37 +35,63 @@ export class EventsLogComponent implements OnInit, OnDestroy, AfterViewInit {
     'recivedAt',
     'state',
   ];
-  dataSource!: MatTableDataSource<ReceivedEvent>;
+
+  errorMessage!: string;
+
+  receivedEvents: ReceivedEvent[] = [];
+  resultsLength = 0;
 
   eventsLogSubscription!: Subscription;
+
+  isLoadingResults = true;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(private eventsLogsService: EventsLogsService) {}
   ngOnInit(): void {}
+
   ngAfterViewInit(): void {
-    this.eventsLogSubscription = this.eventsLogsService
-      .getRecivedEvents()
-      .subscribe({
-        next: (res) => {
-          this.dataSource = new MatTableDataSource(res.content);
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
-        },
+    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
+    this.eventsLogSubscription = merge(
+      this.sort.sortChange,
+      this.paginator.page
+    )
+      .pipe(
+        startWith({}),
+        switchMap(() => {
+          this.isLoadingResults = true;
+          return this.eventsLogsService!.getReceivedEvents(
+            this.paginator.pageIndex,
+            this.sort.direction
+          ).pipe(
+            catchError((err) => {
+              if (err.error) {
+                this.errorMessage = err.error.message;
+              } else {
+                this.errorMessage = 'Unknown Error';
+              }
+              return of(null);
+            })
+          );
+        }),
+        map((data) => {
+          this.isLoadingResults = false;
+          if (data === null) {
+            return [];
+          }
+          this.resultsLength = data.content?.totalItems || 0;
+          return data.content?.items || [];
+        })
+      )
+      .subscribe((data) => {
+        console.log(data);
+        this.receivedEvents = data;
       });
   }
 
   ngOnDestroy(): void {
+    this.sort.sortChange.complete();
     this.eventsLogSubscription?.unsubscribe();
-  }
-
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
   }
 }

@@ -16,10 +16,13 @@ export class EventsLogsService {
   httpRoute = environment.api + '/event';
   constructor(private http: HttpClient) {}
 
-  getRecivedEvents(): Observable<RecivedEventFullResponse> {
+  getReceivedEvents(
+    pageIndex: number,
+    order: string
+  ): Observable<ReceivedEventFullResponse> {
     return this.http
-      .get<RecivedEventFullResponse>(this.httpRoute, {
-        params: { 'page-size': 0 },
+      .get<ReceivedEventFullResponse>(this.httpRoute, {
+        params: { pageIndex, order, itemsPerPage: 20 },
       })
       .pipe(
         retryWhen((errors) =>
@@ -79,9 +82,16 @@ interface BaseSuccess {
   message: string;
 }
 
-export interface RecivedEventFullResponse extends BaseSuccess {
-  pagination: Pagination;
-  content: ReceivedEvent[];
+export interface ReceivedEventFullResponse extends BaseSuccess {
+  content: PaginatedEvent;
+}
+
+interface PaginatedEvent {
+  items: ReceivedEvent[];
+  pageIndex: number;
+  itemsPerPage: number;
+  totalItems: number;
+  totalPages: number;
 }
 
 enum Operations {
