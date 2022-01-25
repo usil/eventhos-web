@@ -1,10 +1,11 @@
 {
-  "name": "template-dashboard",
+  "name": "eventhos-ui",
   "version": "1.0.0",
   "scripts": {
     "ng": "ng",
     "dev": "ng serve",
     "start": "nodeboot-spa-server dist/template-dashboard -s settings.json -p 2000 --allow-routes",
+    "install:library": "npm install node_modules/oauth2/dist/nodeboot-oauth2-starter/nodeboot-oauth2-starter-1.0.7.tgz",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
@@ -22,7 +23,7 @@
     "@angular/platform-browser-dynamic": "~13.0.0",
     "@angular/router": "~13.0.0",
     "ngx-clipboard": "^15.0.1",
-    "nodeboot-oauth2-starter": "file:nodeboot-oauth2-starter-1.0.6.tgz",
+    "nodeboot-oauth2-starter-ui": "git+https://github.com/usil/nodeboot-oauth2-ui-starter-dist.git#sprint1-snapshot",
     "rxjs": "~7.4.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"

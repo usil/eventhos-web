@@ -11,8 +11,7 @@ import { ClientComponent } from './access/client/client.component';
 import { RoleComponent } from './access/role/role.component';
 import { ApplicationPartComponent } from './access/application-part/application-part.component';
 import { UserProfileComponent } from './access/user-profile/user-profile.component';
-import { NodebootOauth2StarterModule } from 'nodeboot-oauth2-starter';
-
+import { NodebootOauth2StarterModule } from 'nodeboot-oauth2-starter-ui';
 @NgModule({
   declarations: [
     DashboardComponent,

@@ -21,7 +21,7 @@ export class MainInterceptor implements HttpInterceptor {
     if (this.loginService.loggedIn()) {
       const secureRequest = request.clone({
         setHeaders: {
-          Authorization: `AK ${this.loginService.getJwtToken()}`,
+          Authorization: `BEARER ${this.loginService.getJwtToken()}`,
         },
         // withCredentials: true,
       });
