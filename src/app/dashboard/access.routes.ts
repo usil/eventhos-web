@@ -16,8 +16,8 @@ const routes = [
   },
   {
     icon: 'description',
-    path: 'auth/part',
-    name: 'Application Part',
+    path: 'auth/resource',
+    name: 'Application Resource',
   },
 ];
 

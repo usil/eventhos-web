@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AdminGuard } from '../guards/admin.guard';
-import { ApplicationPartComponent } from './access/application-part/application-part.component';
+import { ApplicationResourceComponent } from './access/application-resource/application-resource.component';
 import { ClientComponent } from './access/client/client.component';
 import { RoleComponent } from './access/role/role.component';
 import { UserProfileComponent } from './access/user-profile/user-profile.component';
@@ -35,8 +35,8 @@ const routes: Routes = [
         canLoad: [AdminGuard],
       },
       {
-        path: 'auth/part',
-        component: ApplicationPartComponent,
+        path: 'auth/resource',
+        component: ApplicationResourceComponent,
         canActivate: [AdminGuard],
         canLoad: [AdminGuard],
       },

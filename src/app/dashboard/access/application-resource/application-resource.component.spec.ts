@@ -1,20 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ApplicationPartComponent } from './application-part.component';
+import { ApplicationResourceComponent } from './application-resource.component';
 
 describe('ApplicationPartComponent', () => {
-  let component: ApplicationPartComponent;
-  let fixture: ComponentFixture<ApplicationPartComponent>;
+  let component: ApplicationResourceComponent;
+  let fixture: ComponentFixture<ApplicationResourceComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ApplicationPartComponent ]
-    })
-    .compileComponents();
+      declarations: [ApplicationResourceComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ApplicationPartComponent);
+    fixture = TestBed.createComponent(ApplicationResourceComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
