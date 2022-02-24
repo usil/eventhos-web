@@ -45,6 +45,8 @@ export class EventsLogComponent implements OnInit, OnDestroy, AfterViewInit {
 
   isLoadingResults = true;
 
+  pageSize = 10;
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 

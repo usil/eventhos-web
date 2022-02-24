@@ -4,6 +4,7 @@ import { environment } from 'src/environments/environment';
 import {
   concatMap,
   delay,
+  first,
   Observable,
   retryWhen,
   take,
@@ -13,7 +14,7 @@ import {
   providedIn: 'root',
 })
 export class EventsLogsService {
-  httpRoute = environment.api + '/event';
+  httpRoute = environment.api + '/event/received';
   constructor(private http: HttpClient) {}
 
   getReceivedEvents(
@@ -22,13 +23,9 @@ export class EventsLogsService {
   ): Observable<ReceivedEventFullResponse> {
     return this.http
       .get<ReceivedEventFullResponse>(this.httpRoute, {
-        params: { pageIndex, order, itemsPerPage: 20 },
+        params: { pageIndex, order, itemsPerPage: 10 },
       })
-      .pipe(
-        retryWhen((errors) =>
-          errors.pipe(delay(500), take(5), concatMap(throwError))
-        )
-      );
+      .pipe(first());
   }
 }
 

@@ -5,8 +5,10 @@
     </button>
     <h1 class="app-name">Eventhos</h1>
     <span class="spacer"></span>
-    <button mat-button [matMenuTriggerFor]="menu">user name</button>
-    <mat-menu #menu="matMenu">
+    <button color="accent" mat-button [matMenuTriggerFor]="menu">
+      {{ username }}
+    </button>
+    <mat-menu color="primary" #menu="matMenu">
       <button (click)="navigateTo('/dashboard/profile')" mat-menu-item>
         <mat-icon>account_circle</mat-icon>
         <span>Profile</span>
@@ -33,7 +35,7 @@
           class="expansion-element"
         >
           <mat-icon class="icon-expansion">table_chart</mat-icon>
-          <span>Eventhos</span>
+          <span class="main-nav-title">Eventhos</span>
           <span class="exp-spacer"></span>
           <div class="arrow">
             <mat-icon>keyboard_arrow_down</mat-icon>
@@ -47,8 +49,8 @@
               routerLinkActive="mat-list-single-selected-option"
             >
               <a mat-list-item [routerLink]="eRoute.path"
-                ><mat-icon class="expansion-icon">table_chart</mat-icon
-                ><span>{{ eRoute.name }}</span></a
+                ><mat-icon class="expansion-icon">{{ eRoute.icon }}</mat-icon
+                ><span class="main-nav-title">{{ eRoute.name }}</span></a
               >
             </mat-list-option>
           </mat-selection-list>
@@ -57,7 +59,7 @@
       <div *ngIf="isAdminUser" class="list-container">
         <div (click)="authPanelOpen = !authPanelOpen" class="expansion-element">
           <mat-icon class="icon-expansion">lock</mat-icon>
-          <span>Auth</span>
+          <span class="main-nav-title">Auth</span>
           <span class="exp-spacer"></span>
           <div class="arrow">
             <mat-icon>keyboard_arrow_down</mat-icon>
@@ -72,7 +74,7 @@
             >
               <a mat-list-item [routerLink]="route.path"
                 ><mat-icon class="expansion-icon">{{ route.icon }}</mat-icon
-                ><span>{{ route.name }}</span></a
+                ><span class="main-nav-title">{{ route.name }}</span></a
               >
             </mat-list-option>
           </mat-selection-list>

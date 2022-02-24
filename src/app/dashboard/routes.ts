@@ -1,5 +1,9 @@
+import { ContractComponent } from './contract/contract.component';
+import { ActionComponent } from './action/action.component';
+import { EventComponent } from './event/event.component';
 import { TablesComponent } from './tables/tables.component';
 import { EventsLogComponent } from './events-log/events-log.component';
+import { SystemComponent } from './system/system.component';
 
 const routes = [
   // {
@@ -33,7 +37,31 @@ const routes = [
   //   component: TablesComponent,
   // },
   {
+    icon: 'dns',
+    path: 'system',
+    name: 'Systems',
+    component: SystemComponent,
+  },
+  {
+    icon: 'event',
+    path: 'event',
+    name: 'Events',
+    component: EventComponent,
+  },
+  {
+    icon: 'link',
+    path: 'action',
+    name: 'Actions',
+    component: ActionComponent,
+  },
+  {
     icon: 'assignment',
+    path: 'contract',
+    name: 'Contracts',
+    component: ContractComponent,
+  },
+  {
+    icon: 'list_alt',
     path: 'events-logs',
     name: 'Events Log',
     component: EventsLogComponent,

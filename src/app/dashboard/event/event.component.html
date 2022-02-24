@@ -1,0 +1,142 @@
+<h3>Create Event</h3>
+<div class="error-display" *ngIf="errorMessage">
+  <h5>{{ errorMessage }}</h5>
+</div>
+<section>
+  <form
+    (ngSubmit)="createEvent(createEventForm.getRawValue())"
+    [formGroup]="createEventForm"
+    class="creation-forms"
+  >
+    <mat-form-field appearance="fill">
+      <mat-label>Identifier</mat-label>
+      <input formControlName="identifier" matInput />
+      <mat-hint>Auto generated event identifier</mat-hint>
+      <mat-error *ngIf="createEventForm.get('identifier')?.invalid">{{
+        getErrorMessage("identifier")
+      }}</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Name</mat-label>
+      <input formControlName="name" matInput placeholder="New System" />
+      <mat-hint>System name</mat-hint>
+      <mat-error *ngIf="createEventForm.get('name')?.invalid">{{
+        getErrorMessage("name")
+      }}</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>System</mat-label>
+      <mat-select formControlName="system_id">
+        <mat-option
+          *ngFor="let system of producerSystems"
+          [value]="system.id"
+          >{{ system.name }}</mat-option
+        >
+      </mat-select>
+      <mat-hint>Select the producer system</mat-hint>
+      <mat-error *ngIf="createEventForm.get('system_id')?.invalid">{{
+        getErrorMessage("system_id")
+      }}</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Operation</mat-label>
+      <mat-select formControlName="operation">
+        <mat-option *ngFor="let operation of operations" [value]="operation">{{
+          operation
+        }}</mat-option>
+      </mat-select>
+      <mat-hint>Select the event operation type</mat-hint>
+      <mat-error *ngIf="createEventForm.get('operation')?.invalid">{{
+        getErrorMessage("operation")
+      }}</mat-error>
+    </mat-form-field>
+    <mat-form-field class="span-4" appearance="fill">
+      <mat-label>Description</mat-label>
+      <textarea formControlName="description" matInput></textarea>
+      <mat-hint>Event Description</mat-hint>
+      <mat-error *ngIf="createEventForm.get('description')?.invalid">{{
+        getErrorMessage("description")
+      }}</mat-error>
+    </mat-form-field>
+    <button
+      [disabled]="createEventForm.invalid"
+      type="submit"
+      class="span-4"
+      color="accent"
+      mat-flat-button
+    >
+      Create Event
+    </button>
+  </form>
+</section>
+<section class="show-table">
+  <h3>Events List</h3>
+  <div class="container-table mat-elevation-z8">
+    <div class="loading-shade" *ngIf="isLoadingResults">
+      <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+    </div>
+    <div class="example-table-container">
+      <table
+        mat-table
+        [dataSource]="events"
+        class="user-table"
+        matSort
+        matSortActive="id"
+        matSortDisableClear
+        matSortDirection="asc"
+      >
+        <ng-container matColumnDef="id">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef>id</th>
+          <td mat-cell *matCellDef="let row">{{ row.id }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="identifier">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef>Identifier</th>
+          <td mat-cell *matCellDef="let row">{{ row.identifier }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef>Name</th>
+          <td mat-cell *matCellDef="let row">{{ row.name }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="operation">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef>Operation</th>
+          <td mat-cell *matCellDef="let row">{{ row.operation }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="description">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef>Description</th>
+          <td mat-cell *matCellDef="let row">{{ row.description }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="system_id">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef>System Id</th>
+          <td mat-cell *matCellDef="let row">{{ row.system_id }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td class="actions" mat-cell *matCellDef="let row">
+            <!-- <button color="primary" mat-stroked-button>Edit</button> -->
+            <button
+              (click)="openDeleteDialog(row)"
+              color="warn"
+              mat-stroked-button
+            >
+              Delete
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+
+    <mat-paginator
+      [length]="resultsLength"
+      [pageSize]="pageSize"
+    ></mat-paginator>
+  </div>
+</section>

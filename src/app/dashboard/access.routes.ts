@@ -1,21 +1,21 @@
 const routes = [
   {
-    icon: 'description',
+    icon: 'supervised_user_circle',
     path: 'auth/users',
     name: 'Users',
   },
   {
-    icon: 'description',
+    icon: 'public',
     path: 'auth/clients',
     name: 'Clients',
   },
   {
-    icon: 'description',
+    icon: 'accessibility',
     path: 'auth/roles',
     name: 'Roles',
   },
   {
-    icon: 'description',
+    icon: 'dashboard',
     path: 'auth/resource',
     name: 'Application Resource',
   },

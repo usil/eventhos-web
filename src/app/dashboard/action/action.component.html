@@ -1,0 +1,424 @@
+<h3>Create Action</h3>
+<div class="error-display" *ngIf="errorMessage">
+  <h5>{{ errorMessage }}</h5>
+</div>
+<section>
+  <form
+    (ngSubmit)="createAction(createActionForm.value)"
+    [formGroup]="createActionForm"
+    class="creation-forms"
+  >
+    <mat-form-field appearance="fill">
+      <mat-label>Identifier</mat-label>
+      <input formControlName="identifier" matInput />
+      <mat-hint>Auto generated action identifier</mat-hint>
+      <mat-error *ngIf="createActionForm.get('identifier')?.invalid">{{
+        getErrorMessage("identifier")
+      }}</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Name</mat-label>
+      <input formControlName="name" matInput placeholder="New System" />
+      <mat-hint>Action name</mat-hint>
+      <mat-error *ngIf="createActionForm.get('name')?.invalid">{{
+        getErrorMessage("name")
+      }}</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>System</mat-label>
+      <mat-select formControlName="system_id">
+        <mat-option
+          *ngFor="let system of producerSystems"
+          [value]="system.id"
+          >{{ system.name }}</mat-option
+        >
+      </mat-select>
+      <mat-hint>Select the consumer system</mat-hint>
+      <mat-error *ngIf="createActionForm.get('system_id')?.invalid">{{
+        getErrorMessage("system_id")
+      }}</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Operation</mat-label>
+      <mat-select formControlName="operation">
+        <mat-option *ngFor="let operation of operations" [value]="operation">{{
+          operation
+        }}</mat-option>
+      </mat-select>
+      <mat-hint>Select the action operation type</mat-hint>
+      <mat-error *ngIf="createActionForm.get('operation')?.invalid">{{
+        getErrorMessage("operation")
+      }}</mat-error>
+    </mat-form-field>
+    <mat-form-field class="span-4" appearance="fill">
+      <mat-label>Description</mat-label>
+      <textarea formControlName="description" matInput></textarea>
+      <mat-hint>Action Description</mat-hint>
+      <mat-error *ngIf="createActionForm.get('description')?.invalid">{{
+        getErrorMessage("description")
+      }}</mat-error>
+    </mat-form-field>
+    <h3 class="span-4">Http configuration</h3>
+    <mat-form-field class="span-2" appearance="fill">
+      <mat-label>Url</mat-label>
+      <input formControlName="url" matInput />
+      <mat-hint>The url to call to execute the action</mat-hint>
+      <mat-error *ngIf="createActionForm.get('url')?.invalid">{{
+        getErrorMessage("url")
+      }}</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Method</mat-label>
+      <mat-select formControlName="method">
+        <mat-option *ngFor="let method of methods" [value]="method">{{
+          method
+        }}</mat-option>
+      </mat-select>
+      <mat-hint>The http method</mat-hint>
+      <mat-error *ngIf="createActionForm.get('method')?.invalid">{{
+        getErrorMessage("method")
+      }}</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Security</mat-label>
+      <mat-select formControlName="securityType">
+        <mat-option
+          *ngFor="let securityType of securityTypes"
+          [value]="securityType.code"
+          >{{ securityType.name }}</mat-option
+        >
+      </mat-select>
+      <mat-hint>The type of security</mat-hint>
+      <mat-error *ngIf="createActionForm.get('securityType')?.invalid">{{
+        getErrorMessage("securityType")
+      }}</mat-error>
+    </mat-form-field>
+    <h4
+      *ngIf="createActionForm.get('securityType')?.value === 2"
+      class="span-4"
+    >
+      Oauth2 Client Security
+    </h4>
+    <mat-form-field
+      class="span-4"
+      *ngIf="createActionForm.get('securityType')?.value === 2"
+      appearance="fill"
+    >
+      <mat-label>Token generation url</mat-label>
+      <input formControlName="securityUrl" matInput />
+      <mat-hint>Endpoint to generate the access token</mat-hint>
+      <mat-error *ngIf="createActionForm.get('securityUrl')?.invalid">{{
+        getErrorMessage("securityUrl")
+      }}</mat-error>
+    </mat-form-field>
+    <mat-form-field
+      class="span-2"
+      *ngIf="createActionForm.get('securityType')?.value === 2"
+      appearance="fill"
+    >
+      <mat-label>Client ID</mat-label>
+      <input formControlName="clientId" matInput />
+      <mat-hint>The client id</mat-hint>
+      <mat-error *ngIf="createActionForm.get('clientId')?.invalid">{{
+        getErrorMessage("clientId")
+      }}</mat-error>
+    </mat-form-field>
+    <mat-form-field
+      *ngIf="createActionForm.get('securityType')?.value === 2"
+      class="span-2"
+      appearance="fill"
+    >
+      <mat-label>Client Secret</mat-label>
+      <input
+        formControlName="clientSecret"
+        name="password"
+        matInput
+        [type]="hide ? 'password' : 'text'"
+      />
+      <button
+        type="button"
+        mat-icon-button
+        matSuffix
+        (click)="hide = !hide"
+        [attr.aria-label]="'Hide Client Secret'"
+        [attr.aria-pressed]="hide"
+      >
+        <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+      </button>
+      <mat-hint>Put the client secret</mat-hint>
+      <mat-error *ngIf="createActionForm.get('clientSecret')?.invalid">{{
+        getErrorMessage("clientSecret")
+      }}</mat-error>
+    </mat-form-field>
+    <h4
+      *ngIf="createActionForm.get('securityType')?.value === 3"
+      class="span-4"
+    >
+      Oauth2 User Security
+    </h4>
+    <mat-form-field
+      class="span-2"
+      *ngIf="createActionForm.get('securityType')?.value === 3"
+      appearance="fill"
+    >
+      <mat-label>Token generation url</mat-label>
+      <input formControlName="securityUrl" matInput />
+      <mat-hint>Endpoint to generate the access token</mat-hint>
+      <mat-error *ngIf="createActionForm.get('securityUrl')?.invalid">{{
+        getErrorMessage("securityUrl")
+      }}</mat-error>
+    </mat-form-field>
+    <mat-form-field
+      class="span-2"
+      *ngIf="createActionForm.get('securityType')?.value === 3"
+      appearance="fill"
+    >
+      <mat-label>Json path</mat-label>
+      <input formControlName="jsonPath" matInput />
+      <mat-hint>Json path to get the access token</mat-hint>
+      <mat-error *ngIf="createActionForm.get('jsonPath')?.invalid">{{
+        getErrorMessage("jsonPath")
+      }}</mat-error>
+    </mat-form-field>
+    <mat-form-field
+      class="span-2"
+      *ngIf="createActionForm.get('securityType')?.value === 3"
+      appearance="fill"
+    >
+      <mat-label>Username</mat-label>
+      <input formControlName="username" matInput />
+      <mat-hint>Username to create token</mat-hint>
+      <mat-error *ngIf="createActionForm.get('username')?.invalid">{{
+        getErrorMessage("username")
+      }}</mat-error>
+    </mat-form-field>
+    <mat-form-field
+      *ngIf="createActionForm.get('securityType')?.value === 3"
+      class="span-2"
+      appearance="fill"
+    >
+      <mat-label>Password</mat-label>
+      <input
+        formControlName="password"
+        name="password"
+        matInput
+        [type]="hide ? 'password' : 'text'"
+      />
+      <button
+        type="button"
+        mat-icon-button
+        matSuffix
+        (click)="hide = !hide"
+        [attr.aria-label]="'Hide password'"
+        [attr.aria-pressed]="hide"
+      >
+        <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+      </button>
+      <mat-hint>Put the user password</mat-hint>
+      <mat-error *ngIf="createActionForm.get('password')?.invalid">{{
+        getErrorMessage("password")
+      }}</mat-error>
+    </mat-form-field>
+
+    <h4 class="span-4">Headers</h4>
+    <div formArrayName="headers" class="span-4">
+      <div
+        *ngFor="let sub of headersFormArray.controls; index as i"
+        textIndex="i"
+      >
+        <div class="key-value-form" [formGroupName]="i">
+          <mat-form-field appearance="fill">
+            <mat-label>Key</mat-label>
+            <input formControlName="key" matInput />
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Value</mat-label>
+            <input formControlName="value" matInput />
+          </mat-form-field>
+          <button
+            (click)="removeHeaderPair(i)"
+            class="remove-btn"
+            color="warn"
+            mat-flat-button
+            type="button"
+          >
+            Remove
+          </button>
+        </div>
+      </div>
+    </div>
+    <button
+      (click)="addHeaderPair()"
+      type="button"
+      color="primary"
+      mat-stroked-button
+      class="span-4"
+    >
+      Add header
+    </button>
+    <h4
+      *ngIf="
+        createActionForm.get('method')?.value === 'post' ||
+        createActionForm.get('method')?.value === 'put'
+      "
+      class="span-4"
+    >
+      Body
+    </h4>
+    <div
+      *ngIf="
+        createActionForm.get('method')?.value === 'post' ||
+        createActionForm.get('method')?.value === 'put'
+      "
+      formArrayName="body"
+      class="span-4"
+    >
+      <div *ngFor="let sub of bodyFormArray.controls; index as i" textIndex="i">
+        <div class="key-value-form" [formGroupName]="i">
+          <mat-form-field appearance="fill">
+            <mat-label>Key</mat-label>
+            <input formControlName="key" matInput />
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Value</mat-label>
+            <input formControlName="value" matInput />
+          </mat-form-field>
+          <button
+            (click)="removeBodyPair(i)"
+            class="remove-btn"
+            color="warn"
+            mat-flat-button
+            type="button"
+          >
+            Remove
+          </button>
+        </div>
+      </div>
+    </div>
+    <button
+      *ngIf="
+        createActionForm.get('method')?.value === 'post' ||
+        createActionForm.get('method')?.value === 'put'
+      "
+      (click)="addBodyPair()"
+      type="button"
+      color="primary"
+      mat-stroked-button
+      class="span-4"
+    >
+      Add body field
+    </button>
+    <h4 class="span-4">Query Url Params</h4>
+    <div formArrayName="queryUrlParams" class="span-4">
+      <div
+        *ngFor="let sub of queryFormArray.controls; index as i"
+        textIndex="i"
+      >
+        <div class="key-value-form" [formGroupName]="i">
+          <mat-form-field appearance="fill">
+            <mat-label>Key</mat-label>
+            <input formControlName="key" matInput />
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Value</mat-label>
+            <input formControlName="value" matInput />
+          </mat-form-field>
+          <button
+            (click)="removeUrlQueryParamPair(i)"
+            class="remove-btn"
+            color="warn"
+            mat-flat-button
+            type="button"
+          >
+            Remove
+          </button>
+        </div>
+      </div>
+    </div>
+    <button
+      (click)="addUrlQueryParamPair()"
+      type="button"
+      color="primary"
+      mat-stroked-button
+      class="span-4"
+    >
+      Add url query param
+    </button>
+    <button
+      [disabled]="createActionForm.invalid"
+      type="submit"
+      class="span-4"
+      color="accent"
+      mat-flat-button
+    >
+      Create Action
+    </button>
+  </form>
+</section>
+<section class="show-table">
+  <h3>Events List</h3>
+  <div class="container-table mat-elevation-z8">
+    <div class="loading-shade" *ngIf="isLoadingResults">
+      <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+    </div>
+    <div class="example-table-container">
+      <table
+        mat-table
+        [dataSource]="actions"
+        class="user-table"
+        matSort
+        matSortActive="id"
+        matSortDisableClear
+        matSortDirection="asc"
+      >
+        <ng-container matColumnDef="id">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef>id</th>
+          <td mat-cell *matCellDef="let row">{{ row.id }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef>Name</th>
+          <td mat-cell *matCellDef="let row">{{ row.name }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="operation">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef>Operation</th>
+          <td mat-cell *matCellDef="let row">{{ row.operation }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="description">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef>Description</th>
+          <td mat-cell *matCellDef="let row">{{ row.description }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="system_id">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef>System Id</th>
+          <td mat-cell *matCellDef="let row">{{ row.system_id }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td class="actions" mat-cell *matCellDef="let row">
+            <!-- <button color="primary" mat-stroked-button>Edit</button> -->
+            <button
+              (click)="openDeleteDialog(row)"
+              color="warn"
+              mat-stroked-button
+            >
+              Delete
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+
+    <mat-paginator
+      aria-label="Select page"
+      [length]="resultsLength"
+      [pageSize]="pageSize"
+    ></mat-paginator>
+  </div>
+</section>

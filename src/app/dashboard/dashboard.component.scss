@@ -1,3 +1,7 @@
+.main-nav-title {
+  font-weight: 400;
+}
+
 .dashboard-container {
   display: flex;
   flex-direction: column;
@@ -16,13 +20,18 @@
     }
   }
 
+  .mat-icon {
+    color: #ffd300;
+  }
+
   .toolbar {
+    background-color: #141492;
     & h1.app-name {
-      color: #00103e;
-      font-weight: 900;
+      color: #ffd300;
+      font-weight: 400;
     }
     .mat-icon {
-      color: #388e3c;
+      color: #ffd300;
     }
     .spacer {
       flex: 1 1 auto;
@@ -55,7 +64,7 @@
     margin: 0.25rem 0;
     border-radius: 0.25rem;
     .mat-list-item-content {
-      color: white;
+      color: #141492;
       padding: 0 !important;
     }
 
@@ -69,7 +78,7 @@
       padding: 0 !important;
     }
     &:hover {
-      background-color: rgba(233, 233, 233, 0.068);
+      background-color: rgba(58, 58, 58, 0.068);
     }
     &.mat-list-single-selected-option {
       background-color: rgba(233, 233, 233, 0.39);
@@ -81,8 +90,8 @@
 }
 
 .side-nav {
-  background-color: #00103e;
-  color: white;
+  // background-color: #141492;
+  color: #141492;
 }
 
 .forms-field {
@@ -121,7 +130,7 @@ input.input-right-align {
   .expansion-element {
     min-width: 240px;
     &:hover {
-      background-color: rgba(233, 233, 233, 0.068);
+      background-color: rgba(58, 58, 58, 0.068);
       cursor: pointer;
     }
     height: 48px;
