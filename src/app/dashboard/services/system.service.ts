@@ -47,9 +47,23 @@ export class SystemService {
       .pipe(first());
   }
 
+  editSystem(systemId: number, systemUpdateDto: SystemUpdateDto) {
+    return this.http
+      .put(this.httpRoute + `/${systemId}`, { ...systemUpdateDto })
+      .pipe(first());
+  }
+
   deleteSystem(systemId: number) {
     return this.http.delete(this.httpRoute + `/${systemId}`);
   }
+}
+
+export interface SystemUpdateDto {
+  name: string;
+  type: string;
+  description: string;
+  systemClass: string;
+  clientId?: number;
 }
 
 interface GetSystemEvents {

@@ -19,7 +19,7 @@
     <mat-form-field appearance="fill">
       <mat-label>Name</mat-label>
       <input formControlName="name" matInput placeholder="New System" />
-      <mat-hint>System name</mat-hint>
+      <mat-hint>Event name</mat-hint>
       <mat-error *ngIf="createEventForm.get('name')?.invalid">{{
         getErrorMessage("name")
       }}</mat-error>
@@ -118,7 +118,13 @@
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>Actions</th>
           <td class="actions" mat-cell *matCellDef="let row">
-            <!-- <button color="primary" mat-stroked-button>Edit</button> -->
+            <button
+              (click)="openEditDialog(row)"
+              color="primary"
+              mat-stroked-button
+            >
+              Edit
+            </button>
             <button
               (click)="openDeleteDialog(row)"
               color="warn"

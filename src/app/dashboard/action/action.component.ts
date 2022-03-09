@@ -1,3 +1,5 @@
+import { Router } from '@angular/router';
+import { EditActionComponent } from './edit-action/edit-action.component';
 import { DeleteActionComponent } from './delete-action/delete-action.component';
 import {
   Action,
@@ -17,6 +19,7 @@ import {
   Validators,
   FormArray,
   FormGroupDirective,
+  AbstractControl,
 } from '@angular/forms';
 import {
   Subscription,
@@ -29,12 +32,12 @@ import {
   switchMap,
   BehaviorSubject,
   first,
+  skip,
 } from 'rxjs';
 import { System, SystemService } from '../services/system.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
-
 @Component({
   selector: 'app-action',
   templateUrl: './action.component.html',
@@ -70,13 +73,12 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
   operations = ['select', 'new', 'update', 'delete'];
   methods = ['get', 'post', 'put', 'delete'];
   securityTypes = [
-    { name: 'public', code: 1 },
-    { name: 'oauth2 client', code: 2 },
-    { name: 'api key query', code: 4 },
-    { name: 'api key header', code: 5 },
+    { name: 'custom', code: 0 },
+    { name: 'oauth2 client', code: 1 },
   ];
   producerSystems: System[] = [];
   generateIdentifier$: Subscription;
+  bodyInputType$: Subscription;
   changeType$: Subscription;
   headersFormArray: FormArray;
   queryFormArray: FormArray;
@@ -89,6 +91,7 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
     private actionService: ActionService,
     private systemService: SystemService,
     private formBuilder: FormBuilder,
+    private router: Router,
     public dialog: MatDialog
   ) {
     this.createActionForm = this.formBuilder.group({
@@ -125,6 +128,11 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
         '',
         Validators.compose([Validators.required])
       ),
+      bodyInput: this.formBuilder.control('keyValue'),
+      rawBody: this.formBuilder.control(
+        { value: '{}', disabled: true },
+        Validators.compose([Validators.required, this.jsonParseValidator])
+      ),
       securityType: this.formBuilder.control(
         '',
         Validators.compose([Validators.required])
@@ -136,19 +144,6 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
       securityUrl: this.formBuilder.control(
         { value: '', disabled: true },
         Validators.compose([Validators.required, Validators.minLength(2)])
-      ),
-      username: this.formBuilder.control(
-        { value: '', disabled: true },
-        Validators.compose([
-          Validators.required,
-          Validators.pattern(/^[a-zA-Z0-9_\.\-]+$/),
-          Validators.minLength(1),
-          Validators.maxLength(45),
-        ])
-      ),
-      password: this.formBuilder.control(
-        { value: '', disabled: true },
-        Validators.compose([Validators.required])
       ),
       clientSecret: this.formBuilder.control(
         { value: '', disabled: true },
@@ -169,6 +164,18 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.headersFormArray = this.createActionForm.get('headers') as FormArray;
 
+    this.bodyInputType$ = this.createActionForm
+      .get('bodyInput')
+      ?.valueChanges.subscribe((value: 'raw' | 'keyValue') => {
+        if (value === 'keyValue') {
+          this.createActionForm.get('body')?.enable();
+          this.createActionForm.get('rawBody')?.disable();
+          return;
+        }
+        this.createActionForm.get('body')?.disable();
+        this.createActionForm.get('rawBody')?.enable();
+      }) as Subscription;
+
     this.queryFormArray = this.createActionForm.get(
       'queryUrlParams'
     ) as FormArray;
@@ -176,7 +183,6 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
     this.bodyFormArray = this.createActionForm.get('body') as FormArray;
 
     this.generateIdentifier$ = merge(
-      this.reload,
       this.createActionForm.get('name')?.valueChanges as Observable<any>,
       this.createActionForm.get('operation')?.valueChanges as Observable<any>
     ).subscribe({
@@ -204,13 +210,7 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
           this.createActionForm.get('clientSecret')?.disable();
           this.createActionForm.get('jsonPath')?.disable();
           this.createActionForm.get('securityUrl')?.disable();
-          if (code === 3) {
-            this.createActionForm.get('username')?.enable();
-            this.createActionForm.get('password')?.enable();
-            this.createActionForm.get('jsonPath')?.enable();
-            this.createActionForm.get('securityUrl')?.enable();
-          }
-          if (code === 2) {
+          if (code === 1) {
             this.createActionForm.get('clientId')?.enable();
             this.createActionForm.get('clientSecret')?.enable();
             this.createActionForm.get('jsonPath')?.enable();
@@ -218,6 +218,15 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
           }
         },
       }) as Subscription;
+  }
+
+  jsonParseValidator(control: AbstractControl) {
+    try {
+      JSON.parse(control.value);
+    } catch (error: any) {
+      return { jsonInvalid: error.message };
+    }
+    return null;
   }
 
   ngAfterViewInit(): void {
@@ -228,6 +237,7 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
       this.reload
     )
       .pipe(
+        skip(1),
         startWith({}),
         switchMap(() => {
           this.errorMessage = undefined;
@@ -251,7 +261,6 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
             );
         }),
         map((data) => {
-          console.log(data);
           this.isLoadingResults = false;
           if (data === null) {
             return [];
@@ -263,6 +272,27 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe((data) => {
         this.actions = data;
       });
+  }
+
+  tapKeyPressedInTextarea(
+    keyEvent: KeyboardEvent,
+    rawBodyTextArea: HTMLTextAreaElement
+  ) {
+    if (keyEvent.key === 'Tab') {
+      const startPost = rawBodyTextArea.selectionStart;
+      keyEvent.preventDefault();
+      const rawBodyRef = this.createActionForm.get('rawBody');
+      const originalValue = rawBodyRef?.value as string;
+
+      rawBodyRef?.setValue(
+        originalValue.substring(0, startPost) +
+          '   ' +
+          originalValue.substring(startPost)
+      );
+
+      rawBodyTextArea.selectionStart = rawBodyTextArea.selectionEnd =
+        startPost + 3;
+    }
   }
 
   removeHeaderPair(groupIndex: number): void {
@@ -338,11 +368,18 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
     this.generateIdentifier$?.unsubscribe();
     this.changeType$?.unsubscribe();
     this.roleDataSubscription?.unsubscribe();
+    this.bodyInputType$?.unsubscribe();
   }
 
   getErrorMessage(formControlName: string) {
     if (this.createActionForm.get(formControlName)?.hasError('required')) {
       return 'You must enter a value';
+    }
+
+    if (this.createActionForm.get(formControlName)?.hasError('jsonInvalid')) {
+      return this.createActionForm
+        .get(formControlName)
+        ?.getError('jsonInvalid');
     }
 
     return this.createActionForm.get(formControlName)?.hasError('email')
@@ -352,6 +389,11 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
 
   createAction(createEventFormBody: CreateActionDto) {
     this.createActionForm.disable();
+    if (createEventFormBody.rawBody) {
+      createEventFormBody.rawBody = JSON.parse(
+        createEventFormBody.rawBody as string
+      );
+    }
     const identifier = this.createActionForm.get('identifier')?.value;
     this.actionService
       .createAction({ ...createEventFormBody, identifier })
@@ -359,6 +401,11 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
         error: (err) => {
           this.createActionForm.enable();
           this.createActionForm.get('identifier')?.disable();
+          if (this.createActionForm.get('securityType')?.value !== 1) {
+            this.createActionForm.get('securityUrl')?.disable();
+            this.createActionForm.get('clientSecret')?.disable();
+            this.createActionForm.get('clientId')?.disable();
+          }
           if (err.error) {
             this.errorMessage = err.error.message;
           } else {
@@ -407,5 +454,13 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
           }
         },
       });
+  }
+
+  goToEditPage(action: Action) {
+    this.router.navigate([`/dashboard/action/edit`], {
+      queryParams: {
+        actionId: action.id,
+      },
+    });
   }
 }

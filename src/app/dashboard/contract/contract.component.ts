@@ -1,3 +1,4 @@
+import { EditContractComponent } from './edit-contract/edit-contract.component';
 import { DeleteContractComponent } from './delete-contract/delete-contract.component';
 import {
   BehaviorSubject,
@@ -7,6 +8,7 @@ import {
   merge,
   Observable,
   of,
+  skip,
   startWith,
   Subscription,
   switchMap,
@@ -49,6 +51,7 @@ export class ContractComponent implements OnInit, OnDestroy, AfterViewInit {
     'eventIdentifier',
     'consumer',
     'actionIdentifier',
+    'state',
     'actions',
   ];
 
@@ -218,6 +221,7 @@ export class ContractComponent implements OnInit, OnDestroy, AfterViewInit {
       this.reload
     )
       .pipe(
+        skip(1),
         startWith({}),
         switchMap(() => {
           this.errorMessage = undefined;
@@ -309,6 +313,25 @@ export class ContractComponent implements OnInit, OnDestroy, AfterViewInit {
     });
 
     deleteContractDialogRef
+      .afterClosed()
+      .pipe(first())
+      .subscribe({
+        next: (res) => {
+          if (res) {
+            this.reload.next(this.reload.value + 1);
+          }
+        },
+      });
+  }
+
+  openEditDialog(contract: Contract) {
+    const editContractDialogRef = this.dialog.open(EditContractComponent, {
+      width: '600px',
+      maxHeight: '70vh',
+      data: contract,
+    });
+
+    editContractDialogRef
       .afterClosed()
       .pipe(first())
       .subscribe({

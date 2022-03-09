@@ -94,14 +94,14 @@
       }}</mat-error>
     </mat-form-field>
     <h4
-      *ngIf="createActionForm.get('securityType')?.value === 2"
+      *ngIf="createActionForm.get('securityType')?.value === 1"
       class="span-4"
     >
       Oauth2 Client Security
     </h4>
     <mat-form-field
       class="span-4"
-      *ngIf="createActionForm.get('securityType')?.value === 2"
+      *ngIf="createActionForm.get('securityType')?.value === 1"
       appearance="fill"
     >
       <mat-label>Token generation url</mat-label>
@@ -113,7 +113,7 @@
     </mat-form-field>
     <mat-form-field
       class="span-2"
-      *ngIf="createActionForm.get('securityType')?.value === 2"
+      *ngIf="createActionForm.get('securityType')?.value === 1"
       appearance="fill"
     >
       <mat-label>Client ID</mat-label>
@@ -124,7 +124,7 @@
       }}</mat-error>
     </mat-form-field>
     <mat-form-field
-      *ngIf="createActionForm.get('securityType')?.value === 2"
+      *ngIf="createActionForm.get('securityType')?.value === 1"
       class="span-2"
       appearance="fill"
     >
@@ -180,45 +180,6 @@
         getErrorMessage("jsonPath")
       }}</mat-error>
     </mat-form-field>
-    <mat-form-field
-      class="span-2"
-      *ngIf="createActionForm.get('securityType')?.value === 3"
-      appearance="fill"
-    >
-      <mat-label>Username</mat-label>
-      <input formControlName="username" matInput />
-      <mat-hint>Username to create token</mat-hint>
-      <mat-error *ngIf="createActionForm.get('username')?.invalid">{{
-        getErrorMessage("username")
-      }}</mat-error>
-    </mat-form-field>
-    <mat-form-field
-      *ngIf="createActionForm.get('securityType')?.value === 3"
-      class="span-2"
-      appearance="fill"
-    >
-      <mat-label>Password</mat-label>
-      <input
-        formControlName="password"
-        name="password"
-        matInput
-        [type]="hide ? 'password' : 'text'"
-      />
-      <button
-        type="button"
-        mat-icon-button
-        matSuffix
-        (click)="hide = !hide"
-        [attr.aria-label]="'Hide password'"
-        [attr.aria-pressed]="hide"
-      >
-        <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
-      </button>
-      <mat-hint>Put the user password</mat-hint>
-      <mat-error *ngIf="createActionForm.get('password')?.invalid">{{
-        getErrorMessage("password")
-      }}</mat-error>
-    </mat-form-field>
 
     <h4 class="span-4">Headers</h4>
     <div formArrayName="headers" class="span-4">
@@ -270,6 +231,48 @@
         createActionForm.get('method')?.value === 'post' ||
         createActionForm.get('method')?.value === 'put'
       "
+      class="span-4 radial-input"
+    >
+      <label>Input Type: </label>
+      <mat-radio-group formControlName="bodyInput">
+        <mat-radio-button value="keyValue">Key Value</mat-radio-button>
+        <mat-radio-button value="raw">Raw</mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <mat-form-field
+      *ngIf="
+        (createActionForm.get('method')?.value === 'post' ||
+          createActionForm.get('method')?.value === 'put') &&
+        createActionForm.get('bodyInput')?.value !== 'keyValue'
+      "
+      class="span-4"
+      appearance="fill"
+    >
+      <mat-label>Raw Body</mat-label>
+      <textarea
+        #rawBody
+        (keydown)="tapKeyPressedInTextarea($event, rawBody)"
+        spellcheck="false"
+        [ngStyle]="{
+          height: '15rem',
+          'overflow-y': 'scroll',
+          resize: 'none',
+          'font-size': '18px'
+        }"
+        formControlName="rawBody"
+        matInput
+      ></textarea>
+      <mat-hint>Json raw body to send</mat-hint>
+      <mat-error *ngIf="createActionForm.get('rawBody')?.invalid">{{
+        getErrorMessage("rawBody")
+      }}</mat-error>
+    </mat-form-field>
+    <div
+      *ngIf="
+        (createActionForm.get('method')?.value === 'post' ||
+          createActionForm.get('method')?.value === 'put') &&
+        createActionForm.get('bodyInput')?.value === 'keyValue'
+      "
       formArrayName="body"
       class="span-4"
     >
@@ -297,8 +300,9 @@
     </div>
     <button
       *ngIf="
-        createActionForm.get('method')?.value === 'post' ||
-        createActionForm.get('method')?.value === 'put'
+        (createActionForm.get('method')?.value === 'post' ||
+          createActionForm.get('method')?.value === 'put') &&
+        createActionForm.get('bodyInput')?.value === 'keyValue'
       "
       (click)="addBodyPair()"
       type="button"
@@ -399,7 +403,13 @@
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>Actions</th>
           <td class="actions" mat-cell *matCellDef="let row">
-            <!-- <button color="primary" mat-stroked-button>Edit</button> -->
+            <button
+              (click)="goToEditPage(row)"
+              color="primary"
+              mat-stroked-button
+            >
+              Edit
+            </button>
             <button
               (click)="openDeleteDialog(row)"
               color="warn"

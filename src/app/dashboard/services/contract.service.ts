@@ -34,6 +34,17 @@ export class ContractService {
   deleteContract(contractId: number) {
     return this.http.delete(this.httpRoute + `/${contractId}`);
   }
+
+  editContract(contractId: number, contractUpdateDto: ContractUpdateDto) {
+    return this.http
+      .put(this.httpRoute + `/${contractId}`, { ...contractUpdateDto })
+      .pipe(first());
+  }
+}
+
+export interface ContractUpdateDto {
+  name: string;
+  active: boolean;
 }
 
 interface ContractPaginationResult {

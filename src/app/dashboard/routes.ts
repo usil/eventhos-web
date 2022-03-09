@@ -1,41 +1,14 @@
+import { ContractExecutionDetailComponent } from './events-log/contract-execution-detail/contract-execution-detail.component';
+import { EventContractsComponent } from './events-log/event-contracts/event-contracts.component';
+import { LogsListComponent } from './events-log/logs-list/logs-list.component';
 import { ContractComponent } from './contract/contract.component';
 import { ActionComponent } from './action/action.component';
 import { EventComponent } from './event/event.component';
-import { TablesComponent } from './tables/tables.component';
+
 import { EventsLogComponent } from './events-log/events-log.component';
 import { SystemComponent } from './system/system.component';
 
 const routes = [
-  // {
-  //   icon: 'table_chart',
-  //   path: 'home',
-  //   name: 'Home',
-  //   component: TablesComponent,
-  // },
-  // {
-  //   icon: 'table_chart',
-  //   path: 'producers',
-  //   name: 'Producers',
-  //   component: TablesComponent,
-  // },
-  // {
-  //   icon: 'table_chart',
-  //   path: 'systems',
-  //   name: 'Systems',
-  //   component: TablesComponent,
-  // },
-  // {
-  //   icon: 'table_chart',
-  //   path: 'actions',
-  //   name: 'Subscribers Actions',
-  //   component: TablesComponent,
-  // },
-  // {
-  //   icon: 'table_chart',
-  //   path: 'contracts',
-  //   name: 'Contracts',
-  //   component: TablesComponent,
-  // },
   {
     icon: 'dns',
     path: 'system',
@@ -65,6 +38,21 @@ const routes = [
     path: 'events-logs',
     name: 'Events Log',
     component: EventsLogComponent,
+    children: [
+      { path: '', redirectTo: 'logs-list', pathMatch: 'full' },
+      {
+        path: 'logs-list',
+        component: LogsListComponent,
+      },
+      {
+        path: 'logs-list/event-contracts',
+        component: EventContractsComponent,
+      },
+      {
+        path: 'logs-list/event-contracts/contract-details',
+        component: ContractExecutionDetailComponent,
+      },
+    ],
   },
 ];
 

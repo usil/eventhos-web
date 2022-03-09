@@ -1,33 +1,9 @@
-table {
-  width: 100%;
-}
-
-table {
-  width: 100%;
-}
-
-.mat-form-field {
-  font-size: 14px;
-  width: 100%;
-}
-
-td,
-th {
-  width: calc((100% - 33px) / 4);
-}
-
-.small-column {
-  width: 32px;
-  border-right: 1px solid rgb(182, 182, 182);
-  padding-right: 24px;
-  text-align: center;
-}
-
-.producer-column {
-  padding-left: 16px;
-}
-
-h3 {
-  margin-top: 0;
-  color: #070763;
+.breadCrump {
+  h5 {
+    margin: 0;
+    line-height: 1.75;
+    cursor: pointer;
+  }
+  margin-bottom: 1rem;
+  display: flex;
 }

@@ -70,6 +70,10 @@ h3 {
   color: #070763;
 }
 
+.mat-radio-button ~ .mat-radio-button {
+  margin-left: 16px;
+}
+
 .show-table {
   margin-top: 2rem;
 }

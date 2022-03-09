@@ -1,1 +1,286 @@
-<p>edit-action works!</p>
+<div class="error-display" *ngIf="errorMessage">
+  <h5>{{ errorMessage }}</h5>
+</div>
+<div *ngIf="action">
+  <h3>
+    Edit Action: <span>{{ action.name }}</span>
+  </h3>
+  <section>
+    <form
+      (ngSubmit)="updateAction(editActionForm.value)"
+      [formGroup]="editActionForm"
+      class="creation-forms"
+    >
+      <mat-form-field class="span-2" appearance="fill">
+        <mat-label>Name</mat-label>
+        <input formControlName="name" matInput placeholder="New System" />
+        <mat-hint>Action name</mat-hint>
+        <mat-error *ngIf="editActionForm.get('name')?.invalid">{{
+          getErrorMessage("name")
+        }}</mat-error>
+      </mat-form-field>
+      <mat-form-field class="span-2" appearance="fill">
+        <mat-label>Operation</mat-label>
+        <mat-select formControlName="operation">
+          <mat-option
+            *ngFor="let operation of operations"
+            [value]="operation"
+            >{{ operation }}</mat-option
+          >
+        </mat-select>
+        <mat-hint>Select the action operation type</mat-hint>
+        <mat-error *ngIf="editActionForm.get('operation')?.invalid">{{
+          getErrorMessage("operation")
+        }}</mat-error>
+      </mat-form-field>
+      <mat-form-field class="span-4" appearance="fill">
+        <mat-label>Description</mat-label>
+        <textarea formControlName="description" matInput></textarea>
+        <mat-hint>Action Description</mat-hint>
+        <mat-error *ngIf="editActionForm.get('description')?.invalid">{{
+          getErrorMessage("description")
+        }}</mat-error>
+      </mat-form-field>
+      <h3 class="span-4">Http configuration</h3>
+      <mat-form-field class="span-2" appearance="fill">
+        <mat-label>Url</mat-label>
+        <input formControlName="url" matInput />
+        <mat-hint>The url to call to execute the action</mat-hint>
+        <mat-error *ngIf="editActionForm.get('url')?.invalid">{{
+          getErrorMessage("url")
+        }}</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Method</mat-label>
+        <mat-select formControlName="method">
+          <mat-option *ngFor="let method of methods" [value]="method">{{
+            method
+          }}</mat-option>
+        </mat-select>
+        <mat-hint>The http method</mat-hint>
+        <mat-error *ngIf="editActionForm.get('method')?.invalid">{{
+          getErrorMessage("method")
+        }}</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Security</mat-label>
+        <mat-select formControlName="securityType">
+          <mat-option
+            *ngFor="let securityType of securityTypes"
+            [value]="securityType.code"
+            >{{ securityType.name }}</mat-option
+          >
+        </mat-select>
+        <mat-hint>The type of security</mat-hint>
+        <mat-error *ngIf="editActionForm.get('securityType')?.invalid">{{
+          getErrorMessage("securityType")
+        }}</mat-error>
+      </mat-form-field>
+      <h4
+        *ngIf="editActionForm.get('securityType')?.value === 1"
+        class="span-4"
+      >
+        Oauth2 Client Security
+      </h4>
+      <mat-form-field
+        class="span-4"
+        *ngIf="editActionForm.get('securityType')?.value === 1"
+        appearance="fill"
+      >
+        <mat-label>Token generation url</mat-label>
+        <input formControlName="securityUrl" matInput />
+        <mat-hint>Endpoint to generate the access token</mat-hint>
+        <mat-error *ngIf="editActionForm.get('securityUrl')?.invalid">{{
+          getErrorMessage("securityUrl")
+        }}</mat-error>
+      </mat-form-field>
+      <mat-form-field
+        class="span-2"
+        *ngIf="editActionForm.get('securityType')?.value === 1"
+        appearance="fill"
+      >
+        <mat-label>Client ID</mat-label>
+        <input formControlName="clientId" matInput />
+        <mat-hint>The client id</mat-hint>
+        <mat-error *ngIf="editActionForm.get('clientId')?.invalid">{{
+          getErrorMessage("clientId")
+        }}</mat-error>
+      </mat-form-field>
+      <mat-form-field
+        *ngIf="editActionForm.get('securityType')?.value === 1"
+        class="span-2"
+        appearance="fill"
+      >
+        <mat-label>Client Secret</mat-label>
+        <input
+          formControlName="clientSecret"
+          name="password"
+          matInput
+          [type]="hide ? 'password' : 'text'"
+        />
+        <button
+          type="button"
+          mat-icon-button
+          matSuffix
+          (click)="hide = !hide"
+          [attr.aria-label]="'Hide Client Secret'"
+          [attr.aria-pressed]="hide"
+        >
+          <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+        </button>
+        <mat-hint>Put the client secret</mat-hint>
+        <mat-error *ngIf="editActionForm.get('clientSecret')?.invalid">{{
+          getErrorMessage("clientSecret")
+        }}</mat-error>
+      </mat-form-field>
+      <h4
+        *ngIf="editActionForm.get('securityType')?.value === 3"
+        class="span-4"
+      >
+        Oauth2 User Security
+      </h4>
+      <mat-form-field
+        class="span-2"
+        *ngIf="editActionForm.get('securityType')?.value === 3"
+        appearance="fill"
+      >
+        <mat-label>Token generation url</mat-label>
+        <input formControlName="securityUrl" matInput />
+        <mat-hint>Endpoint to generate the access token</mat-hint>
+        <mat-error *ngIf="editActionForm.get('securityUrl')?.invalid">{{
+          getErrorMessage("securityUrl")
+        }}</mat-error>
+      </mat-form-field>
+      <mat-form-field
+        class="span-2"
+        *ngIf="editActionForm.get('securityType')?.value === 3"
+        appearance="fill"
+      >
+        <mat-label>Json path</mat-label>
+        <input formControlName="jsonPath" matInput />
+        <mat-hint>Json path to get the access token</mat-hint>
+        <mat-error *ngIf="editActionForm.get('jsonPath')?.invalid">{{
+          getErrorMessage("jsonPath")
+        }}</mat-error>
+      </mat-form-field>
+
+      <h4 class="span-4">Headers</h4>
+      <div formArrayName="headers" class="span-4">
+        <div
+          *ngFor="let sub of headersFormArray.controls; index as i"
+          textIndex="i"
+        >
+          <div class="key-value-form" [formGroupName]="i">
+            <mat-form-field appearance="fill">
+              <mat-label>Key</mat-label>
+              <input formControlName="key" matInput />
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+              <mat-label>Value</mat-label>
+              <input formControlName="value" matInput />
+            </mat-form-field>
+            <button
+              (click)="removeHeaderPair(i)"
+              class="remove-btn"
+              color="warn"
+              mat-flat-button
+              type="button"
+            >
+              Remove
+            </button>
+          </div>
+        </div>
+      </div>
+      <button
+        (click)="addHeaderPair()"
+        type="button"
+        color="primary"
+        mat-stroked-button
+        class="span-4"
+      >
+        Add header
+      </button>
+      <h4
+        *ngIf="
+          editActionForm.get('method')?.value === 'post' ||
+          editActionForm.get('method')?.value === 'put'
+        "
+        class="span-4"
+      >
+        Body
+      </h4>
+      <mat-form-field
+        *ngIf="
+          editActionForm.get('method')?.value === 'post' ||
+          editActionForm.get('method')?.value === 'put'
+        "
+        class="span-4"
+        appearance="fill"
+      >
+        <mat-label>Raw Body</mat-label>
+        <textarea
+          #rawBody
+          (keydown)="tapKeyPressedInTextarea($event, rawBody)"
+          spellcheck="false"
+          [ngStyle]="{
+            height: '15rem',
+            'overflow-y': 'scroll',
+            resize: 'none',
+            'font-size': '18px'
+          }"
+          formControlName="rawBody"
+          matInput
+        ></textarea>
+        <mat-hint>Json raw body to send</mat-hint>
+        <mat-error *ngIf="editActionForm.get('rawBody')?.invalid">{{
+          getErrorMessage("rawBody")
+        }}</mat-error>
+      </mat-form-field>
+      <h4 class="span-4">Query Url Params</h4>
+      <div formArrayName="queryUrlParams" class="span-4">
+        <div
+          *ngFor="let sub of queryFormArray.controls; index as i"
+          textIndex="i"
+        >
+          <div class="key-value-form" [formGroupName]="i">
+            <mat-form-field appearance="fill">
+              <mat-label>Key</mat-label>
+              <input formControlName="key" matInput />
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+              <mat-label>Value</mat-label>
+              <input formControlName="value" matInput />
+            </mat-form-field>
+            <button
+              (click)="removeUrlQueryParamPair(i)"
+              class="remove-btn"
+              color="warn"
+              mat-flat-button
+              type="button"
+            >
+              Remove
+            </button>
+          </div>
+        </div>
+      </div>
+      <button
+        (click)="addUrlQueryParamPair()"
+        type="button"
+        color="primary"
+        mat-stroked-button
+        class="span-4"
+      >
+        Add url query param
+      </button>
+      <button
+        [disabled]="editActionForm.invalid"
+        type="submit"
+        class="span-4"
+        color="accent"
+        mat-flat-button
+      >
+        Update Action
+      </button>
+    </form>
+  </section>
+</div>

@@ -1,0 +1,58 @@
+<div *ngIf="contractExecutionDetail">
+  <h2>Details for the execution of {{ contractExecutionDetail.name }}</h2>
+  <mat-card class="card">
+    <mat-card-title class="card-title">{{
+      contractExecutionDetail.response.status
+    }}</mat-card-title>
+    <mat-card-subtitle
+      >{{ contractExecutionDetail.response.statusText }} |
+      {{ contractExecutionDetail.state }}</mat-card-subtitle
+    >
+    <mat-card-content>
+      <mat-list role="list">
+        <mat-list-item role="listitem"
+          >Url: {{ contractExecutionDetail.request.url }}</mat-list-item
+        >
+        <mat-list-item role="listitem"
+          >Started At:
+          {{
+            contractExecutionDetail.response.startTime | date: "long"
+          }}</mat-list-item
+        >
+        <mat-list-item role="listitem"
+          >Finished At:
+          {{
+            contractExecutionDetail.response.endTime | date: "long"
+          }}</mat-list-item
+        >
+        <mat-list-item role="listitem"
+          >Finished In: {{ getElapsedTime() }} seconds</mat-list-item
+        >
+      </mat-list>
+    </mat-card-content>
+  </mat-card>
+  <mat-tab-group mat-align-tabs="start">
+    <mat-tab label="Request"
+      ><div class="inner-tab">
+        <mat-form-field appearance="outline" class="jsonText" appearance="fill">
+          <mat-label>Received request</mat-label>
+          <textarea
+            disabled
+            [value]="parseJson(contractExecutionDetail.request)"
+            matInput
+          ></textarea>
+        </mat-form-field></div
+    ></mat-tab>
+    <mat-tab label="Response"
+      ><div class="inner-tab">
+        <mat-form-field appearance="outline" class="jsonText" appearance="fill">
+          <mat-label>Received response</mat-label>
+          <textarea
+            disabled
+            [value]="parseJson(contractExecutionDetail.response)"
+            matInput
+          ></textarea>
+        </mat-form-field></div
+    ></mat-tab>
+  </mat-tab-group>
+</div>

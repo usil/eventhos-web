@@ -32,6 +32,18 @@ export class EventService {
   deleteEvent(eventId: number) {
     return this.http.delete(this.httpRoute + `/${eventId}`);
   }
+
+  editEvent(systemId: number, eventUpdateDto: EventUpdateDto) {
+    return this.http
+      .put(this.httpRoute + `/${systemId}`, { ...eventUpdateDto })
+      .pipe(first());
+  }
+}
+
+export interface EventUpdateDto {
+  name: string;
+  operation: string;
+  description: string;
 }
 
 interface EventPaginationResult {

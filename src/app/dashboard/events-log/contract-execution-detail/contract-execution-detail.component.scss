@@ -1,0 +1,39 @@
+h2 {
+  color: #0b0b96;
+  span {
+    color: #ffd300;
+  }
+}
+
+.card-title {
+  color: #0b0b96;
+}
+
+table {
+  width: 100%;
+}
+
+.event {
+  h3 {
+    color: #0b0b96;
+  }
+  margin-bottom: 2rem;
+  display: grid;
+}
+
+.jsonText {
+  width: 100%;
+  textarea {
+    font-size: 1rem;
+    font-weight: 600;
+    min-height: 250px;
+  }
+}
+
+.inner-tab {
+  padding: 1rem;
+}
+
+.card {
+  margin-bottom: 1rem;
+}

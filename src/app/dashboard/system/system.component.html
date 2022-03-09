@@ -136,7 +136,14 @@
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>Actions</th>
           <td class="actions" mat-cell *matCellDef="let row">
-            <!-- <button color="primary" mat-stroked-button>Edit</button> -->
+            <button
+              color="primary"
+              (click)="openEditDialog(row)"
+              lor="primary"
+              mat-stroked-button
+            >
+              Edit
+            </button>
             <button
               (click)="openDeleteDialog(row)"
               color="warn"

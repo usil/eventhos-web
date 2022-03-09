@@ -1,6 +1,12 @@
+import {
+  MatDatepickerModule,
+  // MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+  // MAT_MOMENT_DATE_FORMATS,
+  // MomentDateAdapter,
+} from '@angular/material/datepicker';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { LOCALE_ID, NgModule } from '@angular/core';
+import { CommonModule, JsonPipe } from '@angular/common';
 import { DashboardComponent } from './dashboard.component';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashBoardMaterials } from './material/material.module';
@@ -27,6 +33,22 @@ import { EditActionComponent } from './action/edit-action/edit-action.component'
 import { DeleteActionComponent } from './action/delete-action/delete-action.component';
 import { DeleteContractComponent } from './contract/delete-contract/delete-contract.component';
 import { EditContractComponent } from './contract/edit-contract/edit-contract.component';
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+} from '@angular/material/core';
+import {
+  MatMomentDateModule,
+  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+  MAT_MOMENT_DATE_FORMATS,
+  MomentDateAdapter,
+} from '@angular/material-moment-adapter';
+import { LogsListComponent } from './events-log/logs-list/logs-list.component';
+import { EventExecutionDetailsComponent } from './events-log/event-execution-details/event-execution-details.component';
+import { EventContractsComponent } from './events-log/event-contracts/event-contracts.component';
+import { ContractExecutionDetailComponent } from './events-log/contract-execution-detail/contract-execution-detail.component';
+
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -52,6 +74,10 @@ import { EditContractComponent } from './contract/edit-contract/edit-contract.co
     DeleteActionComponent,
     DeleteContractComponent,
     EditContractComponent,
+    LogsListComponent,
+    EventExecutionDetailsComponent,
+    EventContractsComponent,
+    ContractExecutionDetailComponent,
   ],
   imports: [
     CommonModule,
@@ -60,6 +86,18 @@ import { EditContractComponent } from './contract/edit-contract/edit-contract.co
     NodebootOauth2StarterModule,
     ReactiveFormsModule,
     FormsModule,
+    MatMomentDateModule,
+    MatDatepickerModule,
+  ],
+  providers: [
+    { provide: LOCALE_ID, useValue: 'es-PE' },
+    { provide: MAT_DATE_LOCALE, useValue: 'es-PE' },
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+    },
+    { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
   ],
 })
 export class DashboardModule {}

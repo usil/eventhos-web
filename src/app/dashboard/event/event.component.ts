@@ -1,3 +1,4 @@
+import { EditEventComponent } from './edit-event/edit-event.component';
 import { DeleteEventComponent } from './delete-event/delete-event.component';
 import {
   CreateEventDto,
@@ -27,6 +28,7 @@ import {
   merge,
   Observable,
   of,
+  skip,
   startWith,
   Subscription,
   switchMap,
@@ -111,7 +113,6 @@ export class EventComponent implements OnInit, OnDestroy, AfterViewInit {
       ),
     });
     this.generateIdentifier$ = merge(
-      this.reload,
       this.createEventForm.get('name')?.valueChanges as Observable<any>,
       this.createEventForm.get('operation')?.valueChanges as Observable<any>
     ).subscribe({
@@ -139,10 +140,12 @@ export class EventComponent implements OnInit, OnDestroy, AfterViewInit {
       this.reload
     )
       .pipe(
+        skip(1),
         startWith({}),
         switchMap(() => {
           this.errorMessage = undefined;
           this.isLoadingResults = true;
+          console.log(this.reload.value);
           return this.eventService
             .getEvents(
               this.sort.active,
@@ -238,6 +241,25 @@ export class EventComponent implements OnInit, OnDestroy, AfterViewInit {
     });
 
     deleteEventDialogRef
+      .afterClosed()
+      .pipe(first())
+      .subscribe({
+        next: (res) => {
+          if (res) {
+            this.reload.next(this.reload.value + 1);
+          }
+        },
+      });
+  }
+
+  openEditDialog(event: Event) {
+    const editActionDialogRef = this.dialog.open(EditEventComponent, {
+      width: '600px',
+      maxHeight: '70vh',
+      data: event,
+    });
+
+    editActionDialogRef
       .afterClosed()
       .pipe(first())
       .subscribe({

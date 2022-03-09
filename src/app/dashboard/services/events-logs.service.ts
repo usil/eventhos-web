@@ -1,15 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import {
-  concatMap,
-  delay,
-  first,
-  Observable,
-  retryWhen,
-  take,
-  throwError,
-} from 'rxjs';
+import { first, Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
@@ -19,12 +11,37 @@ export class EventsLogsService {
 
   getReceivedEvents(
     pageIndex: number,
-    order: string
+    order: string,
+    systemId?: number,
+    fromTime?: string,
+    toTime?: string
   ): Observable<ReceivedEventFullResponse> {
+    const params: Record<string, any> = { pageIndex, order, itemsPerPage: 10 };
+    if (systemId) {
+      params['systemId'] = systemId;
+    }
+    if (fromTime && toTime) {
+      params['fromTime'] = fromTime;
+      params['toTime'] = toTime;
+    }
     return this.http
       .get<ReceivedEventFullResponse>(this.httpRoute, {
-        params: { pageIndex, order, itemsPerPage: 10 },
+        params,
       })
+      .pipe(first());
+  }
+
+  getReceivedEventDetails(
+    receivedEventId: number
+  ): Observable<ReceivedEventDetailsResponse> {
+    return this.http
+      .get<ReceivedEventDetailsResponse>(this.httpRoute + `/${receivedEventId}`)
+      .pipe(first());
+  }
+
+  getContractExecutionDetail(detailId: number) {
+    return this.http
+      .get(this.httpRoute + `/execution-detail/${detailId}`)
       .pipe(first());
   }
 }
@@ -40,7 +57,38 @@ export interface ReceivedEvent {
   eventDescription: string;
   header: Record<any, any>;
   body?: Record<any, any>;
-  recivedAt: Date;
+  receivedAt: Date;
+  state: string[];
+}
+
+export interface ReceivedEventContracts {
+  detailId: number;
+  state: string;
+  contractId: number;
+  contractIdentifier: string;
+  contractName: string;
+  actionId: number;
+  actionIdentifier: string;
+  actionName: string;
+  actionOperation: string;
+  actionDescription: string;
+}
+
+export interface ReceivedEvent {
+  id: number;
+  received_at: string;
+  received_request: {
+    headers: Record<string, any>;
+    query: Record<string, any>;
+    body: Record<string, any>;
+    method: string;
+    url: string;
+  };
+  eventId: number;
+  eventIdentifier: string;
+  eventName: string;
+  eventOperation: string;
+  eventDescription: string;
 }
 
 interface ProducerEvent {
@@ -81,6 +129,13 @@ interface BaseSuccess {
 
 export interface ReceivedEventFullResponse extends BaseSuccess {
   content: PaginatedEvent;
+}
+
+interface ReceivedEventDetailsResponse extends BaseSuccess {
+  content: {
+    receivedEvent: ReceivedEvent;
+    executedEventContracts: ReceivedEventContracts[];
+  };
 }
 
 interface PaginatedEvent {

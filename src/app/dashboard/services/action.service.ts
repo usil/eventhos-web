@@ -31,9 +31,27 @@ export class ActionService {
       .pipe(first());
   }
 
+  getAction(actionId: number): Observable<GetActionResponse> {
+    return this.http
+      .get<GetActionResponse>(this.httpRoute + `/${actionId}`)
+      .pipe(first());
+  }
+
+  editAction(actionId: number, editActionDto: EditActionDto) {
+    return this.http
+      .put(this.httpRoute + `/${actionId}`, editActionDto)
+      .pipe(first());
+  }
+
   deleteAction(actionId: number) {
     return this.http.delete(this.httpRoute + `/${actionId}`);
   }
+}
+
+interface GetActionResponse {
+  message: string;
+  code: number;
+  content?: FullAction;
 }
 
 interface ActionPaginationResult {
@@ -65,13 +83,26 @@ export interface CreateActionDto {
   securityType: number;
   url: string;
   securityUrl: string;
-  jsonPath: string;
   identifier?: string;
   headers: { key: string; value: string | number }[];
-  body: { key: string; value: string | number }[];
+  body?: { key: string; value: string | number }[];
+  rawBody?: Record<string, any> | Record<string, any>[] | string[] | string;
   queryUrlParams: { key: string; value: string | number }[];
-  username?: string;
-  password?: string;
+  clientSecret?: string;
+  clientId?: number;
+}
+
+export interface EditActionDto {
+  name: string;
+  operation: string;
+  description: string;
+  method: string;
+  securityType: number;
+  url: string;
+  securityUrl: string;
+  headers: { key: string; value: string | number }[];
+  rawBody?: Record<string, any> | Record<string, any>[] | string[] | string;
+  queryUrlParams: { key: string; value: string | number }[];
   clientSecret?: string;
   clientId?: number;
 }
@@ -84,6 +115,35 @@ export interface Action {
   operation: string;
   description: string;
   deleted: boolean;
+  created_at: Date;
+  updated_at: Date;
+}
+
+export interface FullAction {
+  id: number;
+  system_id: number;
+  identifier: string;
+  name: string;
+  operation: string;
+  description: string;
+  deleted: boolean;
+  httpConfiguration: {
+    url: string;
+    method: string;
+    headers: Record<any, string | string[]>;
+    params: Record<any, string | string[]>;
+    data: Record<any, any>;
+  };
+  security: {
+    type: string;
+    httpConfiguration?: {
+      url: string;
+      method: string;
+      headers: Record<any, string | string[]>;
+      params: Record<any, string | string[]>;
+      data: Record<any, any>;
+    };
+  };
   created_at: Date;
   updated_at: Date;
 }

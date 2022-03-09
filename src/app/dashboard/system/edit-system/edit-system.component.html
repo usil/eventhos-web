@@ -1,1 +1,77 @@
-<p>edit-system works!</p>
+<h2 mat-dialog-title>
+  Edit system: <span>{{ system.name }}</span>
+</h2>
+<div class="error-display" *ngIf="errorMessage">
+  <h5>{{ errorMessage }}</h5>
+</div>
+<form
+  [formGroup]="editSystemForm"
+  (ngSubmit)="updateSystem(editSystemForm.value)"
+>
+  <mat-form-field class="mat-form-field" appearance="fill">
+    <mat-label>Name</mat-label>
+    <input formControlName="name" matInput placeholder="New System" />
+    <mat-hint>System name</mat-hint>
+    <mat-error *ngIf="editSystemForm.get('name')?.invalid">{{
+      getErrorMessage("name")
+    }}</mat-error>
+  </mat-form-field>
+  <mat-form-field class="mat-form-field" appearance="fill">
+    <mat-label>Type</mat-label>
+    <mat-select formControlName="type">
+      <mat-option *ngFor="let systemType of systemTypes" [value]="systemType">{{
+        systemType
+      }}</mat-option>
+    </mat-select>
+    <mat-hint>Select the system type</mat-hint>
+    <mat-error *ngIf="editSystemForm.get('type')?.invalid">{{
+      getErrorMessage("type")
+    }}</mat-error>
+  </mat-form-field>
+  <mat-form-field class="mat-form-field" appearance="fill">
+    <mat-label>System class</mat-label>
+    <mat-select formControlName="systemClass">
+      <mat-option value="producer">Producer</mat-option>
+      <mat-option value="consumer">Consumer</mat-option>
+      <mat-option value="hybrid">Hybrid</mat-option>
+    </mat-select>
+    <mat-hint>Select the system class</mat-hint>
+    <mat-error *ngIf="editSystemForm.get('systemClass')?.invalid">{{
+      getErrorMessage("systemClass")
+    }}</mat-error>
+  </mat-form-field>
+  <mat-form-field class="span-4" appearance="fill">
+    <mat-label>Client</mat-label>
+    <mat-select formControlName="clientId">
+      <mat-option *ngFor="let client of clients" [value]="client.id">{{
+        client.name
+      }}</mat-option>
+    </mat-select>
+    <mat-hint>Select a client</mat-hint>
+    <mat-error *ngIf="editSystemForm.get('clientId')?.invalid">{{
+      getErrorMessage("clientId")
+    }}</mat-error>
+  </mat-form-field>
+  <mat-form-field class="mat-form-field" appearance="fill">
+    <mat-label>Description</mat-label>
+    <textarea formControlName="description" matInput></textarea>
+    <mat-hint>System Description</mat-hint>
+    <mat-error *ngIf="editSystemForm.get('description')?.invalid">{{
+      getErrorMessage("description")
+    }}</mat-error>
+  </mat-form-field>
+  <div align="end" mat-dialog-actions>
+    <button
+      [ngStyle]="{ 'margin-right': '.5rem' }"
+      (click)="closeDialog()"
+      type="button"
+      color="warn"
+      mat-stroked-button
+      [disabled]="dialogRef.disableClose"
+    >
+      Cancel</button
+    ><button [disabled]="!editSystemForm.valid" color="primary" mat-flat-button>
+      Update
+    </button>
+  </div>
+</form>

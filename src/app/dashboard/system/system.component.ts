@@ -1,3 +1,4 @@
+import { EditSystemComponent } from './edit-system/edit-system.component';
 import { DeleteSystemComponent } from './delete-system/delete-system.component';
 import { System, SystemService } from './../services/system.service';
 import {
@@ -25,6 +26,7 @@ import {
   switchMap,
   first,
   BehaviorSubject,
+  skip,
 } from 'rxjs';
 import { CreateSystemDto } from '../services/system.service';
 import { MatPaginator } from '@angular/material/paginator';
@@ -43,7 +45,6 @@ export class SystemComponent implements OnInit, OnDestroy, AfterViewInit {
     'class',
     'type',
     'description',
-    'client_id',
     'actions',
   ];
 
@@ -146,8 +147,7 @@ export class SystemComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.generateIdentifier$ = merge(
       this.createSystemForm.get('name')?.valueChanges as Observable<any>,
-      this.createSystemForm.get('type')?.valueChanges as Observable<any>,
-      this.reload
+      this.createSystemForm.get('type')?.valueChanges as Observable<any>
     ).subscribe({
       next: () => {
         let name = this.createSystemForm.get('name')?.value as string;
@@ -171,6 +171,7 @@ export class SystemComponent implements OnInit, OnDestroy, AfterViewInit {
       this.reload
     )
       .pipe(
+        skip(1),
         startWith({}),
         switchMap(() => {
           this.errorMessage = undefined;
@@ -270,6 +271,25 @@ export class SystemComponent implements OnInit, OnDestroy, AfterViewInit {
     });
 
     deleteSystemDialogRef
+      .afterClosed()
+      .pipe(first())
+      .subscribe({
+        next: (res) => {
+          if (res) {
+            this.reload.next(this.reload.value + 1);
+          }
+        },
+      });
+  }
+
+  openEditDialog(system: System) {
+    const editSystemDialogRef = this.dialog.open(EditSystemComponent, {
+      width: '600px',
+      maxHeight: '70vh',
+      data: system,
+    });
+
+    editSystemDialogRef
       .afterClosed()
       .pipe(first())
       .subscribe({
