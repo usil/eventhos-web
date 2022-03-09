@@ -1,0 +1,171 @@
+<h3>Create Contract Subscription</h3>
+<div class="error-display" *ngIf="errorMessage">
+  <h5>{{ errorMessage }}</h5>
+</div>
+<section>
+  <form
+    (ngSubmit)="createContract(createContractForm.value)"
+    [formGroup]="createContractForm"
+    class="creation-forms"
+  >
+    <mat-form-field class="span-2" appearance="fill">
+      <mat-label>Identifier</mat-label>
+      <input formControlName="identifier" matInput />
+      <mat-hint>Auto generated system identifier</mat-hint>
+      <mat-error *ngIf="createContractForm.get('identifier')?.invalid">{{
+        getErrorMessage("identifier")
+      }}</mat-error>
+    </mat-form-field>
+    <mat-form-field class="span-2" appearance="fill">
+      <mat-label>Name</mat-label>
+      <input formControlName="name" matInput placeholder="New System" />
+      <mat-hint>Contract name</mat-hint>
+      <mat-error *ngIf="createContractForm.get('name')?.invalid">{{
+        getErrorMessage("name")
+      }}</mat-error>
+    </mat-form-field>
+    <mat-form-field class="span-4" appearance="fill">
+      <mat-label>When in the producer...</mat-label>
+      <mat-select formControlName="producerId">
+        <mat-option *ngFor="let producer of producers" [value]="producer.id">{{
+          producer.name
+        }}</mat-option>
+      </mat-select>
+      <mat-hint>The producer system of an event</mat-hint>
+      <mat-error *ngIf="createContractForm.get('producerId')?.invalid">{{
+        getErrorMessage("producerId")
+      }}</mat-error>
+    </mat-form-field>
+    <mat-form-field class="span-4" appearance="fill">
+      <mat-label>This event occurs...</mat-label>
+      <mat-select formControlName="eventId">
+        <mat-option *ngFor="let event of events" [value]="event.id"
+          >{{ event.operation }} | {{ event.name }}
+        </mat-option>
+      </mat-select>
+      <mat-hint>The event produced by the system</mat-hint>
+      <mat-error *ngIf="createContractForm.get('eventId')?.invalid">{{
+        getErrorMessage("eventId")
+      }}</mat-error>
+    </mat-form-field>
+    <mat-form-field class="span-4" appearance="fill">
+      <mat-label>Then in the consumer...</mat-label>
+      <mat-select formControlName="consumerId">
+        <mat-option *ngFor="let consumer of consumers" [value]="consumer.id">{{
+          consumer.name
+        }}</mat-option>
+      </mat-select>
+      <mat-hint>The consumer system of an event</mat-hint>
+      <mat-error *ngIf="createContractForm.get('consumerId')?.invalid">{{
+        getErrorMessage("consumerId")
+      }}</mat-error>
+    </mat-form-field>
+    <mat-form-field class="span-4" appearance="fill">
+      <mat-label>Execute this action...</mat-label>
+      <mat-select formControlName="actionId">
+        <mat-option *ngFor="let action of actions" [value]="action.id"
+          >{{ action.operation }} | {{ action.name }}
+        </mat-option>
+      </mat-select>
+      <mat-hint>The subscribed action to the event</mat-hint>
+      <mat-error *ngIf="createContractForm.get('actionId')?.invalid">{{
+        getErrorMessage("actionId")
+      }}</mat-error>
+    </mat-form-field>
+    <button
+      [disabled]="
+        createContractForm.invalid || actions.length < 1 || events.length < 1
+      "
+      type="submit"
+      class="span-4"
+      color="accent"
+      mat-flat-button
+    >
+      Create Contract
+    </button>
+  </form>
+</section>
+<section class="show-table">
+  <h3>Contracts List</h3>
+  <div class="container-table mat-elevation-z8">
+    <div class="loading-shade" *ngIf="isLoadingResults">
+      <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+    </div>
+    <div class="example-table-container">
+      <table
+        mat-table
+        [dataSource]="contracts"
+        class="user-table"
+        matSort
+        matSortActive="id"
+        matSortDisableClear
+        matSortDirection="asc"
+      >
+        <ng-container matColumnDef="id">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef>id</th>
+          <td mat-cell *matCellDef="let row">{{ row.id }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Name</th>
+          <td mat-cell *matCellDef="let row">{{ row.name }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="producer">
+          <th mat-header-cell *matHeaderCellDef>Producer</th>
+          <td mat-cell *matCellDef="let row">{{ row.producerName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="eventIdentifier">
+          <th mat-header-cell *matHeaderCellDef>Producer Event</th>
+          <td mat-cell *matCellDef="let row">{{ row.eventIdentifier }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="consumer">
+          <th mat-header-cell *matHeaderCellDef>Subscriber</th>
+          <td mat-cell *matCellDef="let row">{{ row.consumerName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="actionIdentifier">
+          <th mat-header-cell *matHeaderCellDef>Subscriber Action</th>
+          <td mat-cell *matCellDef="let row">{{ row.actionIdentifier }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="state">
+          <th mat-header-cell *matHeaderCellDef>Active</th>
+          <td mat-cell *matCellDef="let row">
+            {{ row.active === 1 ? true : false }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td class="actions" mat-cell *matCellDef="let row">
+            <button
+              (click)="openEditDialog(row)"
+              color="primary"
+              mat-stroked-button
+            >
+              Edit
+            </button>
+            <button
+              (click)="openDeleteDialog(row)"
+              color="warn"
+              mat-stroked-button
+            >
+              Delete
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+
+    <mat-paginator
+      [length]="resultsLength"
+      [pageSize]="pageSize"
+    ></mat-paginator>
+  </div>
+</section>

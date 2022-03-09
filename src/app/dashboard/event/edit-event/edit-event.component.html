@@ -1,0 +1,50 @@
+<h2 mat-dialog-title>
+  Edit event: <span>{{ event.name }}</span>
+</h2>
+<div class="error-display" *ngIf="errorMessage">
+  <h5>{{ errorMessage }}</h5>
+</div>
+<form [formGroup]="editEventForm" (ngSubmit)="updateEvent(editEventForm.value)">
+  <mat-form-field appearance="fill">
+    <mat-label>Name</mat-label>
+    <input formControlName="name" matInput placeholder="New System" />
+    <mat-hint>Event name</mat-hint>
+    <mat-error *ngIf="editEventForm.get('name')?.invalid">{{
+      getErrorMessage("name")
+    }}</mat-error>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Operation</mat-label>
+    <mat-select formControlName="operation">
+      <mat-option *ngFor="let operation of operations" [value]="operation">{{
+        operation
+      }}</mat-option>
+    </mat-select>
+    <mat-hint>Select the event operation type</mat-hint>
+    <mat-error *ngIf="editEventForm.get('operation')?.invalid">{{
+      getErrorMessage("operation")
+    }}</mat-error>
+  </mat-form-field>
+  <mat-form-field class="span-4" appearance="fill">
+    <mat-label>Description</mat-label>
+    <textarea formControlName="description" matInput></textarea>
+    <mat-hint>Event Description</mat-hint>
+    <mat-error *ngIf="editEventForm.get('description')?.invalid">{{
+      getErrorMessage("description")
+    }}</mat-error>
+  </mat-form-field>
+  <div align="end" mat-dialog-actions>
+    <button
+      [ngStyle]="{ 'margin-right': '.5rem' }"
+      (click)="closeDialog()"
+      type="button"
+      color="warn"
+      mat-stroked-button
+      [disabled]="dialogRef.disableClose"
+    >
+      Cancel</button
+    ><button [disabled]="!editEventForm.valid" color="primary" mat-flat-button>
+      Update
+    </button>
+  </div>
+</form>

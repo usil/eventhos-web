@@ -1,3 +1,4 @@
 {
-  "api": "http://localhost:1000"
+  "title": "Eventhos",
+  "api": "http://localhost:1800"
 }

@@ -1,63 +1,24 @@
-import {
-  Component,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-  AfterViewInit,
-} from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
 import { Subscription } from 'rxjs';
-import {
-  EventsLogsService,
-  ReceivedEvent,
-} from '../services/events-logs.service';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-events-log',
   templateUrl: './events-log.component.html',
   styleUrls: ['./events-log.component.scss'],
 })
-export class EventsLogComponent implements OnInit, OnDestroy, AfterViewInit {
-  displayedColumns: string[] = [
-    'id',
-    'systemName',
-    'eventName',
-    'recivedAt',
-    'state',
-  ];
-  dataSource!: MatTableDataSource<ReceivedEvent>;
-
-  eventsLogSubscription!: Subscription;
-
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
-
-  constructor(private eventsLogsService: EventsLogsService) {}
-  ngOnInit(): void {}
-  ngAfterViewInit(): void {
-    this.eventsLogSubscription = this.eventsLogsService
-      .getRecivedEvents()
-      .subscribe({
-        next: (res) => {
-          this.dataSource = new MatTableDataSource(res.content);
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
-        },
-      });
+export class EventsLogComponent implements OnInit, OnDestroy {
+  receivedEventId!: number;
+  detailId!: number;
+  activatedRoute$!: Subscription;
+  constructor(private activatedRoute: ActivatedRoute) {
+    this.activatedRoute.queryParams.subscribe((params) => {
+      this.receivedEventId = params['receivedEventId'];
+      this.detailId = params['detailId'];
+    });
   }
-
   ngOnDestroy(): void {
-    this.eventsLogSubscription?.unsubscribe();
+    this.activatedRoute$?.unsubscribe();
   }
-
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-  }
+  ngOnInit(): void {}
 }

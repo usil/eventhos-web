@@ -12,11 +12,16 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator';
-
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatCardModule } from '@angular/material/card';
+import { MatTabsModule } from '@angular/material/tabs';
 @NgModule({
   exports: [
     MatToolbarModule,
+    MatTabsModule,
     MatIconModule,
+    MatRadioModule,
     MatButtonModule,
     MatSidenavModule,
     MatListModule,
@@ -28,6 +33,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatSortModule,
     MatMenuModule,
     MatPaginatorModule,
+    MatProgressSpinnerModule,
+    MatCardModule,
   ],
 })
 export class DashBoardMaterials {}
