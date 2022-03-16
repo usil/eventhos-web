@@ -78,10 +78,4 @@ $usil-theme: mat.define-light-theme(
   )
 );
 
-// @include mat.core-theme($usil-theme);
-
-// @include mat.button-theme($usil-theme);
-
-// @include mat.toolbar-theme($usil-theme);
-
 @include mat.all-component-themes($usil-theme);
