@@ -1,4 +1,4 @@
-# Eventhos Web Platform v1.0.0
+# Eventhos Web Platform v0.0.2
 
 This the web platform to use eventhos.
 
