@@ -1,3 +1,4 @@
+require("dotenv").config();
 const EnvSettings = require("advanced-settings").EnvSettings;
 const envSettings = new EnvSettings();
 
