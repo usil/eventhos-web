@@ -1,3 +1,4 @@
+require("dotenv").config();
 const EnvSettings = require("advanced-settings").EnvSettings;
 const envSettings = new EnvSettings();
 
@@ -10,6 +11,7 @@ const options = {
 
       devServer.app.get("/settings.json", function (req, res) {
         const settings = envSettings.loadJsonFileSync("./settings.json");
+        console.log(settings);
         res.json(settings);
       });
     },
