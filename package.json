@@ -4,8 +4,7 @@
   "scripts": {
     "ng": "ng",
     "dev": "ng serve",
-    "start": "nodeboot-spa-server dist/template-dashboard -s settings.json -p 2000 --allow-routes",
-    "install:library": "npm install node_modules/oauth2/dist/nodeboot-oauth2-starter/nodeboot-oauth2-starter-1.0.7.tgz",
+    "start": "nodeboot-spa-server dist/template-dashboard -s settings.json -p 2110 --allow-routes",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
@@ -23,6 +22,7 @@
     "@angular/platform-browser": "~13.0.0",
     "@angular/platform-browser-dynamic": "~13.0.0",
     "@angular/router": "~13.0.0",
+    "dotenv": "^16.0.0",
     "moment": "^2.29.1",
     "ngx-clipboard": "^15.0.1",
     "nodeboot-oauth2-starter-ui": "git+https://github.com/usil/nodeboot-oauth2-ui-starter-dist.git",

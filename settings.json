@@ -1,4 +1,4 @@
 {
   "title": "Eventhos",
-  "api": "http://localhost:1800"
+  "api": "${URL}"
 }
