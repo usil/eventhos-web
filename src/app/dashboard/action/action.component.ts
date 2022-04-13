@@ -1,5 +1,4 @@
 import { Router } from '@angular/router';
-import { EditActionComponent } from './edit-action/edit-action.component';
 import { DeleteActionComponent } from './delete-action/delete-action.component';
 import {
   Action,

@@ -19,6 +19,12 @@ export class ContractService {
       .pipe(first());
   }
 
+  getContractsFromEvent(eventId: number) {
+    return this.http
+      .get<ContractEvents>(this.httpRoute + `/event/${eventId}`)
+      .pipe(first());
+  }
+
   getContracts(
     activeSort: string,
     order: string,
@@ -40,10 +46,15 @@ export class ContractService {
       .put(this.httpRoute + `/${contractId}`, { ...contractUpdateDto })
       .pipe(first());
   }
+
+  updateContractOrders(orders: { order: number; contractId: number }) {
+    return this.http.put(this.httpRoute + `/order`, { orders }).pipe(first());
+  }
 }
 
 export interface ContractUpdateDto {
   name: string;
+  order: number;
   active: boolean;
 }
 
@@ -64,6 +75,7 @@ interface ContractPaginationContent {
 export interface CreateContractDto {
   name: string;
   identifier?: string;
+  order: number;
   producerId: number;
   eventId: number;
   consumerId: number;
@@ -76,9 +88,16 @@ interface CreateContractResult {
   content: { contractId: number };
 }
 
+interface ContractEvents {
+  message: string;
+  code: number;
+  content: Contract[];
+}
+
 export interface Contract {
   id: number;
   name: string;
+  order: number;
   active: number;
   systemName: string;
   consumerName: string;

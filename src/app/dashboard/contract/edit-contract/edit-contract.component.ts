@@ -22,7 +22,6 @@ export class EditContractComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public contract: Contract,
     public dialogRef: MatDialogRef<EditContractComponent>
   ) {
-    console.log(contract.active);
     this.editContractForm = this.formBuilder.group({
       name: this.formBuilder.control(
         this.contract.name,
@@ -31,6 +30,15 @@ export class EditContractComponent implements OnInit {
           Validators.pattern(/^[a-zA-Z0-9_\.\-\/\s]+$/),
           Validators.minLength(1),
           Validators.maxLength(45),
+        ])
+      ),
+      order: this.formBuilder.control(
+        this.contract.order,
+        Validators.compose([
+          Validators.required,
+          Validators.min(0),
+          Validators.max(1000),
+          Validators.pattern(/^[0-9]+$/),
         ])
       ),
       active: this.formBuilder.control(

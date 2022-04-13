@@ -18,6 +18,15 @@
   </mat-form-field>
 
   <mat-form-field appearance="fill">
+    <mat-label>Order</mat-label>
+    <input type="number" formControlName="order" matInput />
+    <mat-hint>The contract execution order respect the event</mat-hint>
+    <mat-error *ngIf="editContractForm.get('order')?.invalid">{{
+      getErrorMessage("order")
+    }}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
     <mat-label>Active state</mat-label>
     <mat-select formControlName="active">
       <mat-option [value]="1">Active</mat-option>

@@ -52,6 +52,7 @@ export class ContractComponent implements OnInit, OnDestroy, AfterViewInit {
     'consumer',
     'actionIdentifier',
     'state',
+    'order',
     'actions',
   ];
 
@@ -97,6 +98,15 @@ export class ContractComponent implements OnInit, OnDestroy, AfterViewInit {
           Validators.pattern(/^[a-zA-Z0-9_\.\-\/\s]+$/),
           Validators.minLength(1),
           Validators.maxLength(45),
+        ])
+      ),
+      order: this.formBuilder.control(
+        0,
+        Validators.compose([
+          Validators.required,
+          Validators.min(0),
+          Validators.max(1000),
+          Validators.pattern(/^[0-9]+$/),
         ])
       ),
       identifier: this.formBuilder.control(
@@ -298,6 +308,14 @@ export class ContractComponent implements OnInit, OnDestroy, AfterViewInit {
   getErrorMessage(formControlName: string) {
     if (this.createContractForm.get(formControlName)?.hasError('required')) {
       return 'You must enter a value';
+    }
+
+    if (this.createContractForm.get(formControlName)?.hasError('max')) {
+      return 'Maximum value surpassed';
+    }
+
+    if (this.createContractForm.get(formControlName)?.hasError('min')) {
+      return 'Minimum is 0';
     }
 
     return this.createContractForm.get(formControlName)?.hasError('email')

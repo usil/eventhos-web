@@ -1,0 +1,41 @@
+<h2 mat-dialog-title>
+  Contracts of event: <span>{{ event.name }}</span>
+</h2>
+<div class="error-display" *ngIf="errorMessage">
+  <h5>{{ errorMessage }}</h5>
+</div>
+<div mat-dialog-content [formGroup]="ordersFormGroup">
+  <h1 class="no-contracts" *ngIf="contracts.length === 0">NO CONTRACTS</h1>
+  <mat-list [ngStyle]="{ display: 'grid', gap: '1rem' }" formArrayName="orders">
+    <mat-list-item
+      *ngFor="let control of ordersFormArray.controls; index as i"
+      textIndex="i"
+    >
+      <div mat-line>{{ contracts[i].name }}</div>
+      <div class="key-value-form" [formGroupName]="i">
+        <mat-form-field appearance="standard">
+          <mat-label>Order</mat-label>
+          <input type="number" formControlName="order" matInput />
+        </mat-form-field>
+      </div>
+    </mat-list-item>
+  </mat-list>
+</div>
+<div align="end" mat-dialog-actions>
+  <button
+    [ngStyle]="{ 'margin-right': '.5rem' }"
+    color="warn"
+    (click)="closeDialog()"
+    mat-stroked-button
+  >
+    Close
+  </button>
+  <button
+    (click)="updateContractsOrder()"
+    [disabled]="!ordersFormGroup.valid"
+    color="primary"
+    mat-flat-button
+  >
+    Update
+  </button>
+</div>

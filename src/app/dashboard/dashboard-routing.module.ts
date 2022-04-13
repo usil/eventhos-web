@@ -1,4 +1,3 @@
-import { LoginGuard } from './../guards/login.guard';
 import { EditActionComponent } from './action/edit-action/edit-action.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
@@ -49,7 +48,7 @@ const routes: Routes = [
         canLoad: [AdminGuard],
       },
       { path: 'profile', component: UserProfileComponent },
-      { path: '', redirectTo: 'home', pathMatch: 'full' },
+      { path: '', redirectTo: 'profile', pathMatch: 'full' },
     ],
   },
 ];

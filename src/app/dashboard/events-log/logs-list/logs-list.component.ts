@@ -154,7 +154,6 @@ export class LogsListComponent implements OnInit, OnDestroy, AfterViewInit {
         startWith({}),
         switchMap(() => {
           this.isLoadingResults = true;
-          console.log(this.systemId);
           return this.eventsLogsService!.getReceivedEvents(
             this.paginator.pageIndex,
             this.sort.direction,
