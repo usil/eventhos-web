@@ -24,7 +24,15 @@
         getErrorMessage("name")
       }}</mat-error>
     </mat-form-field>
-    <mat-form-field class="span-4" appearance="fill">
+    <mat-form-field class="span-2" appearance="fill">
+      <mat-label>Order</mat-label>
+      <input type="number" formControlName="order" matInput />
+      <mat-hint>The contract execution order respect the event</mat-hint>
+      <mat-error *ngIf="createContractForm.get('order')?.invalid">{{
+        getErrorMessage("order")
+      }}</mat-error>
+    </mat-form-field>
+    <mat-form-field class="span-6" appearance="fill">
       <mat-label>When in the producer...</mat-label>
       <mat-select formControlName="producerId">
         <mat-option *ngFor="let producer of producers" [value]="producer.id">{{
@@ -36,7 +44,7 @@
         getErrorMessage("producerId")
       }}</mat-error>
     </mat-form-field>
-    <mat-form-field class="span-4" appearance="fill">
+    <mat-form-field class="span-6" appearance="fill">
       <mat-label>This event occurs...</mat-label>
       <mat-select formControlName="eventId">
         <mat-option *ngFor="let event of events" [value]="event.id"
@@ -48,7 +56,7 @@
         getErrorMessage("eventId")
       }}</mat-error>
     </mat-form-field>
-    <mat-form-field class="span-4" appearance="fill">
+    <mat-form-field class="span-6" appearance="fill">
       <mat-label>Then in the consumer...</mat-label>
       <mat-select formControlName="consumerId">
         <mat-option *ngFor="let consumer of consumers" [value]="consumer.id">{{
@@ -60,7 +68,7 @@
         getErrorMessage("consumerId")
       }}</mat-error>
     </mat-form-field>
-    <mat-form-field class="span-4" appearance="fill">
+    <mat-form-field class="span-6" appearance="fill">
       <mat-label>Execute this action...</mat-label>
       <mat-select formControlName="actionId">
         <mat-option *ngFor="let action of actions" [value]="action.id"
@@ -72,12 +80,13 @@
         getErrorMessage("actionId")
       }}</mat-error>
     </mat-form-field>
+
     <button
       [disabled]="
         createContractForm.invalid || actions.length < 1 || events.length < 1
       "
       type="submit"
-      class="span-4"
+      class="span-6"
       color="accent"
       mat-flat-button
     >
@@ -135,6 +144,13 @@
           <th mat-header-cell *matHeaderCellDef>Active</th>
           <td mat-cell *matCellDef="let row">
             {{ row.active === 1 ? true : false }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="order">
+          <th mat-header-cell *matHeaderCellDef>Order</th>
+          <td mat-cell *matCellDef="let row">
+            {{ row.order }}
           </td>
         </ng-container>
 

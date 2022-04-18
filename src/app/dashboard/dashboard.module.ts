@@ -10,7 +10,6 @@ import { CommonModule, JsonPipe } from '@angular/common';
 import { DashboardComponent } from './dashboard.component';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashBoardMaterials } from './material/material.module';
-import { FormsComponent } from './forms/forms.component';
 import { TablesComponent } from './tables/tables.component';
 import { EventsLogComponent } from './events-log/events-log.component';
 import { UserComponent } from './access/user/user.component';
@@ -24,7 +23,6 @@ import { EventComponent } from './event/event.component';
 import { ActionComponent } from './action/action.component';
 import { ContractComponent } from './contract/contract.component';
 import { EditComponent } from './system/edit/edit.component';
-import { DeleteComponent } from './system/delete/delete.component';
 import { DeleteSystemComponent } from './system/delete-system/delete-system.component';
 import { EditSystemComponent } from './system/edit-system/edit-system.component';
 import { DeleteEventComponent } from './event/delete-event/delete-event.component';
@@ -48,11 +46,11 @@ import { LogsListComponent } from './events-log/logs-list/logs-list.component';
 import { EventExecutionDetailsComponent } from './events-log/event-execution-details/event-execution-details.component';
 import { EventContractsComponent } from './events-log/event-contracts/event-contracts.component';
 import { ContractExecutionDetailComponent } from './events-log/contract-execution-detail/contract-execution-detail.component';
+import { ViewContractsComponent } from './event/view-contracts/view-contracts.component';
 
 @NgModule({
   declarations: [
     DashboardComponent,
-    FormsComponent,
     TablesComponent,
     EventsLogComponent,
     UserComponent,
@@ -65,7 +63,6 @@ import { ContractExecutionDetailComponent } from './events-log/contract-executio
     ActionComponent,
     ContractComponent,
     EditComponent,
-    DeleteComponent,
     DeleteSystemComponent,
     EditSystemComponent,
     DeleteEventComponent,
@@ -78,6 +75,7 @@ import { ContractExecutionDetailComponent } from './events-log/contract-executio
     EventExecutionDetailsComponent,
     EventContractsComponent,
     ContractExecutionDetailComponent,
+    ViewContractsComponent,
   ],
   imports: [
     CommonModule,

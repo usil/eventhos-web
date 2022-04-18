@@ -24,13 +24,7 @@ import {
   FormGroupDirective,
   Validators,
 } from '@angular/forms';
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  ViewChild,
-  AfterViewInit,
-} from '@angular/core';
+import { Component, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import { System, SystemService } from '../services/system.service';
 import { Event } from '../services/event.service';
 import { Action } from '../services/action.service';
@@ -43,7 +37,7 @@ import { MatDialog } from '@angular/material/dialog';
   templateUrl: './contract.component.html',
   styleUrls: ['./contract.component.scss'],
 })
-export class ContractComponent implements OnInit, OnDestroy, AfterViewInit {
+export class ContractComponent implements OnDestroy, AfterViewInit {
   displayedColumns: string[] = [
     'id',
     'name',
@@ -52,6 +46,7 @@ export class ContractComponent implements OnInit, OnDestroy, AfterViewInit {
     'consumer',
     'actionIdentifier',
     'state',
+    'order',
     'actions',
   ];
 
@@ -99,6 +94,15 @@ export class ContractComponent implements OnInit, OnDestroy, AfterViewInit {
           Validators.maxLength(45),
         ])
       ),
+      order: this.formBuilder.control(
+        0,
+        Validators.compose([
+          Validators.required,
+          Validators.min(0),
+          Validators.max(1000),
+          Validators.pattern(/^[\d]+$/),
+        ])
+      ),
       identifier: this.formBuilder.control(
         { value: '', disabled: true },
         Validators.compose([Validators.required])
@@ -123,11 +127,7 @@ export class ContractComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.systemService.getSystems('id', 'desc', 0, 100, 'producer').subscribe({
       error: (err) => {
-        if (err.error) {
-          this.errorMessage = err.error.message;
-        } else {
-          this.errorMessage = 'Unknown Error';
-        }
+        this.handleError(err);
       },
       next: (res) => {
         this.createContractForm.get('producerId')?.enable();
@@ -143,11 +143,7 @@ export class ContractComponent implements OnInit, OnDestroy, AfterViewInit {
         if (!id) return;
         this.systemService.getSystemEvents(id).subscribe({
           error: (err) => {
-            if (err.error) {
-              this.errorMessage = err.error.message;
-            } else {
-              this.errorMessage = 'Unknown Error';
-            }
+            this.handleError(err);
           },
           next: (res) => {
             this.createContractForm.get('eventId')?.enable();
@@ -158,11 +154,7 @@ export class ContractComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.systemService.getSystems('id', 'desc', 0, 100, 'consumer').subscribe({
       error: (err) => {
-        if (err.error) {
-          this.errorMessage = err.error.message;
-        } else {
-          this.errorMessage = 'Unknown Error';
-        }
+        this.handleError(err);
       },
       next: (res) => {
         this.createContractForm.get('consumerId')?.enable();
@@ -178,11 +170,7 @@ export class ContractComponent implements OnInit, OnDestroy, AfterViewInit {
         if (!id) return;
         this.systemService.getSystemActions(id).subscribe({
           error: (err) => {
-            if (err.error) {
-              this.errorMessage = err.error.message;
-            } else {
-              this.errorMessage = 'Unknown Error';
-            }
+            this.handleError(err);
           },
           next: (res) => {
             this.createContractForm.get('actionId')?.enable();
@@ -213,6 +201,15 @@ export class ContractComponent implements OnInit, OnDestroy, AfterViewInit {
       },
     });
   }
+
+  handleError(err: any) {
+    if (err.error) {
+      this.errorMessage = err.error.message;
+    } else {
+      this.errorMessage = 'Unknown Error';
+    }
+  }
+
   ngAfterViewInit(): void {
     this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
     this.roleDataSubscription = merge(
@@ -264,8 +261,6 @@ export class ContractComponent implements OnInit, OnDestroy, AfterViewInit {
     this.producerId$.unsubscribe();
   }
 
-  ngOnInit(): void {}
-
   createContract(contractForm: CreateContractDto) {
     const identifier = this.createContractForm.get('identifier')?.value;
     this.createContractForm.disable();
@@ -300,6 +295,14 @@ export class ContractComponent implements OnInit, OnDestroy, AfterViewInit {
       return 'You must enter a value';
     }
 
+    if (this.createContractForm.get(formControlName)?.hasError('max')) {
+      return 'Maximum value surpassed';
+    }
+
+    if (this.createContractForm.get(formControlName)?.hasError('min')) {
+      return 'Minimum is 0';
+    }
+
     return this.createContractForm.get(formControlName)?.hasError('email')
       ? 'Not a valid email'
       : '';
@@ -317,11 +320,15 @@ export class ContractComponent implements OnInit, OnDestroy, AfterViewInit {
       .pipe(first())
       .subscribe({
         next: (res) => {
-          if (res) {
-            this.reload.next(this.reload.value + 1);
-          }
+          this.afterDialogCloseHandle(res);
         },
       });
+  }
+
+  afterDialogCloseHandle(res: any) {
+    if (res) {
+      this.reload.next(this.reload.value + 1);
+    }
   }
 
   openEditDialog(contract: Contract) {
@@ -336,9 +343,7 @@ export class ContractComponent implements OnInit, OnDestroy, AfterViewInit {
       .pipe(first())
       .subscribe({
         next: (res) => {
-          if (res) {
-            this.reload.next(this.reload.value + 1);
-          }
+          this.afterDialogCloseHandle(res);
         },
       });
   }

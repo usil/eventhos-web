@@ -21,9 +21,17 @@ export class EventService {
     activeSort: string,
     order: string,
     pageIndex: number,
-    itemsPerPage: number
+    itemsPerPage: number,
+    filters?: { systemId?: number; eventName?: string }
   ) {
     let queryString = `?activeSort=${activeSort}&order=${order}&pageIndex=${pageIndex}&itemsPerPage=${itemsPerPage}`;
+    if (filters && filters.systemId) {
+      queryString += `&systemId=${filters.systemId}`;
+    }
+
+    if (filters && filters.eventName !== '') {
+      queryString += `&eventName=${filters.eventName}`;
+    }
     return this.http
       .get<EventPaginationResult>(this.httpRoute + queryString)
       .pipe(first());

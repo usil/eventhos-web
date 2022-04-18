@@ -23,6 +23,8 @@ import { System } from '../services/system.service';
 import {
   BehaviorSubject,
   catchError,
+  debounceTime,
+  distinctUntilChanged,
   first,
   map,
   merge,
@@ -36,6 +38,7 @@ import {
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
+import { ViewContractsComponent } from './view-contracts/view-contracts.component';
 
 @Component({
   selector: 'app-event',
@@ -49,7 +52,7 @@ export class EventComponent implements OnInit, OnDestroy, AfterViewInit {
     'name',
     'operation',
     'description',
-    'system_id',
+    'contracts',
     'actions',
   ];
 
@@ -69,9 +72,15 @@ export class EventComponent implements OnInit, OnDestroy, AfterViewInit {
 
   errorMessage!: string | undefined;
   createEventForm: FormGroup;
+  searchEventForm: FormGroup;
   operations = ['select', 'new', 'update', 'delete'];
   producerSystems: System[] = [];
   generateIdentifier$: Subscription;
+  systemIdChange$: Subscription;
+  nameChange$: Subscription;
+
+  systemId!: string;
+  eventName = '';
 
   reload = new BehaviorSubject<number>(0);
 
@@ -81,6 +90,28 @@ export class EventComponent implements OnInit, OnDestroy, AfterViewInit {
     private formBuilder: FormBuilder,
     public dialog: MatDialog
   ) {
+    this.searchEventForm = this.formBuilder.group({
+      systemId: this.formBuilder.control(''),
+      name: this.formBuilder.control(''),
+    });
+
+    this.nameChange$ = this.searchEventForm
+      .get('name')
+      ?.valueChanges.pipe(distinctUntilChanged(), debounceTime(750))
+      .subscribe((changeValue) => {
+        this.eventName = changeValue;
+        this.paginator.pageIndex = 0;
+        this.reload.next(this.reload.value + 1);
+      }) as Subscription;
+
+    this.systemIdChange$ = this.searchEventForm
+      .get('systemId')
+      ?.valueChanges.subscribe((changeValue) => {
+        this.systemId = changeValue;
+        this.paginator.pageIndex = 0;
+        this.reload.next(this.reload.value + 1);
+      }) as Subscription;
+
     this.createEventForm = this.formBuilder.group({
       identifier: this.formBuilder.control(
         { value: '', disabled: true },
@@ -118,7 +149,6 @@ export class EventComponent implements OnInit, OnDestroy, AfterViewInit {
     ).subscribe({
       next: () => {
         let name = this.createEventForm.get('name')?.value as string;
-        console.log('x', name);
         if (name && name !== '') {
           const type = this.createEventForm.get('operation')?.value as string;
           name = name.trim();
@@ -134,24 +164,26 @@ export class EventComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
+
     this.roleDataSubscription = merge(
       this.sort.sortChange,
       this.paginator.page,
       this.reload
     )
       .pipe(
+        distinctUntilChanged(),
         skip(1),
         startWith({}),
         switchMap(() => {
           this.errorMessage = undefined;
           this.isLoadingResults = true;
-          console.log(this.reload.value);
           return this.eventService
             .getEvents(
               this.sort.active,
               this.sort.direction,
               this.paginator.pageIndex,
-              this.pageSize
+              this.pageSize,
+              { systemId: parseInt(this.systemId), eventName: this.eventName }
             )
             .pipe(
               catchError((err) => {
@@ -179,7 +211,9 @@ export class EventComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnDestroy(): void {
+    this.systemIdChange$?.unsubscribe();
     this.generateIdentifier$?.unsubscribe();
+    this.nameChange$?.unsubscribe();
   }
 
   ngOnInit(): void {
@@ -269,5 +303,13 @@ export class EventComponent implements OnInit, OnDestroy, AfterViewInit {
           }
         },
       });
+  }
+
+  openViewContractsDialog(event: Event) {
+    this.dialog.open(ViewContractsComponent, {
+      width: '600px',
+      maxHeight: '70vh',
+      data: event,
+    });
   }
 }
