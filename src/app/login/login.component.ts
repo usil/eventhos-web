@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoginService } from './services/login.service';
@@ -8,10 +8,10 @@ import { LoginService } from './services/login.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   hide = true;
   loginForm: FormGroup;
-  errorMessage!: String;
+  errorMessage!: string;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
             /^[a-zA-Z0-9\d@$!%*#?&]*[A-Z]+[a-zA-Z0-9\d@$!%*#?&]*$/
           ),
           Validators.pattern(
-            /^[a-zA-Z0-9\d@$!%*#?&]*[0-9]+[a-zA-Z0-9\d@$!%*#?&]*$/
+            /^[a-zA-Z0-9\d@$!%*#?&]*[\d]+[a-zA-Z0-9\d@$!%*#?&]*$/
           ),
           Validators.pattern(
             /^[a-zA-Z0-9\d@$!%*#?&]*[a-z]+[a-zA-Z0-9\d@$!%*#?&]*$/
@@ -46,8 +46,6 @@ export class LoginComponent implements OnInit {
       ),
     });
   }
-
-  ngOnInit(): void {}
 
   login(loginBody: { username: string; password: string }) {
     this.loginService.login(loginBody).subscribe({

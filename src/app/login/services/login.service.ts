@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { first, map, Observable, tap } from 'rxjs';
+import { first, Observable, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -52,14 +52,13 @@ export class LoginService {
 
   getRoles() {
     const roles = localStorage.getItem('roles');
-    const rolesArray = roles?.split('|||');
-    return rolesArray;
+    return roles?.split('|||');
   }
 }
 
 interface LoginResult {
   message: string;
-  code: Number;
+  code: number;
   content?: UserLogin;
 }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { MediaMatcher } from '@angular/cdk/layout';
 import routes from './routes';
 import accessRoutes from './access.routes';
@@ -10,13 +10,13 @@ import { Router } from '@angular/router';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent {
   mobileQuery: MediaQueryList;
   eventhosRoutes = routes;
   accessRoutesList = accessRoutes;
 
   title = environment.title;
-  username: String;
+  username: string;
   tablesPanelOpen = false;
   authPanelOpen = false;
   isAdminUser: boolean;
@@ -39,8 +39,6 @@ export class DashboardComponent implements OnInit {
   ngOnDestroy(): void {
     this.mobileQuery.removeListener(this._mobileQueryListener);
   }
-
-  ngOnInit(): void {}
 
   logOut() {
     this.loginService.logOut();
