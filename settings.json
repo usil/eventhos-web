@@ -1,4 +1,4 @@
 {
   "title": "Eventhos",
-  "api": "${URL}"
+  "api": "${EVENTHOS_API_BASE_URL}"
 }
