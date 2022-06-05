@@ -2,72 +2,40 @@
 
 @include mat.core();
 
-$usil-blue: (
-  50: #b8b8fc,
-  200: #b0b0fa,
-  300: #8686eb,
-  400: #5858da,
-  500: #4747d3,
-  600: #3636be,
-  700: #2525ac,
-  800: #1a1aa3,
-  900: #0b0b96,
-  A100: #0b0b96,
-  A200: #0b0b96,
-  A400: #0b0b96,
-  A700: #0b0b96,
+$usil-light-blue: (
+  50: #f3f5ff,
+  200: #b9c4fb,
+  300: #a3b2f9,
+  400: #8ea0fa,
+  500: #7d91f9,
+  600: #6c83f9,
+  700: #526ef8,
+  800: #3b5af5,
+  900: #2e4ff1,
+  A100: #2e4ff1,
+  A200: #2e4ff1,
+  A400: #2e4ff1,
+  A700: #2e4ff1,
   contrast: (
-    50: white,
-    100: white,
-    200: white,
-    300: white,
-    400: white,
-    500: white,
-    600: white,
-    700: white,
-    800: white,
-    900: white,
-    A100: white,
-    A200: white,
-    A400: white,
-    A700: white,
+    50: #f3f5ff,
+    100: #f3f5ff,
+    200: #f3f5ff,
+    300: #f3f5ff,
+    400: #f3f5ff,
+    500: #f3f5ff,
+    600: #f3f5ff,
+    700: #f3f5ff,
+    800: #f3f5ff,
+    900: #f3f5ff,
+    A100: #f3f5ff,
+    A200: #f3f5ff,
+    A400: #f3f5ff,
+    A700: #f3f5ff,
   ),
 );
 
-$usil-yellow: (
-  50: #fffae1,
-  200: #fcf5d1,
-  300: #fcefad,
-  400: #fcec9e,
-  500: #fae478,
-  600: #ffe250,
-  700: #ffdd34,
-  800: #fcd61c,
-  900: #ffd300,
-  A100: #ffd300,
-  A200: #ffd300,
-  A400: #ffd300,
-  A700: #ffd300,
-  contrast: (
-    50: #0b0b96,
-    100: #0b0b96,
-    200: #0b0b96,
-    300: #0b0b96,
-    400: #0b0b96,
-    500: #0b0b96,
-    600: #0b0b96,
-    700: #0b0b96,
-    800: #0b0b96,
-    900: #0b0b96,
-    A100: #0b0b96,
-    A200: #0b0b96,
-    A400: #0b0b96,
-    A700: #0b0b96,
-  ),
-);
-
-$my-primary: mat.define-palette($usil-blue, 900);
-$my-accent: mat.define-palette($usil-yellow, 900, 700, 400);
+$my-primary: mat.define-palette($usil-light-blue, 900);
+$my-accent: mat.define-palette($usil-light-blue, 900, 700, 400);
 
 $usil-theme: mat.define-light-theme(
   (

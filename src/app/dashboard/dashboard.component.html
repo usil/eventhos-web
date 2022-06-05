@@ -5,7 +5,12 @@
     </button>
     <h1 class="app-name">Eventhos</h1>
     <span class="spacer"></span>
-    <button color="accent" mat-button [matMenuTriggerFor]="menu">
+    <button
+      class="profile-menu"
+      color="accent"
+      mat-button
+      [matMenuTriggerFor]="menu"
+    >
       {{ username }}
     </button>
     <mat-menu color="primary" #menu="matMenu">
