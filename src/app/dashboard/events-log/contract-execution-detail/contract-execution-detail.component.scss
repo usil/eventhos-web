@@ -1,11 +1,15 @@
 h2 {
   color: #162573;
   span {
-    color: #ffd300;
+    color: #162573;
   }
 }
 
-.card-title {
+.mat-card-content .card-title {
+  color: #162573;
+}
+
+.list-color {
   color: #162573;
 }
 

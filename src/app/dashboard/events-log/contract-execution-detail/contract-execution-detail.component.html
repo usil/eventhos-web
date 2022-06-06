@@ -11,23 +11,27 @@
     <mat-card-content>
       <mat-list role="list">
         <mat-list-item role="listitem"
-          >Url: {{ contractExecutionDetail.request.url }}</mat-list-item
-        >
+          ><span class="list-color"
+            >Url: {{ contractExecutionDetail.request.url }}</span
+          >
+        </mat-list-item>
         <mat-list-item role="listitem"
-          >Started At:
-          {{
+          ><span class="list-color">Started At:</span>
+          <span class="list-color">{{
             contractExecutionDetail.response.startTime | date: "long"
-          }}</mat-list-item
-        >
+          }}</span>
+        </mat-list-item>
         <mat-list-item role="listitem"
-          >Finished At:
-          {{
-            contractExecutionDetail.response.endTime | date: "long"
-          }}</mat-list-item
-        >
+          ><span class="list-color">Finished At:</span>
+          <span class="list-color">
+            {{ contractExecutionDetail.response.endTime | date: "long" }}
+          </span>
+        </mat-list-item>
         <mat-list-item role="listitem"
-          >Finished In: {{ getElapsedTime() }} seconds</mat-list-item
-        >
+          ><span class="list-color"
+            >Finished In: {{ getElapsedTime() }} seconds</span
+          >
+        </mat-list-item>
       </mat-list>
     </mat-card-content>
   </mat-card>
