@@ -27,6 +27,12 @@ Add the materials in the materials folder that is present in each module.
 
 Just run `ng serve` like always. This template uses a modified angular development server.
 
+## Environment variables
+
+| Variable                             | Description                                    | Default Value |
+| ------------------------------------ | ---------------------------------------------- | ------------- |
+| EVENTHOS_API_BASE_URL                       | The eventhos api base url           | NULL      |
+
 ## For Production
 
 First use `ng build` then `npm start`, this will run `nodeboot-spa-server dist/template-dashboard -s settings.json -p 2000 --allow-routes`
