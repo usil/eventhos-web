@@ -43,6 +43,10 @@ You can also look a the testing here as a template. The testing only covers the 
 
 `more functionalities in progress`
 
+## Assets
+
+<a href="https://iconscout.com/icons/live-streaming" target="_blank">Live streaming Logo Icon</a> by <a href="https://iconscout.com/contributors/kawalanicon" target="_blank">Kawalan Studio</a>
+
 ## Contributors
 
 <table>
