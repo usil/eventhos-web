@@ -3,7 +3,7 @@
   <div class="error-display" *ngIf="errorMessage">
     <h5>{{ errorMessage }}</h5>
   </div>
-  <p>Are you sure?</p>
+  <p *ngIf="!errorMessage" >Are you sure?</p>
 </div>
 <div align="end" mat-dialog-actions>
   <button
@@ -15,6 +15,7 @@
   >
     Cancel</button
   ><button
+    *ngIf="!errorMessage"
     class="right-btn"
     (click)="delete()"
     type="button"
