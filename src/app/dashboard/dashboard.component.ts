@@ -52,7 +52,7 @@ export class DashboardComponent {
 
   ngAfterViewInit() {
     var dashboardContainer = document.getElementsByClassName("dashboard-container")[0];
-    var scaleState = 0.9;
+    var scaleState = 0.8;
     //https://stackoverflow.com/questions/10464038/imitate-browser-zoom-with-javascript
     dashboardContainer.setAttribute("style",
       `transform: scale(${scaleState}); 
