@@ -56,6 +56,18 @@
       </button>
     </td>
   </ng-container>
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <ng-container matColumnDef="retry">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let element">
+        <button
+          (click)="retrySendEventContract(element.contractId)"
+          mat-stroked-button
+          *ngIf="element.state == 'error' ? true : false"
+        >
+          <mat-icon>autorenew</mat-icon> retry 
+        </button>
+    </td>
+  </ng-container>
+  <tr mat-head r-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 </table>

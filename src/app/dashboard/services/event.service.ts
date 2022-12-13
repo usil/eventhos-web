@@ -46,6 +46,11 @@ export class EventService {
       .put(this.httpRoute + `/${systemId}`, { ...eventUpdateDto })
       .pipe(first());
   }
+
+  handleEventContract(eventIdentifier: string, accessKey: string, contractId: number) {
+    let query = `?event-identifier=${eventIdentifier}&access-key=${accessKey}&contract-id=${contractId}`; 
+    return this.http.post(this.httpRoute + '/send/contract' + query, {}) 
+  }
 }
 
 export interface EventUpdateDto {
