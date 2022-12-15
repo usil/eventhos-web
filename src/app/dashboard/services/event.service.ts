@@ -47,9 +47,9 @@ export class EventService {
       .pipe(first());
   }
 
-  handleEventContract(eventIdentifier: string, accessKey: string, contractId: number) {
+  handleEventContract(eventIdentifier: string, accessKey: string, contractId: number, contractDetailId: number) {
     let query = `?event-identifier=${eventIdentifier}&access-key=${accessKey}&contract-id=${contractId}`; 
-    return this.http.post(this.httpRoute + '/send/contract' + query, {}) 
+    return this.http.post(this.httpRoute + '/send/contract' + query, {contractDetailId}) 
   }
 }
 

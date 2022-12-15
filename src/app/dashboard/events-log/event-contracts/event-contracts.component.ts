@@ -68,11 +68,12 @@ export class EventContractsComponent implements OnInit {
     );
   }
 
-  retrySendEventContract(contractId: number) {
+  retrySendEventContract(contractId: number, contractDetailId: number) {
     this.eventService.handleEventContract(
       this.receivedEvent.received_request.query["event-identifier"], 
       this.receivedEvent.received_request.query["access-key"],
-      contractId
+      contractId,
+      contractDetailId
     ).subscribe({
       error: (err) => {
         console.error(err)

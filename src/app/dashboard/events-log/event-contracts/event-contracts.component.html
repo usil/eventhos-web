@@ -50,6 +50,9 @@
     <td mat-cell *matCellDef="let element">
       <button
         (click)="goToContractDetailsPage(element.detailId)"
+        [ngStyle]="{
+          color: element.state == 'error' ? 'red' : 'green'
+        }"
         mat-stroked-button
       >
         {{ element.state }}
@@ -60,12 +63,13 @@
     <th mat-header-cell *matHeaderCellDef></th>
     <td mat-cell *matCellDef="let element">
         <button
-          (click)="retrySendEventContract(element.contractId)"
+          (click)="retrySendEventContract(element.contractId, element.detailId)"
           mat-stroked-button
-          *ngIf="element.state == 'error' ? true : false"
+          *ngIf="element.state == 'error' && element.attempts == 0 ? true : false"
         >
           <mat-icon>autorenew</mat-icon> retry 
         </button>
+        <mat-label *ngIf="element.attempts != 0">retried</mat-label>
     </td>
   </ng-container>
   <tr mat-head r-row *matHeaderRowDef="displayedColumns"></tr>
