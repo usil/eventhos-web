@@ -63,7 +63,7 @@
     <th mat-header-cell *matHeaderCellDef></th>
     <td mat-cell *matCellDef="let element">
         <button
-          (click)="retrySendEventContract(element.contractId, element.detailId)"
+          (click)="retrySendEventContract(element.contractId, element.detailId, receivedEvent.id)"
           mat-stroked-button
           *ngIf="element.state == 'error' && element.attempts == 0 ? true : false"
         >
