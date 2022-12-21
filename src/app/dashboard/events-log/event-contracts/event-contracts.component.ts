@@ -80,6 +80,7 @@ export class EventContractsComponent implements OnInit {
     ).subscribe({
       error: (err) => {
         console.error(err)
+        alert('There are errors ' + err.error.message)
       },
       next: () => {
         this.router.navigate(['/dashboard/events-logs']);
