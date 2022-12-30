@@ -28,7 +28,22 @@ export class EditActionComponent implements OnInit, OnDestroy {
     { name: 'oauth2 client', code: 1 },
   ];
   operations = ['select', 'new', 'update', 'delete'];
-  methods = ['get', 'post', 'put', 'delete'];
+  methods = ['get', 
+    'post', 
+    'put', 
+    'delete', 
+    'patch', 
+    'copy', 
+    'head',
+    'options',
+    'link',
+    'unlink',
+    'purge',
+    'lock',
+    'unlock',
+    'propfind',
+    'view'
+  ];
   hide = true;
   headersFormArray!: FormArray;
   queryFormArray!: FormArray;
