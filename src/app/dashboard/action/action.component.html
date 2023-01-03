@@ -220,7 +220,8 @@
     <h4
       *ngIf="
         createActionForm.get('method')?.value === 'post' ||
-        createActionForm.get('method')?.value === 'put'
+        createActionForm.get('method')?.value === 'put' ||
+        createActionForm.get('method')?.value === 'patch'
       "
       class="span-4"
     >
@@ -229,7 +230,9 @@
     <div
       *ngIf="
         createActionForm.get('method')?.value === 'post' ||
-        createActionForm.get('method')?.value === 'put'
+        createActionForm.get('method')?.value === 'put' ||
+        createActionForm.get('method')?.value === 'patch'
+
       "
       class="span-4 radial-input"
     >
@@ -242,7 +245,8 @@
     <mat-form-field
       *ngIf="
         (createActionForm.get('method')?.value === 'post' ||
-          createActionForm.get('method')?.value === 'put') &&
+          createActionForm.get('method')?.value === 'put' || 
+          createActionForm.get('method')?.value === 'patch' ) &&
         createActionForm.get('bodyInput')?.value !== 'keyValue'
       "
       class="span-4"
@@ -270,7 +274,8 @@
     <div
       *ngIf="
         (createActionForm.get('method')?.value === 'post' ||
-          createActionForm.get('method')?.value === 'put') &&
+          createActionForm.get('method')?.value === 'put' ||
+          createActionForm.get('method')?.value === 'patch') &&
         createActionForm.get('bodyInput')?.value === 'keyValue'
       "
       formArrayName="body"
@@ -301,7 +306,8 @@
     <button
       *ngIf="
         (createActionForm.get('method')?.value === 'post' ||
-          createActionForm.get('method')?.value === 'put') &&
+          createActionForm.get('method')?.value === 'put' ||
+          createActionForm.get('method')?.value === 'patch') &&
         createActionForm.get('bodyInput')?.value === 'keyValue'
       "
       (click)="addBodyPair()"

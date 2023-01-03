@@ -203,7 +203,8 @@
       <h4
         *ngIf="
           editActionForm.get('method')?.value === 'post' ||
-          editActionForm.get('method')?.value === 'put'
+          editActionForm.get('method')?.value === 'put' ||
+          editActionForm.get('method')?.value === 'patch'
         "
         class="span-4"
       >
@@ -212,7 +213,9 @@
       <mat-form-field
         *ngIf="
           editActionForm.get('method')?.value === 'post' ||
-          editActionForm.get('method')?.value === 'put'
+          editActionForm.get('method')?.value === 'put' ||
+          editActionForm.get('method')?.value === 'patch'
+
         "
         class="span-4"
         appearance="fill"
