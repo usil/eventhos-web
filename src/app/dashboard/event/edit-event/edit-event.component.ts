@@ -16,7 +16,7 @@ export class EditEventComponent implements OnInit {
   errorMessage!: string | undefined;
   clients: Client[] = [];
   producerSystems: System[] = [];
-  operations = ['select', 'new', 'update', 'delete'];
+  operations = ['select', 'new', 'update', 'delete', 'execute', 'other'];
 
   constructor(
     private eventService: EventService,
