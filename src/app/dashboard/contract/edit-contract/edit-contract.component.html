@@ -37,6 +37,11 @@
       getErrorMessage("operation")
     }}</mat-error>
   </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Mail recipients on error</mat-label>
+    <input formControlName="mailRecipientsOnError" matInput placeholder="user@gmail.com,user2@outlook.com,user3@usil.edu.pe" />
+    <mat-hint>Receptors when there are errors</mat-hint>
+  </mat-form-field>
   <div align="end" mat-dialog-actions>
     <button
       [ngStyle]="{ 'margin-right': '.5rem' }"

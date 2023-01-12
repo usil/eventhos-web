@@ -45,6 +45,12 @@ export class EditContractComponent implements OnInit {
         this.contract.active,
         Validators.required
       ),
+      mailRecipientsOnError: this.formBuilder.control(
+        this.contract.mailRecipientsOnError,
+        Validators.compose([
+          // Validators.pattern(//),
+        ])
+      )
     });
   }
 
