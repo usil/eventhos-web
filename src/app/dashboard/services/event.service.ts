@@ -57,6 +57,15 @@ export class EventService {
     let query = `?event-identifier=${eventIdentifier}&access-key=${accessKey}&contract-id=${contractId}`; 
     return this.http.post(this.httpRoute + '/send/contract' + query, {contractDetailId, receivedEventId}) 
   }
+
+  handleRetryAbort(
+    eventIdentifier: string,
+    accessKey: string,
+    contractDetailId: number,
+  ) {
+    let query = `?event-identifier=${eventIdentifier}&access-key=${accessKey}`; 
+    return this.http.post(this.httpRoute + '/retry/aborted' + query, {contractDetailId}) 
+  }
 }
 
 export interface EventUpdateDto {

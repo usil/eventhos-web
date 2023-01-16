@@ -20,7 +20,8 @@ export class EventContractsComponent implements OnInit {
     'contractActionId',
     'contractActionName',
     'state',
-    'retry'
+    'retry',
+    'abort'
   ];
   receivedEvent!: ReceivedEvent;
   receivedEventDetails: ReceivedEventContracts[] = [];
@@ -77,6 +78,21 @@ export class EventContractsComponent implements OnInit {
       contractId,
       contractDetailId,
       receivedEventId
+    ).subscribe({
+      error: (err) => {
+        console.error(err)
+        alert('There are errors ' + err.error.message)
+      },
+      next: () => {
+        this.router.navigate(['/dashboard/events-logs']);
+      },
+    });
+  }
+  retryAbort(contractDetailId: number,) {
+    this.eventService.handleRetryAbort(
+      this.receivedEvent.received_request.query["event-identifier"], 
+      this.receivedEvent.received_request.query["access-key"],
+      contractDetailId,
     ).subscribe({
       error: (err) => {
         console.error(err)
