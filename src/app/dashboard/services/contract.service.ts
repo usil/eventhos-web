@@ -56,6 +56,7 @@ export interface ContractUpdateDto {
   name: string;
   order: number;
   active: boolean;
+  mailRecipientsOnError?: string;
 }
 
 interface ContractPaginationResult {
@@ -103,4 +104,5 @@ export interface Contract {
   consumerName: string;
   eventIdentifier: string;
   actionIdentifier: string;
+  mailRecipientsOnError: string;
 }

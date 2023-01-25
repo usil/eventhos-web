@@ -28,7 +28,22 @@ export class EditActionComponent implements OnInit, OnDestroy {
     { name: 'oauth2 client', code: 1 },
   ];
   operations = ['select', 'new', 'update', 'delete'];
-  methods = ['get', 'post', 'put', 'delete'];
+  methods = ['get', 
+    'post', 
+    'put', 
+    'delete', 
+    'patch', 
+    'copy', 
+    'head',
+    'options',
+    'link',
+    'unlink',
+    'purge',
+    'lock',
+    'unlock',
+    'propfind',
+    'view'
+  ];
   hide = true;
   headersFormArray!: FormArray;
   queryFormArray!: FormArray;
@@ -148,7 +163,8 @@ export class EditActionComponent implements OnInit, OnDestroy {
     });
     if (
       action.httpConfiguration.method === 'post' ||
-      action.httpConfiguration.method === 'put'
+      action.httpConfiguration.method === 'put' ||
+      action.httpConfiguration.method === 'patch' 
     ) {
       this.editActionForm.get('rawBody')?.enable();
     }
@@ -166,7 +182,7 @@ export class EditActionComponent implements OnInit, OnDestroy {
     this.methodChangeSubscription$ = this.editActionForm
       .get('method')
       ?.valueChanges.subscribe((changeValue) => {
-        if (changeValue === 'post' || changeValue === 'put') {
+        if (changeValue === 'post' || changeValue === 'put' || changeValue === 'patch') {
           this.editActionForm.get('rawBody')?.enable();
         } else {
           this.editActionForm.get('rawBody')?.disable();

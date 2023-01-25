@@ -5,6 +5,9 @@ import {
 } from './../../services/events-logs.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import {
+  EventService,
+} from './../../services/event.service';
 
 @Component({
   selector: 'app-event-contracts',
@@ -17,6 +20,8 @@ export class EventContractsComponent implements OnInit {
     'contractActionId',
     'contractActionName',
     'state',
+    'retry',
+    'abort'
   ];
   receivedEvent!: ReceivedEvent;
   receivedEventDetails: ReceivedEventContracts[] = [];
@@ -24,17 +29,20 @@ export class EventContractsComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private eventLogService: EventsLogsService
+    private eventLogService: EventsLogsService,
+    private eventService: EventService,
   ) {
     if (
       this.activatedRoute.snapshot.queryParams['receivedEventId'] !== undefined
     ) {
+      //get all contracts for this event
       this.eventLogService
         .getReceivedEventDetails(
           this.activatedRoute.snapshot.queryParams['receivedEventId']
         )
         .subscribe({
           next: (res) => {
+            console.log(res.content)
             this.receivedEvent = res.content.receivedEvent;
             this.receivedEventDetails = res.content.executedEventContracts;
           },
@@ -60,5 +68,39 @@ export class EventContractsComponent implements OnInit {
         },
       }
     );
+  }
+
+  retrySendEventContract(contractId: number, contractDetailId: number, receivedEventId:  number) {
+    console.log(receivedEventId)
+    this.eventService.handleEventContract(
+      this.receivedEvent.received_request.query["event-identifier"], 
+      this.receivedEvent.received_request.query["access-key"],
+      contractId,
+      contractDetailId,
+      receivedEventId
+    ).subscribe({
+      error: (err) => {
+        console.error(err)
+        alert('There are errors ' + err.error.message)
+      },
+      next: () => {
+        this.router.navigate(['/dashboard/events-logs']);
+      },
+    });
+  }
+  retryAbort(contractDetailId: number,) {
+    this.eventService.handleRetryAbort(
+      this.receivedEvent.received_request.query["event-identifier"], 
+      this.receivedEvent.received_request.query["access-key"],
+      contractDetailId,
+    ).subscribe({
+      error: (err) => {
+        console.error(err)
+        alert('There are errors ' + err.error.message)
+      },
+      next: () => {
+        this.router.navigate(['/dashboard/events-logs']);
+      },
+    });
   }
 }
