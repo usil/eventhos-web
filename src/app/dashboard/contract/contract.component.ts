@@ -123,6 +123,12 @@ export class ContractComponent implements OnDestroy, AfterViewInit {
         { value: '', disabled: true },
         Validators.required
       ),
+      mailRecipientsOnError: this.formBuilder.control(
+        '',
+        Validators.compose([
+          // Validators.pattern(//),
+        ])
+      )
     });
 
     this.systemService.getSystems('id', 'desc', 0, 100, 'producer').subscribe({

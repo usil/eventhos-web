@@ -57,20 +57,24 @@ export class SystemComponent implements OnInit, OnDestroy, AfterViewInit {
   reload = new BehaviorSubject<number>(0);
 
   systemTypes = [
-    'ERP',
-    'CRM',
-    'CMS',
-    'LMS',
-    'IOT',
-    'ETL',
     'API',
-    'MICROSERVICE',
-    'SPA',
-    'PWA',
-    'MONOLITHIC',
+    'CMS',
+    'CRM',
     'DESKTOP',
-    'EXTERNAL SERVICE',
-    'SaaS',
+    'ERP',
+    'ETL',
+    'EXTERNAL_SERVICE',
+    'IOT',
+    'LMS',
+    'MICROSERVICE',
+    'MOBILE',
+    'MONOLITHIC',
+    'PWA',
+    'REPORT_PLATFORM',
+    'SAAS',
+    'SCHEDULER',
+    'SPA',
+    'WEB'
   ];
 
   loading = false;

@@ -2,6 +2,10 @@
   font-weight: 400;
 }
 
+.profile-menu {
+  color: white;
+}
+
 .dashboard-container {
   display: flex;
   flex-direction: column;
@@ -21,17 +25,17 @@
   }
 
   .mat-icon {
-    color: #ffd300;
+    color: white;
   }
 
   .toolbar {
-    background-color: #141492;
+    background-color: #243ebf;
     & h1.app-name {
-      color: #ffd300;
+      color: white;
       font-weight: 400;
     }
     .mat-icon {
-      color: #ffd300;
+      color: white;
     }
     .spacer {
       flex: 1 1 auto;
@@ -64,7 +68,7 @@
     margin: 0.25rem 0;
     border-radius: 0.25rem;
     .mat-list-item-content {
-      color: #141492;
+      color: white;
       padding: 0 !important;
     }
 
@@ -91,7 +95,8 @@
 
 .side-nav {
   // background-color: #141492;
-  color: #141492;
+  background-color: #2e4ff1;
+  color: white;
 }
 
 .forms-field {

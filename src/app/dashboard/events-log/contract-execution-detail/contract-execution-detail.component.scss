@@ -1,12 +1,16 @@
 h2 {
-  color: #0b0b96;
+  color: #162573;
   span {
-    color: #ffd300;
+    color: #162573;
   }
 }
 
-.card-title {
-  color: #0b0b96;
+.mat-card-content .card-title {
+  color: #162573;
+}
+
+.list-color {
+  color: #162573;
 }
 
 table {
@@ -15,7 +19,7 @@ table {
 
 .event {
   h3 {
-    color: #0b0b96;
+    color: #162573;
   }
   margin-bottom: 2rem;
   display: grid;

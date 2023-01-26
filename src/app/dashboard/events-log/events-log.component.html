@@ -1,6 +1,6 @@
 <div class="breadCrump">
   <h5
-    [ngStyle]="{ color: receivedEventId === undefined ? 'grey' : '#0b0b96' }"
+    [ngStyle]="{ color: receivedEventId === undefined ? 'grey' : '#162573' }"
     [routerLink]="['/dashboard/events-logs']"
   >
     Received events
@@ -16,7 +16,7 @@
       color:
         receivedEventId !== undefined && detailId === undefined
           ? 'grey'
-          : '#0b0b96'
+          : '#162573'
     }"
     *ngIf="receivedEventId"
     [queryParams]="{ receivedEventId: receivedEventId }"
@@ -28,7 +28,7 @@
     >keyboard_arrow_right</mat-icon
   >
   <h5
-    [ngStyle]="{ color: detailId !== undefined ? 'grey' : '#0b0b96' }"
+    [ngStyle]="{ color: detailId !== undefined ? 'grey' : '#162573' }"
     *ngIf="detailId"
     [routerLink]="['/dashboard/events-logs/event-contracts/contract-details']"
   >

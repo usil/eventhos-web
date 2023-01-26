@@ -69,8 +69,23 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
   errorMessage!: string | undefined;
 
   createActionForm: FormGroup;
-  operations = ['select', 'new', 'update', 'delete'];
-  methods = ['get', 'post', 'put', 'delete'];
+  operations = ['select', 'new', 'update', 'delete', 'execution'];
+  methods = ['get', 
+    'post', 
+    'put', 
+    'delete', 
+    'patch', 
+    'copy', 
+    'head',
+    'options',
+    'link',
+    'unlink',
+    'purge',
+    'lock',
+    'unlock',
+    'propfind',
+    'view'
+  ];
   securityTypes = [
     { name: 'custom', code: 0 },
     { name: 'oauth2 client', code: 1 },

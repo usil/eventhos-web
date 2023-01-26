@@ -5,6 +5,7 @@ import accessRoutes from './access.routes';
 import { environment } from 'src/environments/environment';
 import { LoginService } from '../login/services/login.service';
 import { Router } from '@angular/router';
+import { HostListener } from "@angular/core";
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -33,7 +34,7 @@ export class DashboardComponent {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.username = this.loginService.getUsername() || '';
-    this.mobileQuery.addListener(this._mobileQueryListener);
+    this.mobileQuery.addListener(this._mobileQueryListener);    
   }
 
   ngOnDestroy(): void {
@@ -48,4 +49,15 @@ export class DashboardComponent {
   navigateTo(route: string) {
     this.router.navigate([`${route}`]);
   }
+
+  ngAfterViewInit() {
+    var dashboardContainer = document.getElementsByClassName("dashboard-container")[0];
+    var scaleState = 0.8;
+    //https://stackoverflow.com/questions/10464038/imitate-browser-zoom-with-javascript
+    dashboardContainer.setAttribute("style",
+      `transform: scale(${scaleState}); 
+      transform-origin: top left; 
+      width: ${100 * (1 / scaleState)}%; 
+      height: ${100 * (1 / scaleState)}%`);
+  }  
 }
