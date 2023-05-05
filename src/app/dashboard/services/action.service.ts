@@ -118,6 +118,10 @@ export interface Action {
   updated_at: Date;
 }
 
+export interface ActionWithSystem extends Action {
+  system_name: string
+}
+
 export interface FullAction {
   id: number;
   system_id: number;
