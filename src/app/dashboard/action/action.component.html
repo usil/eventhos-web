@@ -367,6 +367,15 @@
 </section>
 <section class="show-table">
   <h3>Actions List</h3>
+
+  <form [formGroup]="searchActionForm" class="search">
+    <mat-form-field appearance="fill">
+      <mat-label>Action Name</mat-label>
+      <input formControlName="name" matInput placeholder="Action name" />
+      <mat-hint>The action name</mat-hint>
+    </mat-form-field>
+  </form>
+
   <div class="container-table mat-elevation-z8">
     <div class="loading-shade" *ngIf="isLoadingResults">
       <mat-spinner *ngIf="isLoadingResults"></mat-spinner>

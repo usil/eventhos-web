@@ -32,6 +32,8 @@ import {
   BehaviorSubject,
   first,
   skip,
+  distinctUntilChanged,
+  debounceTime,
 } from 'rxjs';
 import { System, SystemService } from '../services/system.service';
 import { MatPaginator } from '@angular/material/paginator';
@@ -98,6 +100,10 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
   queryFormArray: FormArray;
   bodyFormArray: FormArray;
   hide = true;
+  searchActionForm: FormGroup;
+  nameChange$: Subscription;
+  actionName = "";
+
 
   reload = new BehaviorSubject<number>(0);
 
@@ -175,6 +181,19 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
       body: this.formBuilder.array([]),
       queryUrlParams: this.formBuilder.array([]),
     });
+
+    this.searchActionForm = this.formBuilder.group({
+      name: this.formBuilder.control(''),
+    });
+
+    this.nameChange$ = this.searchActionForm
+      .get('name')
+      ?.valueChanges.pipe(distinctUntilChanged(), debounceTime(750))
+      .subscribe((changeValue) => {
+        this.actionName = changeValue;
+        this.paginator.pageIndex = 0;
+        this.reload.next(this.reload.value + 1);
+      }) as Subscription;
 
     this.headersFormArray = this.createActionForm.get('headers') as FormArray;
 
@@ -261,7 +280,8 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
               this.sort.active,
               this.sort.direction,
               this.paginator.pageIndex,
-              this.pageSize
+              this.pageSize,
+              {actionName: this.actionName}
             )
             .pipe(
               catchError((err) => {
@@ -383,6 +403,7 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
     this.changeType$?.unsubscribe();
     this.roleDataSubscription?.unsubscribe();
     this.bodyInputType$?.unsubscribe();
+    this.nameChange$?.unsubscribe()
   }
 
   getErrorMessage(formControlName: string) {

@@ -22,9 +22,13 @@ export class ActionService {
     activeSort: string,
     order: string,
     pageIndex: number,
-    itemsPerPage: number
+    itemsPerPage: number,
+    filters?: {actionName: string}
   ) {
     let queryString = `?activeSort=${activeSort}&order=${order}&pageIndex=${pageIndex}&itemsPerPage=${itemsPerPage}`;
+    if (filters && filters.actionName && filters.actionName !== "") {
+      queryString += `&actionName=${filters.actionName}`;
+    }
     return this.http
       .get<ActionPaginationResult>(this.httpRoute + queryString)
       .pipe(first());

@@ -96,3 +96,10 @@ h5 {
 .span-4 {
   grid-column: span 4;
 }
+
+.search {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
