@@ -97,3 +97,10 @@ h3 {
 .show-table {
   margin-top: 2rem;
 }
+
+.search {
+  display: grid;
+  grid-template-columns: 1fr 1fr 0.2fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}

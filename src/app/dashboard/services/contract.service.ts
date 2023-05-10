@@ -29,9 +29,13 @@ export class ContractService {
     activeSort: string,
     order: string,
     pageIndex: number,
-    itemsPerPage: number
+    itemsPerPage: number,
+    filters?: {wordSearch: string}
   ) {
     let queryString = `?activeSort=${activeSort}&order=${order}&pageIndex=${pageIndex}&itemsPerPage=${itemsPerPage}`;
+    if (filters && filters?.wordSearch && filters?.wordSearch !== "") {
+      queryString += `&wordSearch=${filters.wordSearch}`;
+    }
     return this.http
       .get<ContractPaginationResult>(this.httpRoute + queryString)
       .pipe(first());

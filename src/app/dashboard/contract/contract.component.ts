@@ -3,6 +3,8 @@ import { DeleteContractComponent } from './delete-contract/delete-contract.compo
 import {
   BehaviorSubject,
   catchError,
+  debounceTime,
+  distinctUntilChanged,
   first,
   map,
   merge,
@@ -78,12 +80,29 @@ export class ContractComponent implements OnDestroy, AfterViewInit {
   consumerId$: Subscription;
   generateIdentifier$: Subscription;
 
+  searchContractForm: FormGroup;
+  wordSearchChange$: Subscription;
+  wordSearch = ""
+
   constructor(
     private formBuilder: FormBuilder,
     private systemService: SystemService,
     private contractService: ContractService,
     public dialog: MatDialog
   ) {
+
+    this.searchContractForm = this.formBuilder.group({
+      wordSearch: this.formBuilder.control(''),
+    });
+
+    this.wordSearchChange$ = this.searchContractForm
+      .get('wordSearch')
+      ?.valueChanges.pipe(distinctUntilChanged(), debounceTime(750))
+      .subscribe((changeValue) => {
+        this.wordSearch = changeValue;
+        this.paginator.pageIndex = 0;
+        this.reload.next(this.reload.value + 1);
+      }) as Subscription;
     this.createContractForm = this.formBuilder.group({
       name: this.formBuilder.control(
         '',
@@ -234,7 +253,8 @@ export class ContractComponent implements OnDestroy, AfterViewInit {
               this.sort.active,
               this.sort.direction,
               this.paginator.pageIndex,
-              this.pageSize
+              this.pageSize,
+              {wordSearch: this.wordSearch}
             )
             .pipe(
               catchError((err) => {
@@ -265,6 +285,7 @@ export class ContractComponent implements OnDestroy, AfterViewInit {
     this.generateIdentifier$?.unsubscribe();
     this.consumerId$.unsubscribe();
     this.producerId$.unsubscribe();
+    this.wordSearchChange$?.unsubscribe()
   }
 
   createContract(contractForm: CreateContractDto) {

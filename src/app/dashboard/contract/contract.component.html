@@ -100,6 +100,13 @@
 </section>
 <section class="show-table">
   <h3>Contracts List</h3>
+  <form [formGroup]="searchContractForm" class="search">
+    <mat-form-field appearance="fill">
+      <mat-label>Search by name, producer, producer event, subscriber, subscriber action</mat-label>
+      <input formControlName="wordSearch" matInput placeholder="name, producer, producer event, subscriber, subscriber action" />
+      <mat-hint>Search by name, producer, producer event, subscriber, subscriber action</mat-hint>
+    </mat-form-field>
+  </form>
   <div class="container-table mat-elevation-z8">
     <div class="loading-shade" *ngIf="isLoadingResults">
       <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
