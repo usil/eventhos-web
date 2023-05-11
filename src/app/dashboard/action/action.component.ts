@@ -71,7 +71,7 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
   errorMessage!: string | undefined;
 
   createActionForm: FormGroup;
-  operations = ['select', 'new', 'update', 'delete', 'execution'];
+  operations = ['new', 'update', 'delete', 'execution', 'other'];
   methods = ['get', 
     'post', 
     'put', 

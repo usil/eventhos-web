@@ -19,7 +19,7 @@
           getErrorMessage("name")
         }}</mat-error>
       </mat-form-field>
-      <mat-form-field class="span-2" appearance="fill">
+      <!-- <mat-form-field class="span-2" appearance="fill">
         <mat-label>Operation</mat-label>
         <mat-select formControlName="operation">
           <mat-option
@@ -29,6 +29,19 @@
           >
         </mat-select>
         <mat-hint>Select the action operation type</mat-hint>
+        <mat-error *ngIf="editActionForm.get('operation')?.invalid">{{
+          getErrorMessage("operation")
+        }}</mat-error>
+      </mat-form-field> -->
+      <mat-form-field appearance="fill">
+        <mat-label>Operation</mat-label>
+        <input formControlName="operation" matInput type="text" [matAutocomplete]="auto"/>
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let operation of operations" [value]="operation">
+            {{operation}}
+          </mat-option>
+        </mat-autocomplete>
+        <mat-hint>Select or write the action operation type</mat-hint>
         <mat-error *ngIf="editActionForm.get('operation')?.invalid">{{
           getErrorMessage("operation")
         }}</mat-error>

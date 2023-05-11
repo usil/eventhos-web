@@ -73,7 +73,7 @@ export class EventComponent implements OnInit, OnDestroy, AfterViewInit {
   errorMessage!: string | undefined;
   createEventForm: FormGroup;
   searchEventForm: FormGroup;
-  operations = ['select', 'new', 'update', 'delete', 'execute', 'other'];
+  operations = ['new', 'update', 'delete', 'execution', 'other'];
   producerSystems: System[] = [];
   generateIdentifier$: Subscription;
   systemIdChange$: Subscription;
