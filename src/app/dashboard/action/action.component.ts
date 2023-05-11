@@ -101,8 +101,8 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
   bodyFormArray: FormArray;
   hide = true;
   searchActionForm: FormGroup;
-  nameChange$: Subscription;
-  actionName = "";
+  wordSearchChange$: Subscription;
+  wordSearch = "";
 
 
   reload = new BehaviorSubject<number>(0);
@@ -183,14 +183,14 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
     });
 
     this.searchActionForm = this.formBuilder.group({
-      name: this.formBuilder.control(''),
+      wordSearch: this.formBuilder.control(''),
     });
 
-    this.nameChange$ = this.searchActionForm
-      .get('name')
+    this.wordSearchChange$ = this.searchActionForm
+      .get('wordSearch')
       ?.valueChanges.pipe(distinctUntilChanged(), debounceTime(750))
       .subscribe((changeValue) => {
-        this.actionName = changeValue;
+        this.wordSearch = changeValue;
         this.paginator.pageIndex = 0;
         this.reload.next(this.reload.value + 1);
       }) as Subscription;
@@ -281,7 +281,7 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
               this.sort.direction,
               this.paginator.pageIndex,
               this.pageSize,
-              {actionName: this.actionName}
+              {wordSearch: this.wordSearch}
             )
             .pipe(
               catchError((err) => {
@@ -403,7 +403,7 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
     this.changeType$?.unsubscribe();
     this.roleDataSubscription?.unsubscribe();
     this.bodyInputType$?.unsubscribe();
-    this.nameChange$?.unsubscribe()
+    this.wordSearchChange$?.unsubscribe()
   }
 
   getErrorMessage(formControlName: string) {

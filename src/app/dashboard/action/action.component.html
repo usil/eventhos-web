@@ -370,9 +370,9 @@
 
   <form [formGroup]="searchActionForm" class="search">
     <mat-form-field appearance="fill">
-      <mat-label>Action Name</mat-label>
-      <input formControlName="name" matInput placeholder="Action name" />
-      <mat-hint>The action name</mat-hint>
+      <mat-label>Search by name, description or system name</mat-label>
+      <input id="wordSearch" formControlName="wordSearch" matInput placeholder="name, description or system name" />
+      <mat-hint>Search by name, description or system name</mat-hint>
     </mat-form-field>
   </form>
 

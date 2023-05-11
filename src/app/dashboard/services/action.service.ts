@@ -23,11 +23,11 @@ export class ActionService {
     order: string,
     pageIndex: number,
     itemsPerPage: number,
-    filters?: {actionName: string}
+    filters?: {wordSearch: string}
   ) {
     let queryString = `?activeSort=${activeSort}&order=${order}&pageIndex=${pageIndex}&itemsPerPage=${itemsPerPage}`;
-    if (filters && filters.actionName && filters.actionName !== "") {
-      queryString += `&actionName=${filters.actionName}`;
+    if (filters && filters.wordSearch && filters.wordSearch !== "") {
+      queryString += `&wordSearch=${filters.wordSearch}`;
     }
     return this.http
       .get<ActionPaginationResult>(this.httpRoute + queryString)
