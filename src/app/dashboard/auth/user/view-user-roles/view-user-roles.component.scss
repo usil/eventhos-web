@@ -1,0 +1,37 @@
+.header {
+  h1 {
+    margin: 0;
+    font-size: 32px;
+  }
+
+  h4 {
+    margin: 0;
+    color: gray;
+  }
+
+  display: flex;
+
+  align-items: baseline;
+  gap: 0.5rem;
+
+  flex-wrap: wrap;
+}
+
+section {
+  display: grid;
+  .roles-list {
+    color: black;
+  }
+
+  .actions {
+    margin-top: 2rem;
+  }
+}
+
+.profile-container ::ng-deep .mat-list-base {
+  .mat-list-item {
+    .mat-list-item-content {
+      color: black;
+    }
+  }
+}

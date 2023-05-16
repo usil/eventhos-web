@@ -31,6 +31,8 @@ import { EditActionComponent } from './action/edit-action/edit-action.component'
 import { DeleteActionComponent } from './action/delete-action/delete-action.component';
 import { DeleteContractComponent } from './contract/delete-contract/delete-contract.component';
 import { EditContractComponent } from './contract/edit-contract/edit-contract.component';
+import { UserComponent as AuthUserComponent } from './auth/user/user.component';
+
 import {
   DateAdapter,
   MAT_DATE_FORMATS,
@@ -47,6 +49,11 @@ import { EventExecutionDetailsComponent } from './events-log/event-execution-det
 import { EventContractsComponent } from './events-log/event-contracts/event-contracts.component';
 import { ContractExecutionDetailComponent } from './events-log/contract-execution-detail/contract-execution-detail.component';
 import { ViewContractsComponent } from './event/view-contracts/view-contracts.component';
+import { CreateUserComponent } from './auth/user/create-user/create-user.component';
+import { ViewUserRolesComponent } from './auth/user/view-user-roles/view-user-roles.component';
+import { AddUserRolesComponent } from './auth/user/add-user-roles/add-user-roles.component';
+import { UpdateUserComponent } from './auth/user/update-user/update-user.component';
+import { DeleteUserComponent } from './auth/user/delete-user/delete-user.component';
 
 @NgModule({
   declarations: [
@@ -76,6 +83,12 @@ import { ViewContractsComponent } from './event/view-contracts/view-contracts.co
     EventContractsComponent,
     ContractExecutionDetailComponent,
     ViewContractsComponent,
+    AuthUserComponent,
+    CreateUserComponent,
+    ViewUserRolesComponent,
+    AddUserRolesComponent,
+    UpdateUserComponent,
+    DeleteUserComponent,
   ],
   imports: [
     CommonModule,

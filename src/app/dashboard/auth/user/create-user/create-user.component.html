@@ -1,0 +1,104 @@
+<h2 mat-dialog-title>Create User</h2>
+<form
+  [formGroup]="createUserForm"
+  (ngSubmit)="createUser(createUserForm.value)"
+>
+  <div mat-dialog-content>
+    <div class="error-display" *ngIf="errorMessage">
+      <h5>{{ errorMessage }}</h5>
+    </div>
+    <mat-form-field class="forms-field" appearance="fill">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" name="name" required />
+      <mat-hint>Put your name</mat-hint>
+    </mat-form-field>
+    <mat-form-field class="forms-field" appearance="fill">
+      <mat-label>Description</mat-label>
+      <input
+        matInput
+        formControlName="description"
+        name="description"
+        required
+      />
+      <mat-hint>Breve user description</mat-hint>
+    </mat-form-field>
+    <mat-form-field class="forms-field" appearance="fill">
+      <mat-label>Username</mat-label>
+      <input
+        matInput
+        placeholder="admin01"
+        formControlName="username"
+        name="username"
+        required
+      />
+      <mat-hint>Your username</mat-hint>
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="forms-field">
+      <mat-label>Password</mat-label>
+      <input
+        formControlName="password"
+        name="password"
+        matInput
+        [type]="hidePassword ? 'password' : 'text'"
+        required
+      />
+      <button
+        type="button"
+        mat-icon-button
+        matSuffix
+        (click)="hidePassword = !hidePassword"
+        [attr.aria-label]="'hidePassword password'"
+        [attr.aria-pressed]="hidePassword"
+      >
+        <mat-icon>{{
+          hidePassword ? "visibility_off" : "visibility"
+        }}</mat-icon>
+      </button>
+      <mat-hint>Put your password</mat-hint>
+    </mat-form-field>
+    <div class="select-role">
+      <mat-form-field class="forms-field" appearance="fill">
+        <mat-label>Select A Role</mat-label>
+        <mat-select name="role" formControlName="role">
+          <mat-option [value]="role" *ngFor="let role of roles">{{
+            role.identifier
+          }}</mat-option>
+        </mat-select>
+        <mat-hint>Select a role and add it</mat-hint>
+      </mat-form-field>
+      <button type="button" (click)="addRoleToList()" mat-stroked-button>
+        +
+      </button>
+    </div>
+    <div *ngFor="let role of rolesList" class="roles-list">
+      <div class="role-title">
+        <h3>{{ role.identifier }}</h3>
+      </div>
+      <button
+        (click)="removeRoleToList(role)"
+        color="warn"
+        type="button"
+        mat-stroked-button
+      >
+        -
+      </button>
+    </div>
+  </div>
+  <div align="end" mat-dialog-actions>
+    <button
+      (click)="closeDialog()"
+      type="button"
+      color="warn"
+      mat-stroked-button
+      [disabled]="dialogRef.disableClose"
+    >
+      Cancel</button
+    ><button
+      [disabled]="!createUserForm.valid || rolesList.length === 0"
+      color="primary"
+      mat-flat-button
+    >
+      Create
+    </button>
+  </div>
+</form>

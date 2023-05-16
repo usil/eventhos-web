@@ -7,6 +7,8 @@ import { ClientComponent } from './access/client/client.component';
 import { RoleComponent } from './access/role/role.component';
 import { UserProfileComponent } from './access/user-profile/user-profile.component';
 import { UserComponent } from './access/user/user.component';
+import { UserComponent as AuthUserComponent } from './auth/user/user.component';
+
 
 import { DashboardComponent } from './dashboard.component';
 import routesList from './routes';
@@ -25,7 +27,8 @@ const routes: Routes = [
       },
       {
         path: 'auth/users',
-        component: UserComponent,
+        // component: UserComponent,
+        component: AuthUserComponent,
         canActivate: [AdminGuard],
         canLoad: [AdminGuard],
       },
