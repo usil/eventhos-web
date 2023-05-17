@@ -8,6 +8,8 @@ import { RoleComponent } from './access/role/role.component';
 import { UserProfileComponent } from './access/user-profile/user-profile.component';
 import { UserComponent } from './access/user/user.component';
 import { UserComponent as AuthUserComponent } from './auth/user/user.component';
+import { RoleComponent as AuthRoleComponent } from './auth/role/role.component';
+
 
 
 import { DashboardComponent } from './dashboard.component';
@@ -40,7 +42,8 @@ const routes: Routes = [
       },
       {
         path: 'auth/roles',
-        component: RoleComponent,
+        // component: RoleComponent,
+        component: AuthRoleComponent,
         canActivate: [AdminGuard],
         canLoad: [AdminGuard],
       },

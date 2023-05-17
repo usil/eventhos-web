@@ -32,6 +32,8 @@ import { DeleteActionComponent } from './action/delete-action/delete-action.comp
 import { DeleteContractComponent } from './contract/delete-contract/delete-contract.component';
 import { EditContractComponent } from './contract/edit-contract/edit-contract.component';
 import { UserComponent as AuthUserComponent } from './auth/user/user.component';
+import { RoleComponent as AuthRoleComponent } from './auth/role/role.component';
+
 
 import {
   DateAdapter,
@@ -54,6 +56,9 @@ import { ViewUserRolesComponent } from './auth/user/view-user-roles/view-user-ro
 import { AddUserRolesComponent } from './auth/user/add-user-roles/add-user-roles.component';
 import { UpdateUserComponent } from './auth/user/update-user/update-user.component';
 import { DeleteUserComponent } from './auth/user/delete-user/delete-user.component';
+import { CreateRoleComponent } from './auth/role/create-role/create-role.component';
+import { DeleteRoleComponent } from './auth/role/delete-role/delete-role.component';
+import { OptionsComponent } from './auth/role/options/options.component';
 
 @NgModule({
   declarations: [
@@ -89,6 +94,10 @@ import { DeleteUserComponent } from './auth/user/delete-user/delete-user.compone
     AddUserRolesComponent,
     UpdateUserComponent,
     DeleteUserComponent,
+    AuthRoleComponent,
+    CreateRoleComponent,
+    DeleteRoleComponent,
+    OptionsComponent
   ],
   imports: [
     CommonModule,
