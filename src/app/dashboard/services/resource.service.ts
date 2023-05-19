@@ -29,20 +29,6 @@ export class ResourceService {
             )
             .pipe(first());
     }
-
-    updateRoleOptions(
-        roleId: number,
-        newAllowedObject: Record<string, Option[]>,
-        originalAllowedObject: Record<string, Option[]>
-      ) {
-        return this.http
-          .put(this.httpRoute + `/${roleId}/permission`, {
-            newAllowedObject: newAllowedObject,
-            originalAllowedObject: originalAllowedObject,
-          })
-          .pipe(first());
-      }
-
 }
 
 interface ResourcePaginationResult {

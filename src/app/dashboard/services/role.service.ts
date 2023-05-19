@@ -37,6 +37,19 @@ export class RoleService {
     deleteRole(roleId: number) {
         return this.http.delete(this.httpRoute + `/${roleId}`).pipe(first());
     }
+
+    updateRoleOptions(
+        roleId: number,
+        newAllowedObject: Record<string, Option[]>,
+        originalAllowedObject: Record<string, Option[]>
+      ) {
+        return this.http
+          .put(this.httpRoute + `/${roleId}/permission`, {
+            newAllowedObject: newAllowedObject,
+            originalAllowedObject: originalAllowedObject,
+          })
+          .pipe(first());
+      }
 }
 
 export interface BasicRole {

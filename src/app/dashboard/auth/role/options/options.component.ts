@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { Option, Resource, ResourceService } from 'src/app/dashboard/services/resource.service';
-import { Role } from 'src/app/dashboard/services/role.service';
+import { Role, RoleService } from 'src/app/dashboard/services/role.service';
 
 @Component({
   selector: 'lib-options',
@@ -27,6 +27,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
     public dialogRef: MatDialogRef<OptionsComponent>,
     @Inject(MAT_DIALOG_DATA) public role: Role,
     private resourceService: ResourceService,
+    private roleService: RoleService,
     private formBuilder: FormBuilder
   ) {
     for (const option of this.role.resources) {
@@ -190,7 +191,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
   }
 
   updateOptions() {
-    this.resourceService
+    this.roleService
       .updateRoleOptions(
         this.role.id,
         this.allowedObject,
