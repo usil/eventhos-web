@@ -18,6 +18,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 @NgModule({
@@ -40,7 +41,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatProgressSpinnerModule,
     MatCardModule,
     MatAutocompleteModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatDialogModule
   ],
 })
 export class DashBoardMaterials {}

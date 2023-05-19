@@ -59,6 +59,11 @@ import { DeleteUserComponent } from './auth/user/delete-user/delete-user.compone
 import { CreateRoleComponent } from './auth/role/create-role/create-role.component';
 import { DeleteRoleComponent } from './auth/role/delete-role/delete-role.component';
 import { OptionsComponent } from './auth/role/options/options.component';
+import { DeleteApplicationResourceComponent } from './auth/application-resource/delete-application-resource/delete-application-resource.component';
+import { CreateApplicationResourceComponent } from './auth/application-resource/create-application-resource/create-application-resource.component';
+import { ApplicationOptionsComponent } from './auth/application-resource/application-options/application-options.component';
+import { ApplicationResourceComponent as AuthApplicationResourceComponent } from './auth/application-resource/application-resource.component';
+
 
 @NgModule({
   declarations: [
@@ -97,7 +102,12 @@ import { OptionsComponent } from './auth/role/options/options.component';
     AuthRoleComponent,
     CreateRoleComponent,
     DeleteRoleComponent,
-    OptionsComponent
+    OptionsComponent,
+    DeleteApplicationResourceComponent,
+    ApplicationResourceComponent,
+    CreateApplicationResourceComponent,
+    ApplicationOptionsComponent,
+    AuthApplicationResourceComponent
   ],
   imports: [
     CommonModule,

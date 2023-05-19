@@ -29,6 +29,30 @@ export class ResourceService {
             )
             .pipe(first());
     }
+
+    createResource(resourceIdentifier: string, applications_id: number) {
+        return this.http.post(this.httpRoute, {
+            resourceIdentifier,
+            applications_id,
+        });
+    }
+
+    updateResourceOptions(
+        resourceId: number,
+        newResourceOptions: Option[],
+        originalResourceOptions: Option[]
+    ) {
+        return this.http
+            .put(this.httpRoute + `/${resourceId}/permission`, {
+                newResourcePermissions: newResourceOptions,
+                originalResourcePermissions: originalResourceOptions,
+            })
+            .pipe(first());
+    }
+
+    deleteResource(resourceId: number) {
+        return this.http.delete(this.httpRoute + `/${resourceId}`);
+    }
 }
 
 interface ResourcePaginationResult {

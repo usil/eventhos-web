@@ -9,6 +9,8 @@ import { UserProfileComponent } from './access/user-profile/user-profile.compone
 import { UserComponent } from './access/user/user.component';
 import { UserComponent as AuthUserComponent } from './auth/user/user.component';
 import { RoleComponent as AuthRoleComponent } from './auth/role/role.component';
+import { ApplicationResourceComponent as AuthApplicationResourceComponent } from './auth/application-resource/application-resource.component';
+
 
 
 
@@ -49,7 +51,8 @@ const routes: Routes = [
       },
       {
         path: 'auth/resource',
-        component: ApplicationResourceComponent,
+        //component: ApplicationResourceComponent,
+        component: AuthApplicationResourceComponent,
         canActivate: [AdminGuard],
         canLoad: [AdminGuard],
       },
