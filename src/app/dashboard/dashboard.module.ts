@@ -63,6 +63,18 @@ import { DeleteApplicationResourceComponent } from './auth/application-resource/
 import { CreateApplicationResourceComponent } from './auth/application-resource/create-application-resource/create-application-resource.component';
 import { ApplicationOptionsComponent } from './auth/application-resource/application-options/application-options.component';
 import { ApplicationResourceComponent as AuthApplicationResourceComponent } from './auth/application-resource/application-resource.component';
+import { ClientComponent as AuthClientComponent} from "./auth/client/client.component";
+import { ViewClientRolesComponent } from './auth/client/view-client-roles/view-client-roles.component';
+import { UpdateClientComponent } from './auth/client/update-client/update-client.component';
+import { ShowNewTokenComponent } from './auth/client/show-new-token/show-new-token.component';
+import { ShowTokenComponent } from './auth/client/show-token/show-token.component';
+import { RevokeTokenComponent } from './auth/client/revoke-token/revoke-token.component';
+import { DeleteClientComponent } from './auth/client/delete-client/delete-client.component';
+import { CreateClientComponent } from './auth/client/create-client/create-client.component';
+import { AddClientRolesComponent } from './auth/client/add-client-roles/add-client-roles.component';
+import { ShowSecretComponent } from './auth/client/show-secret/show-secret.component';
+import { ClipboardModule } from 'ngx-clipboard';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -107,7 +119,17 @@ import { ApplicationResourceComponent as AuthApplicationResourceComponent } from
     ApplicationResourceComponent,
     CreateApplicationResourceComponent,
     ApplicationOptionsComponent,
-    AuthApplicationResourceComponent
+    AuthApplicationResourceComponent,
+    AuthClientComponent,
+    ViewClientRolesComponent,
+    UpdateClientComponent,
+    ShowNewTokenComponent,
+    ShowSecretComponent,
+    ShowTokenComponent,
+    RevokeTokenComponent,
+    DeleteClientComponent,
+    CreateClientComponent,
+    AddClientRolesComponent
   ],
   imports: [
     CommonModule,
@@ -118,6 +140,8 @@ import { ApplicationResourceComponent as AuthApplicationResourceComponent } from
     FormsModule,
     MatMomentDateModule,
     MatDatepickerModule,
+    ClipboardModule,
+    HttpClientModule
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'es-PE' },

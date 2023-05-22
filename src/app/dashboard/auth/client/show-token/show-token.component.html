@@ -1,0 +1,44 @@
+<h2 mat-dialog-title>Created client data</h2>
+<div mat-dialog-content>
+  <mat-form-field class="full-width" appearance="fill">
+    <mat-label>Client Id</mat-label>
+    <input disabled matInput [value]="clientResult.clientId" />
+  </mat-form-field>
+  <mat-form-field class="full-width" appearance="fill">
+    <mat-label>Client secret</mat-label>
+    <input disabled matInput [value]="clientResult.clientSecret" />
+    <button
+      matTooltip="Copy secret"
+      mat-icon-button
+      matSuffix
+      ngxClipboard
+      [cbContent]="clientResult.clientSecret"
+      [attr.aria-label]="'Copy Token'"
+    >
+      <mat-icon matSuffix>file_copy</mat-icon>
+    </button>
+  </mat-form-field>
+  <mat-form-field
+    *ngIf="!(clientResult.access_token === '')"
+    class="full-width"
+    appearance="fill"
+  >
+    <mat-label>Access Token</mat-label>
+    <input disabled matInput [value]="clientResult.access_token" />
+    <button
+      matTooltip="Copy token"
+      mat-icon-button
+      matSuffix
+      ngxClipboard
+      [cbContent]="clientResult.access_token"
+      [attr.aria-label]="'Copy Token'"
+    >
+      <mat-icon matSuffix>file_copy</mat-icon>
+    </button>
+  </mat-form-field>
+</div>
+<div align="end" mat-dialog-actions>
+  <button (click)="closeDialog()" type="button" color="warn" mat-stroked-button>
+    Ok
+  </button>
+</div>

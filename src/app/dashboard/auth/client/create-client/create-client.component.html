@@ -1,0 +1,87 @@
+<h2 mat-dialog-title>Create Client</h2>
+<form
+  [formGroup]="createClientForm"
+  (ngSubmit)="createClient(createClientForm.value)"
+>
+  <div mat-dialog-content>
+    <div class="error-display" *ngIf="errorMessage">
+      <h5>{{ errorMessage }}</h5>
+    </div>
+    <mat-form-field class="forms-field" appearance="fill">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" name="name" required />
+      <mat-hint>Put the client name</mat-hint>
+    </mat-form-field>
+    <mat-form-field class="forms-field" appearance="fill">
+      <mat-label>Description</mat-label>
+      <textarea
+        matInput
+        formControlName="description"
+        name="description"
+        required
+      ></textarea>
+      <mat-hint>Breve user description</mat-hint>
+    </mat-form-field>
+    <mat-form-field class="forms-field" appearance="fill">
+      <mat-label>Identifier</mat-label>
+      <input
+        matInput
+        placeholder="admin01"
+        formControlName="identifier"
+        name="identifier"
+        required
+      />
+      <mat-hint>Client unique identifier</mat-hint>
+    </mat-form-field>
+    <div class="select-role">
+      <mat-form-field class="forms-field" appearance="fill">
+        <mat-label>Select A Role</mat-label>
+        <mat-select name="role" formControlName="role">
+          <mat-option [value]="role" *ngFor="let role of roles">{{
+            role.identifier
+          }}</mat-option>
+        </mat-select>
+        <mat-hint>Select a role and add it</mat-hint>
+      </mat-form-field>
+      <button type="button" (click)="addRoleToList()" mat-stroked-button>
+        +
+      </button>
+    </div>
+    <div *ngFor="let role of rolesList" class="roles-list">
+      <div class="role-title">
+        <h3>{{ role.identifier }}</h3>
+      </div>
+      <button
+        (click)="removeRoleToList(role)"
+        color="warn"
+        type="button"
+        mat-stroked-button
+      >
+        -
+      </button>
+    </div>
+    <div class="check-container">
+      <h4>Create with a long live token:</h4>
+      <p>
+        <mat-checkbox formControlName="longLive">Long Live Token</mat-checkbox>
+      </p>
+    </div>
+  </div>
+  <div align="end" mat-dialog-actions>
+    <button
+      (click)="closeDialog()"
+      type="button"
+      color="warn"
+      mat-stroked-button
+      [disabled]="dialogRef.disableClose"
+    >
+      Cancel</button
+    ><button
+      [disabled]="!createClientForm.valid || rolesList.length === 0"
+      color="primary"
+      mat-flat-button
+    >
+      Create
+    </button>
+  </div>
+</form>

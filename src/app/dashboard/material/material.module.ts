@@ -19,6 +19,9 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
 
 
 @NgModule({
@@ -42,7 +45,9 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatCardModule,
     MatAutocompleteModule,
     MatExpansionModule,
-    MatDialogModule
+    MatDialogModule,
+    MatCheckboxModule,
+    MatTooltipModule
   ],
 })
 export class DashBoardMaterials {}
