@@ -50,6 +50,27 @@ export class UserService {
       .put(`${this.httpRoute}/${userId}/role`, { roles, originalRolesList })
       .pipe(first());
   }
+
+  getUserProfile(): Observable<UserProfileResult> {
+    return this.http
+      .get<UserProfileResult>(`${this.httpRoute}/profile/me`)
+      .pipe(first());
+  }
+
+  updatePassword(userId: number, newPassword: string, oldPassword: string) {
+    return this.http
+      .put(`${this.httpRoute}/${userId}/password`, {
+        newPassword,
+        oldPassword,
+      })
+      .pipe(first());
+  }
+}
+
+interface UserProfileResult {
+  message: string;
+  code: number;
+  content?: User;
 }
 
 interface PaginationUserContent {

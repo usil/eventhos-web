@@ -11,6 +11,7 @@ import { UserComponent as AuthUserComponent } from './auth/user/user.component';
 import { RoleComponent as AuthRoleComponent } from './auth/role/role.component';
 import { ApplicationResourceComponent as AuthApplicationResourceComponent } from './auth/application-resource/application-resource.component';
 import { ClientComponent as AuthClientComponent} from "./auth/client/client.component";
+import { UserProfileComponent as AuthUserProfileComponent } from "./auth/user-profile/user-profile.component"
 
 
 
@@ -57,7 +58,12 @@ const routes: Routes = [
         canActivate: [AdminGuard],
         canLoad: [AdminGuard],
       },
-      { path: 'profile', component: UserProfileComponent },
+      { 
+        path: 'profile', 
+        // component: UserProfileComponent
+        component: AuthUserProfileComponent 
+
+      },
       { path: '', redirectTo: 'profile', pathMatch: 'full' },
     ],
   },

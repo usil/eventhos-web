@@ -73,8 +73,11 @@ import { DeleteClientComponent } from './auth/client/delete-client/delete-client
 import { CreateClientComponent } from './auth/client/create-client/create-client.component';
 import { AddClientRolesComponent } from './auth/client/add-client-roles/add-client-roles.component';
 import { ShowSecretComponent } from './auth/client/show-secret/show-secret.component';
+import { UserProfileComponent as AuthUserProfileComponent } from './auth/user-profile/user-profile.component';
+
 import { ClipboardModule } from 'ngx-clipboard';
 import { HttpClientModule } from '@angular/common/http';
+import { ChangePasswordComponent } from './auth/user-profile/change-password/change-password.component';
 
 
 @NgModule({
@@ -129,7 +132,11 @@ import { HttpClientModule } from '@angular/common/http';
     RevokeTokenComponent,
     DeleteClientComponent,
     CreateClientComponent,
-    AddClientRolesComponent
+    AddClientRolesComponent,
+    UserProfileComponent,
+    AuthUserProfileComponent,
+    ChangePasswordComponent,
+    ChangePasswordComponent
   ],
   imports: [
     CommonModule,
