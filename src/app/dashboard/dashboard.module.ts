@@ -12,12 +12,12 @@ import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashBoardMaterials } from './material/material.module';
 import { TablesComponent } from './tables/tables.component';
 import { EventsLogComponent } from './events-log/events-log.component';
-import { UserComponent } from './access/user/user.component';
+/* import { UserComponent } from './access/user/user.component';
 import { ClientComponent } from './access/client/client.component';
 import { RoleComponent } from './access/role/role.component';
 import { ApplicationResourceComponent } from './access/application-resource/application-resource.component';
-import { UserProfileComponent } from './access/user-profile/user-profile.component';
-import { NodebootOauth2StarterModule } from 'nodeboot-oauth2-starter-ui';
+import { UserProfileComponent } from './access/user-profile/user-profile.component'; */
+// import { NodebootOauth2StarterModule } from 'nodeboot-oauth2-starter-ui';
 import { SystemComponent } from './system/system.component';
 import { EventComponent } from './event/event.component';
 import { ActionComponent } from './action/action.component';
@@ -85,11 +85,11 @@ import { ChangePasswordComponent } from './auth/user-profile/change-password/cha
     DashboardComponent,
     TablesComponent,
     EventsLogComponent,
-    UserComponent,
+    /* UserComponent,
     ClientComponent,
     RoleComponent,
     ApplicationResourceComponent,
-    UserProfileComponent,
+    UserProfileComponent, */
     SystemComponent,
     EventComponent,
     ActionComponent,
@@ -119,7 +119,7 @@ import { ChangePasswordComponent } from './auth/user-profile/change-password/cha
     DeleteRoleComponent,
     OptionsComponent,
     DeleteApplicationResourceComponent,
-    ApplicationResourceComponent,
+    // ApplicationResourceComponent,
     CreateApplicationResourceComponent,
     ApplicationOptionsComponent,
     AuthApplicationResourceComponent,
@@ -133,7 +133,7 @@ import { ChangePasswordComponent } from './auth/user-profile/change-password/cha
     DeleteClientComponent,
     CreateClientComponent,
     AddClientRolesComponent,
-    UserProfileComponent,
+    // UserProfileComponent,
     AuthUserProfileComponent,
     ChangePasswordComponent,
     ChangePasswordComponent
@@ -142,7 +142,7 @@ import { ChangePasswordComponent } from './auth/user-profile/change-password/cha
     CommonModule,
     DashboardRoutingModule,
     DashBoardMaterials,
-    NodebootOauth2StarterModule,
+    // NodebootOauth2StarterModule,
     ReactiveFormsModule,
     FormsModule,
     MatMomentDateModule,

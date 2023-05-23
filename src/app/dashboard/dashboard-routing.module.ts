@@ -2,11 +2,11 @@ import { EditActionComponent } from './action/edit-action/edit-action.component'
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AdminGuard } from '../guards/admin.guard';
-import { ApplicationResourceComponent } from './access/application-resource/application-resource.component';
+/* import { ApplicationResourceComponent } from './access/application-resource/application-resource.component';
 import { ClientComponent } from './access/client/client.component';
 import { RoleComponent } from './access/role/role.component';
 import { UserProfileComponent } from './access/user-profile/user-profile.component';
-import { UserComponent } from './access/user/user.component';
+import { UserComponent } from './access/user/user.component'; */
 import { UserComponent as AuthUserComponent } from './auth/user/user.component';
 import { RoleComponent as AuthRoleComponent } from './auth/role/role.component';
 import { ApplicationResourceComponent as AuthApplicationResourceComponent } from './auth/application-resource/application-resource.component';
