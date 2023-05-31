@@ -1,0 +1,50 @@
+<h2 mat-dialog-title>Role {{ role.identifier }} access options</h2>
+<form [formGroup]="optionsForm" (ngSubmit)="updateOptions()">
+  <div mat-dialog-content>
+    <div class="error-display" *ngIf="errorMessage">
+      <h5>{{ errorMessage }}</h5>
+    </div>
+    <mat-form-field class="forms-field" appearance="fill">
+      <mat-label>Select a resource</mat-label>
+      <mat-select name="resource" formControlName="resource">
+        <mat-option
+          [value]="option.applicationResourceName"
+          *ngFor="let option of options"
+          >{{ option.applicationResourceName }}</mat-option
+        >
+      </mat-select>
+      <mat-hint>Select an application resource</mat-hint>
+    </mat-form-field>
+    <mat-selection-list #allowed formControlName="selected">
+      <mat-list-option
+        [value]="convertToString(allowedL)"
+        [disabled]="
+          allowedL.allowed !== '*' &&
+          optionsForm.get('selected')?.value.length === allowedShowList.length
+            ? true
+            : false
+        "
+        *ngFor="let allowedL of allowedShowList"
+      >
+        {{ allowedL.allowed }}
+      </mat-list-option>
+    </mat-selection-list>
+  </div>
+  <div align="end" mat-dialog-actions>
+    <button
+      (click)="closeDialog()"
+      type="button"
+      color="warn"
+      mat-stroked-button
+      [disabled]="dialogRef.disableClose"
+    >
+      Cancel</button
+    ><button
+      [disabled]="!optionsForm.valid || objectKeys(allowedObject).length === 0"
+      color="primary"
+      mat-flat-button
+    >
+      Update
+    </button>
+  </div>
+</form>

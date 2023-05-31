@@ -1,0 +1,22 @@
+<h2 mat-dialog-title>Client Access Token</h2>
+<div mat-dialog-content>
+  <mat-form-field class="full-width" appearance="fill">
+    <mat-label>Access Token</mat-label>
+    <input disabled matInput [value]="security.access_token" />
+    <button
+      matTooltip="Copy token"
+      mat-icon-button
+      matSuffix
+      ngxClipboard
+      [cbContent]="security.access_token"
+      [attr.aria-label]="'Copy Token'"
+    >
+      <mat-icon matSuffix>file_copy</mat-icon>
+    </button>
+  </mat-form-field>
+</div>
+<div align="end" mat-dialog-actions>
+  <button (click)="closeDialog()" type="button" color="warn" mat-stroked-button>
+    Close
+  </button>
+</div>

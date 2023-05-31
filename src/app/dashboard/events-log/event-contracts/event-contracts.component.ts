@@ -42,7 +42,6 @@ export class EventContractsComponent implements OnInit {
         )
         .subscribe({
           next: (res) => {
-            console.log(res.content)
             this.receivedEvent = res.content.receivedEvent;
             this.receivedEventDetails = res.content.executedEventContracts;
           },
@@ -71,7 +70,6 @@ export class EventContractsComponent implements OnInit {
   }
 
   retrySendEventContract(contractId: number, contractDetailId: number, receivedEventId:  number) {
-    console.log(receivedEventId)
     this.eventService.handleEventContract(
       this.receivedEvent.received_request.query["event-identifier"], 
       this.receivedEvent.received_request.query["access-key"],

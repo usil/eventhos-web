@@ -25,7 +25,6 @@
     "dotenv": "16.0.0",
     "moment": "2.29.2",
     "ngx-clipboard": "15.0.1",
-    "nodeboot-oauth2-starter-ui": "git+https://github.com/usil/nodeboot-oauth2-ui-starter-dist.git",
     "rxjs": "7.4.0",
     "tslib": "2.3.0",
     "zone.js": "0.11.4"
