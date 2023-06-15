@@ -34,9 +34,10 @@ import { System } from '../../services/system.service';
 export class LogsListComponent implements OnInit, OnDestroy, AfterViewInit {
   displayedColumns: string[] = [
     'id',
-    'systemName',
-    'eventName',
     'receivedAt',
+    'eventIdentifier',
+    'eventName',
+    'systemName',
     'state',
   ];
 
