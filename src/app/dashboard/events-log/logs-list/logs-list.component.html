@@ -30,7 +30,24 @@
 
     <mat-hint>Select a date range</mat-hint>
   </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Search by id, event identifier, event name or producer at</mat-label>
+    <input id="generalSearch" formControlName="generalSearch" matInput placeholder="id, event identifier, event name, producer at" />
+    <mat-hint>Search by id, event identifier, event name or producer at</mat-hint>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>State</mat-label>
+    <mat-select formControlName="stateController">
+      <mat-option>Clear</mat-option>
+      <mat-option *ngFor="let item of states" [value]="item">{{
+        item
+      }}</mat-option>
+    </mat-select>
+    <mat-hint>Select the producer system</mat-hint>
+  </mat-form-field>
+
 </form>
+
 <div class="mat-elevation-z8">
   <div class="loading-shade" *ngIf="isLoadingResults">
     <mat-spinner *ngIf="isLoadingResults"></mat-spinner>

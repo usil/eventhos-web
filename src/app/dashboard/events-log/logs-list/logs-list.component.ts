@@ -1,7 +1,7 @@
 import { Router } from '@angular/router';
 import { ReceivedEvent } from './../../services/events-logs.service';
 import { SystemService } from '../../services/system.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import {
   Component,
   OnDestroy,
@@ -14,6 +14,8 @@ import { MatSort } from '@angular/material/sort';
 import {
   BehaviorSubject,
   catchError,
+  debounceTime,
+  distinctUntilChanged,
   map,
   merge,
   Observable,
@@ -40,6 +42,9 @@ export class LogsListComponent implements OnInit, OnDestroy, AfterViewInit {
     'systemName',
     'state',
   ];
+  states : string[] = [
+    "error", "processed", "aborted", "retried"
+  ]
 
   errorMessage!: string;
   producerSystems: System[] = [];
@@ -62,9 +67,14 @@ export class LogsListComponent implements OnInit, OnDestroy, AfterViewInit {
   toTime!: Moment | undefined;
   systemId!: string;
   reload = new BehaviorSubject<number>(0);
+  stateController: string = "";
+  generalSearch: string = "";
 
   systemIdChange$: Subscription;
   dateSubscription$: Subscription;
+  stateControllerChange$: Subscription;
+  generalSearchChange$: Subscription;
+
 
   constructor(
     private eventsLogsService: EventsLogsService,
@@ -76,12 +86,31 @@ export class LogsListComponent implements OnInit, OnDestroy, AfterViewInit {
       fromTime: this.formBuilder.control(''),
       toTime: this.formBuilder.control(''),
       systemId: this.formBuilder.control(''),
+      stateController: this.formBuilder.control(''),
+      generalSearch: this.formBuilder.control('')
     });
 
     this.systemIdChange$ = this.searchForm
       .get('systemId')
       ?.valueChanges.subscribe((changeValue) => {
         this.systemId = changeValue;
+        this.paginator.pageIndex = 0;
+        this.reload.next(this.reload.value + 1);
+      }) as Subscription;
+
+    this.stateControllerChange$ = this.searchForm
+      .get('stateController')
+      ?.valueChanges.subscribe((changeValue) => {
+        this.stateController = changeValue;
+        this.paginator.pageIndex = 0;
+        this.reload.next(this.reload.value + 1);
+      }) as Subscription;
+
+    this.generalSearchChange$ = this.searchForm
+      .get('generalSearch')
+      ?.valueChanges.pipe(distinctUntilChanged(), debounceTime(750))
+      .subscribe((changeValue) => {
+        this.generalSearch = changeValue;
         this.paginator.pageIndex = 0;
         this.reload.next(this.reload.value + 1);
       }) as Subscription;
@@ -160,7 +189,9 @@ export class LogsListComponent implements OnInit, OnDestroy, AfterViewInit {
             this.sort.direction,
             parseInt(this.systemId as string),
             this.fromTime?.toISOString(),
-            this.toTime?.toISOString()
+            this.toTime?.toISOString(),
+            this.stateController,
+            this.generalSearch
           ).pipe(
             catchError((err) => {
               if (err.error) {
@@ -192,6 +223,9 @@ export class LogsListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.eventsLogSubscription?.unsubscribe();
     this.systemIdChange$?.unsubscribe();
     this.dateSubscription$?.unsubscribe();
+    this.stateControllerChange$?.unsubscribe();
+    this.generalSearchChange$?.unsubscribe();
+
   }
 
   goToDetailsPage(receivedEvent: ReceivedEvent) {
