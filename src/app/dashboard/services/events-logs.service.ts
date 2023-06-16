@@ -19,7 +19,6 @@ export class EventsLogsService {
     generalSearch?: string
   ): Observable<ReceivedEventFullResponse> {
     const params: Record<string, any> = { pageIndex, order, itemsPerPage: 10 };
-    console.log(params)
     if (systemId) {
       params['systemId'] = systemId;
     }

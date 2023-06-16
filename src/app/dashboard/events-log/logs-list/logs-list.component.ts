@@ -213,7 +213,7 @@ export class LogsListComponent implements OnInit, OnDestroy, AfterViewInit {
         })
       )
       .subscribe((data) => {
-        console.log(data);
+        // console.log(data);
         this.receivedEvents = data;
       });
   }

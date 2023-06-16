@@ -277,7 +277,6 @@ export class ContractComponent implements OnDestroy, AfterViewInit {
         })
       )
       .subscribe((data) => {
-        console.log(data);
         this.contracts = data;
       });
   }
