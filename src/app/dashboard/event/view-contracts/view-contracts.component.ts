@@ -74,7 +74,7 @@ export class ViewContractsComponent implements OnInit {
           }
         },
       });
-    console.log(this.ordersFormGroup.value);
+    // console.log(this.ordersFormGroup.value);
   }
 
   closeDialog() {

@@ -55,7 +55,7 @@ export class LoginComponent {
         } else {
           this.errorMessage = 'Unknown Error';
         }
-        console.log(this.errorMessage);
+        // console.log(this.errorMessage);
       },
       next: () => {
         this.router.navigate(['/dashboard']);
