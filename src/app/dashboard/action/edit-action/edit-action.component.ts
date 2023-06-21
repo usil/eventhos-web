@@ -124,6 +124,13 @@ export class EditActionComponent implements OnInit, OnDestroy {
         },
         Validators.compose([Validators.required, this.jsonParseValidator])
       ),
+      rawFunctionBody: this.formBuilder.control(
+        {
+          value: action.httpConfiguration?.rawFunctionBody ?? undefined,
+          disabled: true,
+        },
+        // Validators.compose([Validators.required])
+      ),
       securityType: this.formBuilder.control(
         securityCode,
         Validators.compose([Validators.required])
@@ -166,7 +173,15 @@ export class EditActionComponent implements OnInit, OnDestroy {
       action.httpConfiguration.method === 'put' ||
       action.httpConfiguration.method === 'patch' 
     ) {
-      this.editActionForm.get('rawBody')?.enable();
+      // if (Object.keys(action.httpConfiguration.data).length == 0) {
+        /* this.editActionForm.get('rawFunctionBody')?.enable();
+        this.editActionForm.get('rawBody')?.disable(); */
+      // } else {
+        // this.editActionForm.get('rawFunctionBody')?.disable();
+        this.editActionForm.get('rawBody')?.enable();
+        this.editActionForm.get('rawFunctionBody')?.enable();
+
+      // }
     }
     if (action.security.type === 'oauth2_client') {
       this.editActionForm.get('clientId')?.enable();
@@ -184,8 +199,13 @@ export class EditActionComponent implements OnInit, OnDestroy {
       ?.valueChanges.subscribe((changeValue) => {
         if (changeValue === 'post' || changeValue === 'put' || changeValue === 'patch') {
           this.editActionForm.get('rawBody')?.enable();
+          this.editActionForm.get('rawFunctionBody')?.enable();
+
         } else {
           this.editActionForm.get('rawBody')?.disable();
+          this.editActionForm.get('rawFunctionBody')?.disable();
+          this.editActionForm.get('rawBody')?.reset();
+          this.editActionForm.get('rawFunctionBody')?.reset();
         }
       }) as Subscription;
     this.headersFormArray = this.editActionForm.get('headers') as FormArray;

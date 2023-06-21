@@ -253,6 +253,7 @@
       <mat-radio-group formControlName="bodyInput">
         <mat-radio-button value="keyValue">Key Value</mat-radio-button>
         <mat-radio-button value="raw">Raw</mat-radio-button>
+        <mat-radio-button value="function">Code</mat-radio-button>
       </mat-radio-group>
     </div>
     <mat-form-field
@@ -260,7 +261,37 @@
         (createActionForm.get('method')?.value === 'post' ||
           createActionForm.get('method')?.value === 'put' || 
           createActionForm.get('method')?.value === 'patch' ) &&
-        createActionForm.get('bodyInput')?.value !== 'keyValue'
+        createActionForm.get('bodyInput')?.value == 'function'
+      "
+      class="span-4"
+      appearance="fill"
+    >
+      <mat-label>Raw function body</mat-label>
+      <textarea
+        #rawFunctionBody
+        spellcheck="false"
+        (keydown)="tapKeyPressedInTextarea($event, rawFunctionBody)"
+        [ngStyle]="{
+          height: '15rem',
+          'overflow-y': 'scroll',
+          resize: 'none',
+          'font-size': '18px'
+        }"
+        formControlName="rawFunctionBody"
+        matInput
+      ></textarea>
+      <mat-hint>Json raw body to send</mat-hint>
+      <mat-error *ngIf="createActionForm.get('rawFunctionBody')?.invalid">{{
+        getErrorMessage("rawFunctionBody")
+      }}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field
+      *ngIf="
+        (createActionForm.get('method')?.value === 'post' ||
+          createActionForm.get('method')?.value === 'put' || 
+          createActionForm.get('method')?.value === 'patch' ) &&
+        createActionForm.get('bodyInput')?.value == 'raw'
       "
       class="span-4"
       appearance="fill"

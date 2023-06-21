@@ -93,6 +93,7 @@ export interface CreateActionDto {
   queryUrlParams: { key: string; value: string | number }[];
   clientSecret?: string;
   clientId?: number;
+  rawFunctionBody: string;
 }
 
 export interface EditActionDto {
@@ -135,6 +136,7 @@ export interface FullAction {
   description: string;
   deleted: boolean;
   httpConfiguration: {
+    rawFunctionBody?: string;
     url: string;
     method: string;
     headers: Record<any, string | string[]>;
