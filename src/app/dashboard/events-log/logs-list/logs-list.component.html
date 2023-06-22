@@ -1,6 +1,11 @@
 <h3>Events Log</h3>
 <form [formGroup]="searchForm" class="actions">
   <mat-form-field appearance="fill">
+    <mat-label>Search by id</mat-label>
+    <input id="generalSearch" formControlName="generalSearch" matInput placeholder="Search by id" />
+    <mat-hint>Search by id</mat-hint>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
     <mat-label>System</mat-label>
     <mat-select formControlName="systemId">
       <mat-option>Clear</mat-option>
@@ -30,12 +35,7 @@
 
     <mat-hint>Select a date range</mat-hint>
   </mat-form-field>
-  <mat-form-field appearance="fill">
-    <mat-label>Search by id, event identifier, event name or producer at</mat-label>
-    <input id="generalSearch" formControlName="generalSearch" matInput placeholder="id, event identifier, event name, producer at" />
-    <mat-hint>Search by id, event identifier, event name or producer at</mat-hint>
-  </mat-form-field>
-  <mat-form-field appearance="fill">
+  <!-- <mat-form-field appearance="fill">
     <mat-label>State</mat-label>
     <mat-select formControlName="stateController">
       <mat-option>Clear</mat-option>
@@ -43,8 +43,8 @@
         item
       }}</mat-option>
     </mat-select>
-    <mat-hint>Select the producer system</mat-hint>
-  </mat-form-field>
+    <mat-hint>Select the state</mat-hint>
+  </mat-form-field> -->
 
 </form>
 
