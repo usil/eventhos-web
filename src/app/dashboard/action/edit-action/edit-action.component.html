@@ -221,7 +221,7 @@
           editActionForm.get('method')?.value === 'put' ||
           editActionForm.get('method')?.value === 'patch') &&
           (editActionForm.get('rawFunctionBody')?.value != undefined ||
-            editActionForm.get('rawBody')?.value == '{}'
+            objectKeys(action.httpConfiguration.data).length == 0
           )
         "
         class="span-4"
@@ -234,7 +234,7 @@
           editActionForm.get('method')?.value === 'put' ||
           editActionForm.get('method')?.value === 'patch') &&
           (editActionForm.get('rawFunctionBody')?.value != undefined ||
-            editActionForm.get('rawBody')?.value == '{}'
+            objectKeys(action.httpConfiguration.data).length == 0
           )
         "
         class="span-4"
@@ -254,7 +254,6 @@
           formControlName="rawFunctionBody"
           matInput
         ></textarea>
-        <mat-hint>Json raw body to send</mat-hint>
         <mat-error *ngIf="editActionForm.get('rawFunctionBody')?.invalid">{{
           getErrorMessage("rawFunctionBody")
         }}</mat-error>
@@ -266,7 +265,7 @@
           editActionForm.get('method')?.value === 'put' ||
           editActionForm.get('method')?.value === 'patch') &&
           (editActionForm.get('rawFunctionBody')?.value == undefined && 
-            editActionForm.get('rawBody')?.value != '{}'
+            objectKeys(action.httpConfiguration.data).length != 0
           )
         "
         class="span-4"
@@ -279,7 +278,7 @@
           editActionForm.get('method')?.value === 'put' ||
           editActionForm.get('method')?.value === 'patch') &&
           (editActionForm.get('rawFunctionBody')?.value == undefined && 
-            editActionForm.get('rawBody')?.value != '{}'
+            objectKeys(action.httpConfiguration.data).length != 0
           )
         "
         class="span-4"

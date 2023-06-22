@@ -155,7 +155,7 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
       ),
       rawFunctionBody: this.formBuilder.control(
         { value: '', disabled: true },
-        Validators.compose([Validators.required])
+        Validators.compose([this.nodeJsValidator])
       ),
       securityType: this.formBuilder.control(
         '',
@@ -279,6 +279,15 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
     return null;
   }
 
+  nodeJsValidator(control: AbstractControl) {
+    const regex = /(import|require|fs|new|from)+/gi;
+    console.log(regex.test(control.value),"---")
+    if (regex.test(control.value)) {
+      return { nodeJSInvalid: "import, require, fs, from or new is invalid" };
+    }
+    return null;
+  }
+
   ngAfterViewInit(): void {
     this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
     this.roleDataSubscription = merge(
@@ -332,7 +341,7 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
     if (keyEvent.key === 'Tab') {
       const startPost = rawBodyTextArea.selectionStart;
       keyEvent.preventDefault();
-      const rawBodyRef = this.createActionForm.get('rawBody');
+      const rawBodyRef = this.createActionForm.get(rawBodyTextArea as unknown as string);
       const originalValue = rawBodyRef?.value as string;
 
       rawBodyRef?.setValue(
@@ -432,6 +441,11 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
       return this.createActionForm
         .get(formControlName)
         ?.getError('jsonInvalid');
+    }
+    if (this.createActionForm.get(formControlName)?.hasError('nodeJSInvalid')) {
+      return this.createActionForm
+        .get(formControlName)
+        ?.getError('nodeJSInvalid');
     }
 
     return this.createActionForm.get(formControlName)?.hasError('email')

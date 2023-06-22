@@ -280,7 +280,6 @@
         formControlName="rawFunctionBody"
         matInput
       ></textarea>
-      <mat-hint>Json raw body to send</mat-hint>
       <mat-error *ngIf="createActionForm.get('rawFunctionBody')?.invalid">{{
         getErrorMessage("rawFunctionBody")
       }}</mat-error>
