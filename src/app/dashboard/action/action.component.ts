@@ -19,6 +19,7 @@ import {
   FormArray,
   FormGroupDirective,
   AbstractControl,
+  FormControl,
 } from '@angular/forms';
 import {
   Subscription,
@@ -104,7 +105,6 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
   wordSearchChange$: Subscription;
   wordSearch = "";
 
-
   reload = new BehaviorSubject<number>(0);
 
   constructor(
@@ -153,6 +153,10 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
         { value: '{}', disabled: true },
         Validators.compose([Validators.required, this.jsonParseValidator])
       ),
+      rawFunctionBody: this.formBuilder.control(
+        { value: '', disabled: true },
+        Validators.compose([this.nodeJsValidator])
+      ),
       securityType: this.formBuilder.control(
         '',
         Validators.compose([Validators.required])
@@ -199,14 +203,27 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.bodyInputType$ = this.createActionForm
       .get('bodyInput')
-      ?.valueChanges.subscribe((value: 'raw' | 'keyValue') => {
+      ?.valueChanges.subscribe((value: 'raw' | 'keyValue' | 'function') => {
         if (value === 'keyValue') {
           this.createActionForm.get('body')?.enable();
           this.createActionForm.get('rawBody')?.disable();
-          return;
+          this.createActionForm.get('rawBody')?.reset();
+          this.createActionForm.get('rawFunctionBody')?.disable()
+          this.createActionForm.get('rawFunctionBody')?.reset()
+        } else if ( value === "raw") {
+          this.createActionForm.get('body')?.disable();
+          this.createActionForm.get('body')?.reset()
+          this.createActionForm.get('rawFunctionBody')?.disable()
+          this.createActionForm.get('rawFunctionBody')?.reset()
+          this.createActionForm.get('rawBody')?.enable();
+        } else {
+          this.createActionForm.get('body')?.disable();
+          this.createActionForm.get('body')?.reset();
+          this.createActionForm.get('rawBody')?.disable();
+          this.createActionForm.get('rawBody')?.reset();
+          this.createActionForm.get('rawFunctionBody')?.enable()
+
         }
-        this.createActionForm.get('body')?.disable();
-        this.createActionForm.get('rawBody')?.enable();
       }) as Subscription;
 
     this.queryFormArray = this.createActionForm.get(
@@ -258,6 +275,15 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
       JSON.parse(control.value);
     } catch (error: any) {
       return { jsonInvalid: error.message };
+    }
+    return null;
+  }
+
+  nodeJsValidator(control: AbstractControl) {
+    const regex = /(import|require|fs|new|from)+/gi;
+    console.log(regex.test(control.value),"---")
+    if (regex.test(control.value)) {
+      return { nodeJSInvalid: "import, require, fs, from or new is invalid" };
     }
     return null;
   }
@@ -315,7 +341,7 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
     if (keyEvent.key === 'Tab') {
       const startPost = rawBodyTextArea.selectionStart;
       keyEvent.preventDefault();
-      const rawBodyRef = this.createActionForm.get('rawBody');
+      const rawBodyRef = this.createActionForm.get(rawBodyTextArea as unknown as string);
       const originalValue = rawBodyRef?.value as string;
 
       rawBodyRef?.setValue(
@@ -415,6 +441,11 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
       return this.createActionForm
         .get(formControlName)
         ?.getError('jsonInvalid');
+    }
+    if (this.createActionForm.get(formControlName)?.hasError('nodeJSInvalid')) {
+      return this.createActionForm
+        .get(formControlName)
+        ?.getError('nodeJSInvalid');
     }
 
     return this.createActionForm.get(formControlName)?.hasError('email')

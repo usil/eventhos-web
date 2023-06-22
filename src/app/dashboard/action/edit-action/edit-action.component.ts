@@ -23,6 +23,7 @@ export class EditActionComponent implements OnInit, OnDestroy {
   action!: FullAction;
   errorMessage!: string | undefined;
   editActionForm!: FormGroup;
+  objectKeys = Object.keys;
   securityTypes = [
     { name: 'custom', code: 0 },
     { name: 'oauth2 client', code: 1 },
@@ -124,6 +125,13 @@ export class EditActionComponent implements OnInit, OnDestroy {
         },
         Validators.compose([Validators.required, this.jsonParseValidator])
       ),
+      rawFunctionBody: this.formBuilder.control(
+        {
+          value: action.httpConfiguration?.rawFunctionBody ?? undefined,
+          disabled: true,
+        },
+        Validators.compose([this.nodeJsValidator])
+      ),
       securityType: this.formBuilder.control(
         securityCode,
         Validators.compose([Validators.required])
@@ -166,7 +174,15 @@ export class EditActionComponent implements OnInit, OnDestroy {
       action.httpConfiguration.method === 'put' ||
       action.httpConfiguration.method === 'patch' 
     ) {
-      this.editActionForm.get('rawBody')?.enable();
+      // if (Object.keys(action.httpConfiguration.data).length == 0) {
+        /* this.editActionForm.get('rawFunctionBody')?.enable();
+        this.editActionForm.get('rawBody')?.disable(); */
+      // } else {
+        // this.editActionForm.get('rawFunctionBody')?.disable();
+        this.editActionForm.get('rawBody')?.enable();
+        this.editActionForm.get('rawFunctionBody')?.enable();
+
+      // }
     }
     if (action.security.type === 'oauth2_client') {
       this.editActionForm.get('clientId')?.enable();
@@ -184,8 +200,12 @@ export class EditActionComponent implements OnInit, OnDestroy {
       ?.valueChanges.subscribe((changeValue) => {
         if (changeValue === 'post' || changeValue === 'put' || changeValue === 'patch') {
           this.editActionForm.get('rawBody')?.enable();
+          this.editActionForm.get('rawFunctionBody')?.enable();
         } else {
           this.editActionForm.get('rawBody')?.disable();
+          this.editActionForm.get('rawFunctionBody')?.disable();
+          this.editActionForm.get('rawBody')?.setValue("{}");
+          this.editActionForm.get('rawFunctionBody')?.reset();
         }
       }) as Subscription;
     this.headersFormArray = this.editActionForm.get('headers') as FormArray;
@@ -227,11 +247,31 @@ export class EditActionComponent implements OnInit, OnDestroy {
     return null;
   }
 
+  nodeJsValidator(control: AbstractControl) {
+    const regex = /(import|require|fs|new|from)+/gi;
+
+    if (regex.test(control.value)) {
+      return { nodeJSInvalid: "import, require, fs, from or new is invalid" };
+    }
+    return null;
+  }
+
   ngOnInit(): void {}
 
   getErrorMessage(formControlName: string) {
     if (this.editActionForm.get(formControlName)?.hasError('required')) {
       return 'You must enter a value';
+    }
+
+    if (this.editActionForm.get(formControlName)?.hasError('jsonInvalid')) {
+      return this.editActionForm
+        .get(formControlName)
+        ?.getError('jsonInvalid');
+    }
+    if (this.editActionForm.get(formControlName)?.hasError('nodeJSInvalid')) {
+      return this.editActionForm
+        .get(formControlName)
+        ?.getError('nodeJSInvalid');
     }
 
     return this.editActionForm.get(formControlName)?.hasError('email')

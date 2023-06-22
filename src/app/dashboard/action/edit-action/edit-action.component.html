@@ -213,11 +213,60 @@
       >
         Add header
       </button>
+
+      
       <h4
         *ngIf="
-          editActionForm.get('method')?.value === 'post' ||
+          (editActionForm.get('method')?.value === 'post' ||
           editActionForm.get('method')?.value === 'put' ||
-          editActionForm.get('method')?.value === 'patch'
+          editActionForm.get('method')?.value === 'patch') &&
+          (editActionForm.get('rawFunctionBody')?.value != undefined ||
+            objectKeys(action.httpConfiguration.data).length == 0
+          )
+        "
+        class="span-4"
+      >
+        Raw function body
+      </h4>
+      <mat-form-field
+        *ngIf="
+          (editActionForm.get('method')?.value === 'post' ||
+          editActionForm.get('method')?.value === 'put' ||
+          editActionForm.get('method')?.value === 'patch') &&
+          (editActionForm.get('rawFunctionBody')?.value != undefined ||
+            objectKeys(action.httpConfiguration.data).length == 0
+          )
+        "
+        class="span-4"
+        appearance="fill"
+      >
+        <mat-label>Raw function body</mat-label>
+        <textarea
+          #rawFunctionBody
+          (keydown)="tapKeyPressedInTextarea($event, rawFunctionBody)"
+          spellcheck="false"
+          [ngStyle]="{
+            height: '15rem',
+            'overflow-y': 'scroll',
+            resize: 'none',
+            'font-size': '18px'
+          }"
+          formControlName="rawFunctionBody"
+          matInput
+        ></textarea>
+        <mat-error *ngIf="editActionForm.get('rawFunctionBody')?.invalid">{{
+          getErrorMessage("rawFunctionBody")
+        }}</mat-error>
+      </mat-form-field>
+
+      <h4
+        *ngIf="
+          (editActionForm.get('method')?.value === 'post' ||
+          editActionForm.get('method')?.value === 'put' ||
+          editActionForm.get('method')?.value === 'patch') &&
+          (editActionForm.get('rawFunctionBody')?.value == undefined && 
+            objectKeys(action.httpConfiguration.data).length != 0
+          )
         "
         class="span-4"
       >
@@ -225,10 +274,12 @@
       </h4>
       <mat-form-field
         *ngIf="
-          editActionForm.get('method')?.value === 'post' ||
+          (editActionForm.get('method')?.value === 'post' ||
           editActionForm.get('method')?.value === 'put' ||
-          editActionForm.get('method')?.value === 'patch'
-
+          editActionForm.get('method')?.value === 'patch') &&
+          (editActionForm.get('rawFunctionBody')?.value == undefined && 
+            objectKeys(action.httpConfiguration.data).length != 0
+          )
         "
         class="span-4"
         appearance="fill"
@@ -252,6 +303,8 @@
           getErrorMessage("rawBody")
         }}</mat-error>
       </mat-form-field>
+
+
       <h4 class="span-4">Query Url Params</h4>
       <div formArrayName="queryUrlParams" class="span-4">
         <div
