@@ -69,11 +69,14 @@ export class LogsListComponent implements OnInit, OnDestroy, AfterViewInit {
   reload = new BehaviorSubject<number>(0);
   stateController: string = "";
   idSearch: string = "";
+  eventIdentifierSearch: string = "";
 
   systemIdChange$: Subscription;
   dateSubscription$: Subscription;
   stateControllerChange$: Subscription;
   idSearchChange$: Subscription;
+  eventIdentifierSearchChange$: Subscription;
+
 
 
   constructor(
@@ -87,7 +90,8 @@ export class LogsListComponent implements OnInit, OnDestroy, AfterViewInit {
       toTime: this.formBuilder.control(''),
       systemId: this.formBuilder.control(''),
       stateController: this.formBuilder.control(''),
-      idSearch: this.formBuilder.control('')
+      idSearch: this.formBuilder.control(''),
+      eventIdentifierSearch: this.formBuilder.control('')
     });
 
     this.systemIdChange$ = this.searchForm
@@ -105,12 +109,19 @@ export class LogsListComponent implements OnInit, OnDestroy, AfterViewInit {
         this.paginator.pageIndex = 0;
         this.reload.next(this.reload.value + 1);
       }) as Subscription;
-
     this.idSearchChange$ = this.searchForm
       .get('idSearch')
       ?.valueChanges.pipe(distinctUntilChanged(), debounceTime(750))
       .subscribe((changeValue) => {
         this.idSearch = changeValue;
+        this.paginator.pageIndex = 0;
+        this.reload.next(this.reload.value + 1);
+      }) as Subscription;
+    this.eventIdentifierSearchChange$ = this.searchForm
+      .get('eventIdentifierSearch')
+      ?.valueChanges.pipe(distinctUntilChanged(), debounceTime(750))
+      .subscribe((changeValue) => {
+        this.eventIdentifierSearch = changeValue;
         this.paginator.pageIndex = 0;
         this.reload.next(this.reload.value + 1);
       }) as Subscription;
@@ -190,8 +201,8 @@ export class LogsListComponent implements OnInit, OnDestroy, AfterViewInit {
             parseInt(this.systemId as string),
             this.fromTime?.toISOString(),
             this.toTime?.toISOString(),
-            this.stateController,
-            this.idSearch
+            this.idSearch,
+            this.eventIdentifierSearch
           ).pipe(
             catchError((err) => {
               if (err.error) {
@@ -225,6 +236,7 @@ export class LogsListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.dateSubscription$?.unsubscribe();
     this.stateControllerChange$?.unsubscribe();
     this.idSearchChange$?.unsubscribe();
+    this.eventIdentifierSearchChange$?.unsubscribe();
 
   }
 

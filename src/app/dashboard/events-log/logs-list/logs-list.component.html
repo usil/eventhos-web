@@ -22,8 +22,12 @@
     <mat-error *ngIf="searchForm.get('toTime')?.hasError('matEndDateInvalid')"
       >Invalid end date</mat-error
     >
-
     <mat-hint>Select a date range</mat-hint>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Event identifier</mat-label>
+    <input id="eventIdentifierSearch" formControlName="eventIdentifierSearch" matInput placeholder="event identifier" />
+    <mat-hint>Search by event identifier</mat-hint>
   </mat-form-field>
   <mat-form-field appearance="fill" class="searchByProducer">
     <mat-label>Producer</mat-label>
