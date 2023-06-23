@@ -281,7 +281,6 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
 
   nodeJsValidator(control: AbstractControl) {
     const regex = /(import|require|fs|new|from)+/gi;
-    console.log(regex.test(control.value),"---")
     if (regex.test(control.value)) {
       return { nodeJSInvalid: "import, require, fs, from or new is invalid" };
     }

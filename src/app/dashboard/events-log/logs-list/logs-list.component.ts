@@ -38,7 +38,7 @@ export class LogsListComponent implements OnInit, OnDestroy, AfterViewInit {
     'id',
     'receivedAt',
     'eventIdentifier',
-    'eventName',
+    // 'eventName',
     'systemName',
     'state',
   ];
@@ -68,12 +68,12 @@ export class LogsListComponent implements OnInit, OnDestroy, AfterViewInit {
   systemId!: string;
   reload = new BehaviorSubject<number>(0);
   stateController: string = "";
-  generalSearch: string = "";
+  idSearch: string = "";
 
   systemIdChange$: Subscription;
   dateSubscription$: Subscription;
   stateControllerChange$: Subscription;
-  generalSearchChange$: Subscription;
+  idSearchChange$: Subscription;
 
 
   constructor(
@@ -87,7 +87,7 @@ export class LogsListComponent implements OnInit, OnDestroy, AfterViewInit {
       toTime: this.formBuilder.control(''),
       systemId: this.formBuilder.control(''),
       stateController: this.formBuilder.control(''),
-      generalSearch: this.formBuilder.control('')
+      idSearch: this.formBuilder.control('')
     });
 
     this.systemIdChange$ = this.searchForm
@@ -106,11 +106,11 @@ export class LogsListComponent implements OnInit, OnDestroy, AfterViewInit {
         this.reload.next(this.reload.value + 1);
       }) as Subscription;
 
-    this.generalSearchChange$ = this.searchForm
-      .get('generalSearch')
+    this.idSearchChange$ = this.searchForm
+      .get('idSearch')
       ?.valueChanges.pipe(distinctUntilChanged(), debounceTime(750))
       .subscribe((changeValue) => {
-        this.generalSearch = changeValue;
+        this.idSearch = changeValue;
         this.paginator.pageIndex = 0;
         this.reload.next(this.reload.value + 1);
       }) as Subscription;
@@ -191,7 +191,7 @@ export class LogsListComponent implements OnInit, OnDestroy, AfterViewInit {
             this.fromTime?.toISOString(),
             this.toTime?.toISOString(),
             this.stateController,
-            this.generalSearch
+            this.idSearch
           ).pipe(
             catchError((err) => {
               if (err.error) {
@@ -224,7 +224,7 @@ export class LogsListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.systemIdChange$?.unsubscribe();
     this.dateSubscription$?.unsubscribe();
     this.stateControllerChange$?.unsubscribe();
-    this.generalSearchChange$?.unsubscribe();
+    this.idSearchChange$?.unsubscribe();
 
   }
 

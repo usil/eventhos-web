@@ -1,22 +1,12 @@
 <h3>Events Log</h3>
 <form [formGroup]="searchForm" class="actions">
-  <mat-form-field appearance="fill">
-    <mat-label>Search by id</mat-label>
-    <input id="generalSearch" formControlName="generalSearch" matInput placeholder="Search by id" />
+  <mat-form-field appearance="fill" class="searchByIdFilter">
+    <mat-label>id</mat-label>
+    <input id="idSearch" formControlName="idSearch" matInput placeholder="id" type="number" />
     <mat-hint>Search by id</mat-hint>
   </mat-form-field>
-  <mat-form-field appearance="fill">
-    <mat-label>System</mat-label>
-    <mat-select formControlName="systemId">
-      <mat-option>Clear</mat-option>
-      <mat-option *ngFor="let system of producerSystems" [value]="system.id">{{
-        system.name
-      }}</mat-option>
-    </mat-select>
-    <mat-hint>Select the producer system</mat-hint>
-  </mat-form-field>
 
-  <mat-form-field appearance="fill">
+  <mat-form-field appearance="fill" class="searchByDate">
     <mat-label>Enter a date range</mat-label>
     <mat-date-range-input [rangePicker]="picker">
       <input matStartDate formControlName="fromTime" placeholder="Start date" />
@@ -35,6 +25,16 @@
 
     <mat-hint>Select a date range</mat-hint>
   </mat-form-field>
+  <mat-form-field appearance="fill" class="searchByProducer">
+    <mat-label>Producer</mat-label>
+    <mat-select formControlName="systemId">
+      <mat-option>Clear</mat-option>
+      <mat-option *ngFor="let system of producerSystems" [value]="system.id">{{
+        system.name
+      }}</mat-option>
+    </mat-select>
+    <mat-hint>Select the producer system</mat-hint>
+  </mat-form-field>
   <!-- <mat-form-field appearance="fill">
     <mat-label>State</mat-label>
     <mat-select formControlName="stateController">
@@ -45,7 +45,6 @@
     </mat-select>
     <mat-hint>Select the state</mat-hint>
   </mat-form-field> -->
-
 </form>
 
 <div class="mat-elevation-z8">
@@ -78,13 +77,13 @@
         {{ row.eventIdentifier }}
       </td>
     </ng-container>
-    <ng-container matColumnDef="eventName">
+    <!-- <ng-container matColumnDef="eventName">
       <th mat-header-cell *matHeaderCellDef>Event name</th>
       <td mat-cell *matCellDef="let row">{{ row.eventName }}</td>
-    </ng-container>
+    </ng-container> -->
     <ng-container matColumnDef="systemName">
       <th mat-header-cell *matHeaderCellDef>
-        Produced At
+        Producer
       </th>
       <td mat-cell *matCellDef="let row">
         {{ row.systemName }}
