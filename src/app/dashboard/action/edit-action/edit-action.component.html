@@ -214,15 +214,26 @@
         Add header
       </button>
 
-      
+      <div
+        *ngIf="
+          editActionForm.get('method')?.value === 'post' ||
+          editActionForm.get('method')?.value === 'put' ||
+          editActionForm.get('method')?.value === 'patch'
+        "
+        class="span-4 radial-input"
+      >
+        <label>Input Type: </label>
+        <mat-radio-group formControlName="inputType">
+          <mat-radio-button value="raw">Raw</mat-radio-button>
+          <mat-radio-button value="function">Code</mat-radio-button>
+        </mat-radio-group>
+      </div>
       <h4
         *ngIf="
           (editActionForm.get('method')?.value === 'post' ||
           editActionForm.get('method')?.value === 'put' ||
           editActionForm.get('method')?.value === 'patch') &&
-          (editActionForm.get('rawFunctionBody')?.value != undefined ||
-            objectKeys(action.httpConfiguration.data).length == 0
-          )
+          editActionForm.get('inputType')?.value === 'function'
         "
         class="span-4"
       >
@@ -233,9 +244,7 @@
           (editActionForm.get('method')?.value === 'post' ||
           editActionForm.get('method')?.value === 'put' ||
           editActionForm.get('method')?.value === 'patch') &&
-          (editActionForm.get('rawFunctionBody')?.value != undefined ||
-            objectKeys(action.httpConfiguration.data).length == 0
-          )
+          editActionForm.get('inputType')?.value === 'function'
         "
         class="span-4"
         appearance="fill"
@@ -243,6 +252,7 @@
         <mat-label>Raw function body</mat-label>
         <textarea
           #rawFunctionBody
+          id="action-raw-function-body"
           (keydown)="tapKeyPressedInTextarea($event, rawFunctionBody)"
           spellcheck="false"
           [ngStyle]="{
@@ -264,9 +274,7 @@
           (editActionForm.get('method')?.value === 'post' ||
           editActionForm.get('method')?.value === 'put' ||
           editActionForm.get('method')?.value === 'patch') &&
-          (editActionForm.get('rawFunctionBody')?.value == undefined && 
-            objectKeys(action.httpConfiguration.data).length != 0
-          )
+          editActionForm.get('inputType')?.value === 'raw'
         "
         class="span-4"
       >
@@ -277,9 +285,7 @@
           (editActionForm.get('method')?.value === 'post' ||
           editActionForm.get('method')?.value === 'put' ||
           editActionForm.get('method')?.value === 'patch') &&
-          (editActionForm.get('rawFunctionBody')?.value == undefined && 
-            objectKeys(action.httpConfiguration.data).length != 0
-          )
+          editActionForm.get('inputType')?.value === 'raw'
         "
         class="span-4"
         appearance="fill"
@@ -287,6 +293,7 @@
         <mat-label>Raw Body</mat-label>
         <textarea
           #rawBody
+          id="action-raw-body"
           (keydown)="tapKeyPressedInTextarea($event, rawBody)"
           spellcheck="false"
           [ngStyle]="{

@@ -269,6 +269,7 @@
       <mat-label>Raw function body</mat-label>
       <textarea
         #rawFunctionBody
+        id="action-raw-function-body"
         spellcheck="false"
         (keydown)="tapKeyPressedInTextarea($event, rawFunctionBody)"
         [ngStyle]="{
@@ -298,6 +299,7 @@
       <mat-label>Raw Body</mat-label>
       <textarea
         #rawBody
+        id="action-raw-body"
         (keydown)="tapKeyPressedInTextarea($event, rawBody)"
         spellcheck="false"
         [ngStyle]="{

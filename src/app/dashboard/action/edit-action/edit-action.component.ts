@@ -50,6 +50,8 @@ export class EditActionComponent implements OnInit, OnDestroy {
   queryFormArray!: FormArray;
   changeType$!: Subscription;
   methodChangeSubscription$!: Subscription;
+  bodyInputType$!: Subscription;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -76,7 +78,7 @@ export class EditActionComponent implements OnInit, OnDestroy {
         });
     } else {
       this.router.navigate(['/dashboard/action']);
-    }
+    };
   }
 
   addForm(action: FullAction) {
@@ -117,6 +119,9 @@ export class EditActionComponent implements OnInit, OnDestroy {
       method: this.formBuilder.control(
         action.httpConfiguration.method,
         Validators.compose([Validators.required])
+      ),
+      inputType: this.formBuilder.control(
+        Object.keys(action.httpConfiguration.data).length > 0 ? "raw" : action.httpConfiguration?.rawFunctionBody ? "function" : "raw",
       ),
       rawBody: this.formBuilder.control(
         {
@@ -174,15 +179,8 @@ export class EditActionComponent implements OnInit, OnDestroy {
       action.httpConfiguration.method === 'put' ||
       action.httpConfiguration.method === 'patch' 
     ) {
-      // if (Object.keys(action.httpConfiguration.data).length == 0) {
-        /* this.editActionForm.get('rawFunctionBody')?.enable();
-        this.editActionForm.get('rawBody')?.disable(); */
-      // } else {
-        // this.editActionForm.get('rawFunctionBody')?.disable();
-        this.editActionForm.get('rawBody')?.enable();
-        this.editActionForm.get('rawFunctionBody')?.enable();
-
-      // }
+      this.editActionForm.get('rawBody')?.enable();
+      this.editActionForm.get('rawFunctionBody')?.enable();
     }
     if (action.security.type === 'oauth2_client') {
       this.editActionForm.get('clientId')?.enable();
@@ -195,6 +193,15 @@ export class EditActionComponent implements OnInit, OnDestroy {
         .get('clientId')
         ?.setValue(action.security.httpConfiguration?.data['client_id']);
     }
+    this.bodyInputType$ = this.editActionForm
+      .get('inputType')
+      ?.valueChanges.subscribe((value: 'raw' | 'function') => {
+        if (value == 'raw') {
+          this.editActionForm.get('rawFunctionBody')?.reset();
+        } else {
+          this.editActionForm.get('rawBody')?.setValue("{}");
+        }
+      }) as Subscription
     this.methodChangeSubscription$ = this.editActionForm
       .get('method')
       ?.valueChanges.subscribe((changeValue) => {
