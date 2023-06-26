@@ -31,7 +31,7 @@ h3 {
 .actions {
   display:flex;
   flex-direction: column;
-  @media screen and (min-width: 620px) {
+  @media screen and (min-width: 800px) {
     display: grid;
     grid-template-columns: 80px 145px 1.3fr 145px 0.8fr;
     gap: 1rem;

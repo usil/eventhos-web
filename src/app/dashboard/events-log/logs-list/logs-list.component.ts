@@ -202,7 +202,8 @@ export class LogsListComponent implements OnInit, OnDestroy, AfterViewInit {
             this.fromTime?.toISOString(),
             this.toTime?.toISOString(),
             this.idSearch,
-            this.eventIdentifierSearch
+            this.eventIdentifierSearch,
+            this.stateController
           ).pipe(
             catchError((err) => {
               if (err.error) {
