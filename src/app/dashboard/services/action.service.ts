@@ -13,6 +13,7 @@ export class ActionService {
   createAction(
     createActionDto: CreateActionDto
   ): Observable<CreateActionResult> {
+    console.log(createActionDto)
     return this.http
       .post<CreateActionResult>(this.httpRoute, { ...createActionDto })
       .pipe(first());
@@ -94,6 +95,7 @@ export interface CreateActionDto {
   clientSecret?: string;
   clientId?: number;
   rawFunctionBody: string;
+  reply_to: string;
 }
 
 export interface EditActionDto {
@@ -109,6 +111,7 @@ export interface EditActionDto {
   queryUrlParams: { key: string; value: string | number }[];
   clientSecret?: string;
   clientId?: number;
+  reply_to?: string;
 }
 
 export interface Action {
@@ -135,6 +138,7 @@ export interface FullAction {
   operation: string;
   description: string;
   deleted: boolean;
+  reply_to:string;
   httpConfiguration: {
     rawFunctionBody?: string;
     url: string;

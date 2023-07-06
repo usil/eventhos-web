@@ -74,6 +74,7 @@ export class EditActionComponent implements OnInit, OnDestroy {
           next: (getActionResult) => {
             this.addForm(getActionResult.content as FullAction);
             this.action = getActionResult.content as FullAction;
+            console.log(this.action)
           },
         });
     } else {
@@ -103,6 +104,9 @@ export class EditActionComponent implements OnInit, OnDestroy {
           Validators.minLength(1),
           Validators.maxLength(45),
         ])
+      ),
+      reply_to: this.formBuilder.control(
+        action.reply_to
       ),
       operation: this.formBuilder.control(
         action.operation,
