@@ -32,6 +32,11 @@
             >Finished In: {{ getElapsedTime() }} seconds</span
           >
         </mat-list-item>
+        <mat-list-item role="listitem" *ngIf="contractExecutionDetail.reply_from"
+          ><span class="list-color"
+            >Reply from : {{ contractExecutionDetail.reply_from }}</span
+          >
+        </mat-list-item>
       </mat-list>
     </mat-card-content>
   </mat-card>
