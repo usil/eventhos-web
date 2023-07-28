@@ -25,6 +25,7 @@ import {
   FormGroup,
   FormGroupDirective,
   Validators,
+  AbstractControl,
 } from '@angular/forms';
 import { Component, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import { System, SystemService } from '../services/system.service';
@@ -33,6 +34,7 @@ import { Action } from '../services/action.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
+import { CommonService } from '../common/common.service';
 
 @Component({
   selector: 'app-contract',
@@ -83,6 +85,8 @@ export class ContractComponent implements OnDestroy, AfterViewInit {
   searchContractForm: FormGroup;
   wordSearchChange$: Subscription;
   wordSearch = ""
+
+  commonService = new CommonService();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -144,9 +148,7 @@ export class ContractComponent implements OnDestroy, AfterViewInit {
       ),
       mailRecipientsOnError: this.formBuilder.control(
         '',
-        Validators.compose([
-          // Validators.pattern(//),
-        ])
+        Validators.compose([this.commonService.severalMailsPatternValidator])
       )
     });
 
@@ -290,6 +292,7 @@ export class ContractComponent implements OnDestroy, AfterViewInit {
   createContract(contractForm: CreateContractDto) {
     const identifier = this.createContractForm.get('identifier')?.value;
     this.createContractForm.disable();
+    
     this.contractService
       .createContract({ ...contractForm, identifier })
       .subscribe({
@@ -328,6 +331,12 @@ export class ContractComponent implements OnDestroy, AfterViewInit {
     if (this.createContractForm.get(formControlName)?.hasError('min')) {
       return 'Minimum is 0';
     }
+
+    if (this.createContractForm.get(formControlName)?.hasError('invalidMailsPattern')) {
+      return this.createContractForm
+        .get(formControlName)
+        ?.getError('invalidMailsPattern');
+    }      
 
     return this.createContractForm.get(formControlName)?.hasError('email')
       ? 'Not a valid email'

@@ -83,7 +83,10 @@
     <mat-form-field class="span-6" appearance="fill">
       <mat-label>Mail recipients on error</mat-label>
       <input formControlName="mailRecipientsOnError" type="text" matInput placeholder="user@gmail.com,user2@outlook.com,user3@usil.edu.pe" />
-      <mat-hint>Receptors when there are errors</mat-hint>
+      <mat-hint>In case of contract execution error, these mails will be notified. Default is the admin mail</mat-hint>
+      <mat-error *ngIf="createContractForm.get('mailRecipientsOnError')?.invalid">{{
+        getErrorMessage("mailRecipientsOnError")
+      }}</mat-error>
     </mat-form-field>
     <button
       [disabled]="

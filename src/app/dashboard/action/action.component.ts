@@ -40,6 +40,7 @@ import { System, SystemService } from '../services/system.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
+import { CommonService } from '../common/common.service';
 @Component({
   selector: 'app-action',
   templateUrl: './action.component.html',
@@ -107,6 +108,8 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
 
   reload = new BehaviorSubject<number>(0);
 
+  commonService = new CommonService();
+
   constructor(
     private actionService: ActionService,
     private systemService: SystemService,
@@ -171,11 +174,7 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
       ),
       clientSecret: this.formBuilder.control(
         { value: '', disabled: true },
-        Validators.compose([
-          Validators.required,
-          Validators.pattern(/^[a-zA-Z0-9_\.\-]+$/),
-          Validators.minLength(1),
-        ])
+        Validators.compose([this.commonService.secretPatternValidator])
       ),
       clientId: this.formBuilder.control(
         { value: '', disabled: true },
@@ -238,8 +237,8 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
     ).subscribe({
       next: () => {
         let name = this.createActionForm.get('name')?.value as string;
-        if (name && name !== '') {
-          const type = this.createActionForm.get('operation')?.value as string;
+        const type = this.createActionForm.get('operation')?.value as string;
+        if ((name && name !== '') && (type && type !== '')) {          
           name = name.trim();
           name = name.replace(' ', '_');
           name = name.toLocaleLowerCase();
@@ -446,6 +445,12 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
         .get(formControlName)
         ?.getError('nodeJSInvalid');
     }
+
+    if (this.createActionForm.get(formControlName)?.hasError('secretInvalid')) {
+      return this.createActionForm
+        .get(formControlName)
+        ?.getError('secretInvalid');
+    }    
 
     return this.createActionForm.get(formControlName)?.hasError('email')
       ? 'Not a valid email'

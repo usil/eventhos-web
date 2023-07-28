@@ -141,10 +141,10 @@
         >
           <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
         </button>
-        <mat-hint>Put the client secret</mat-hint>
+        <mat-hint>The client_secret is a secret known only to the application and the authorization server</mat-hint>
         <mat-error *ngIf="editActionForm.get('clientSecret')?.invalid">{{
           getErrorMessage("clientSecret")
-        }}</mat-error>
+        }}</mat-error>        
       </mat-form-field>
       <h4
         *ngIf="editActionForm.get('securityType')?.value === 3"

@@ -18,7 +18,7 @@
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Name</mat-label>
-      <input formControlName="name" matInput placeholder="New Action" />
+      <input formControlName="name" matInput placeholder="Enter a name" />
       <mat-hint>Action name</mat-hint>
       <mat-error *ngIf="createActionForm.get('name')?.invalid">{{
         getErrorMessage("name")
@@ -131,7 +131,7 @@
     >
       <mat-label>Client ID</mat-label>
       <input formControlName="clientId" matInput />
-      <mat-hint>The client id</mat-hint>
+      <mat-hint>The client_id that Authorization Server assigned to this app.</mat-hint>
       <mat-error *ngIf="createActionForm.get('clientId')?.invalid">{{
         getErrorMessage("clientId")
       }}</mat-error>
@@ -158,7 +158,7 @@
       >
         <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
       </button>
-      <mat-hint>Put the client secret</mat-hint>
+      <mat-hint>The client_secret is a secret known only to the application and the authorization server</mat-hint>
       <mat-error *ngIf="createActionForm.get('clientSecret')?.invalid">{{
         getErrorMessage("clientSecret")
       }}</mat-error>

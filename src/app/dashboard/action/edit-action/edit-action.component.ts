@@ -13,6 +13,7 @@ import {
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { CommonService } from '../../common/common.service';
 
 @Component({
   selector: 'app-edit-action',
@@ -51,6 +52,8 @@ export class EditActionComponent implements OnInit, OnDestroy {
   changeType$!: Subscription;
   methodChangeSubscription$!: Subscription;
   bodyInputType$!: Subscription;
+
+  commonService = new CommonService();
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -156,11 +159,7 @@ export class EditActionComponent implements OnInit, OnDestroy {
             : '',
           disabled: true,
         },
-        Validators.compose([
-          Validators.required,
-          Validators.pattern(/^[a-zA-Z0-9_\.\-]+$/),
-          Validators.minLength(1),
-        ])
+        Validators.compose([this.commonService.secretPatternValidator])
       ),
       clientId: this.formBuilder.control(
         {
@@ -280,6 +279,12 @@ export class EditActionComponent implements OnInit, OnDestroy {
         .get(formControlName)
         ?.getError('nodeJSInvalid');
     }
+
+    if (this.editActionForm.get(formControlName)?.hasError('secretInvalid')) {
+      return this.editActionForm
+        .get(formControlName)
+        ?.getError('secretInvalid');
+    }        
 
     return this.editActionForm.get(formControlName)?.hasError('email')
       ? 'Not a valid email'
