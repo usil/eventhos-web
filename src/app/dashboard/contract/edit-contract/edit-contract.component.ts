@@ -30,9 +30,9 @@ export class EditContractComponent implements OnInit {
         this.contract.name,
         Validators.compose([
           Validators.required,
-          Validators.pattern(/^[a-zA-Z0-9_\.\-\/\s]+$/),
+          Validators.pattern(/^[a-zA-Z0-9_=>:\.\-\/\s]+$/),
           Validators.minLength(1),
-          Validators.maxLength(45),
+          Validators.maxLength(190),
         ])
       ),
       order: this.formBuilder.control(

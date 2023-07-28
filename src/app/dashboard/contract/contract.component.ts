@@ -35,7 +35,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { CommonService } from '../common/common.service';
-
+import { MatSelectChange } from '@angular/material/select';
 @Component({
   selector: 'app-contract',
   templateUrl: './contract.component.html',
@@ -80,11 +80,17 @@ export class ContractComponent implements OnDestroy, AfterViewInit {
 
   producerId$: Subscription;
   consumerId$: Subscription;
-  generateIdentifier$: Subscription;
 
   searchContractForm: FormGroup;
   wordSearchChange$: Subscription;
   wordSearch = ""
+  selectedProducerName : string | undefined;
+  selectedEventName!: string | undefined;
+  selectedConsumerName!: string | undefined;
+  selectedActionName!: string | undefined;
+
+  selectedEventId!: string | undefined;
+  selectedActionId!: string | undefined;
 
   commonService = new CommonService();
 
@@ -112,9 +118,9 @@ export class ContractComponent implements OnDestroy, AfterViewInit {
         '',
         Validators.compose([
           Validators.required,
-          Validators.pattern(/^[a-zA-Z0-9_\.\-\/\s]+$/),
+          Validators.pattern(/^[a-zA-Z0-9_=>:\.\-\/\s]+$/),
           Validators.minLength(1),
-          Validators.maxLength(45),
+          Validators.maxLength(190),
         ])
       ),
       order: this.formBuilder.control(
@@ -205,28 +211,6 @@ export class ContractComponent implements OnDestroy, AfterViewInit {
           },
         });
       }) as Subscription;
-
-    this.generateIdentifier$ = merge(
-      this.createContractForm.get('name')?.valueChanges as Observable<any>,
-      this.createContractForm.get('eventId')?.valueChanges as Observable<any>,
-      this.createContractForm.get('actionId')?.valueChanges as Observable<any>
-    ).subscribe({
-      next: () => {
-        let name = this.createContractForm.get('name')?.value as string;
-        if (name && name !== '') {
-          const actionId = this.createContractForm.get('actionId')
-            ?.value as string;
-          const eventId = this.createContractForm.get('eventId')
-            ?.value as string;
-          name = name.trim();
-          name = name.replace(' ', '_');
-          name = name.toLocaleLowerCase();
-          this.createContractForm
-            .get('identifier')
-            ?.setValue(`${name}_${eventId || 0}_${actionId || 0}`);
-        }
-      },
-    });
   }
 
   handleError(err: any) {
@@ -283,7 +267,6 @@ export class ContractComponent implements OnDestroy, AfterViewInit {
       });
   }
   ngOnDestroy(): void {
-    this.generateIdentifier$?.unsubscribe();
     this.consumerId$.unsubscribe();
     this.producerId$.unsubscribe();
     this.wordSearchChange$?.unsubscribe()
@@ -342,6 +325,37 @@ export class ContractComponent implements OnDestroy, AfterViewInit {
       ? 'Not a valid email'
       : '';
   }
+
+  onProducerSelectionChange(event: MatSelectChange) {
+    this.selectedProducerName = event.source.triggerValue;
+    this.generateIdentifierAndName();
+  }  
+
+  onEventSelectionChange(event: MatSelectChange) {
+    this.selectedEventName = event.source.triggerValue;
+    this.selectedEventId = event.value;
+    this.generateIdentifierAndName();
+  }  
+  
+  onConsumerSelectionChange(event: MatSelectChange) {
+    this.selectedConsumerName = event.source.triggerValue;
+    this.generateIdentifierAndName();
+  }    
+
+  onActionSelectionChange(event: MatSelectChange) {
+    this.selectedActionName = event.source.triggerValue;
+    this.selectedActionId = event.value;
+    this.generateIdentifierAndName();
+  }
+
+  generateIdentifierAndName() {
+    this.createContractForm
+    .get('identifier')
+    ?.setValue(`${this.selectedEventId || 0}_${this.selectedActionId || 0}`);
+    this.createContractForm
+    .get('name')
+    ?.setValue(`${this.selectedProducerName || ' '} -> ${this.selectedEventName || ' '} = ${this.selectedConsumerName || ' '} -> ${this.selectedActionName || ' '}`); 
+  }  
 
   openDeleteDialog(contract: Contract) {
     const deleteContractDialogRef = this.dialog.open(DeleteContractComponent, {
