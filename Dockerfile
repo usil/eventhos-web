@@ -8,4 +8,6 @@ RUN npm run build
 
 EXPOSE 2110
 
-ENTRYPOINT ["npm","run","start"]
+COPY DockerfileEntryPoint.sh /usr/local/bin/DockerfileEntryPoint.sh
+RUN chmod 744 /usr/local/bin/DockerfileEntryPoint.sh
+ENTRYPOINT ["DockerfileEntryPoint.sh"]
