@@ -14,6 +14,7 @@ import {
   startWith,
   Subscription,
   switchMap,
+  firstValueFrom
 } from 'rxjs';
 import {
   Contract,
@@ -272,10 +273,25 @@ export class ContractComponent implements OnDestroy, AfterViewInit {
     this.wordSearchChange$?.unsubscribe()
   }
 
-  createContract(contractForm: CreateContractDto) {
+  async createContract(contractForm: CreateContractDto) {
     const identifier = this.createContractForm.get('identifier')?.value;
     this.createContractForm.disable();
+
+    const contractsByEventIdAndActionId = await firstValueFrom(
+        this.contractService.findContractsByEventIdAndActionId(contractForm.eventId, contractForm.actionId));
     
+    if(contractsByEventIdAndActionId && contractsByEventIdAndActionId.code === 200000 
+        && contractsByEventIdAndActionId.content.length>0){
+          this.errorMessage = 
+          `Failed. A contract already exist for this event (${this.selectedEventName}) and this action (${this.selectedActionName}). Try again usiung another values.`;
+          this.createContractForm.enable();
+          this.createContractForm.get('name')?.reset();
+          this.createContractForm.get('identifier')?.disable();
+          this.createContractForm.get('eventId')?.disable();
+          this.createContractForm.get('actionId')?.disable();         
+          return;
+    }
+
     this.contractService
       .createContract({ ...contractForm, identifier })
       .subscribe({

@@ -41,6 +41,16 @@ export class ContractService {
       .pipe(first());
   }
 
+  findContractsByEventIdAndActionId(
+    eventId: number,
+    actionId: number
+  ) {
+    let path = `/event/${eventId}/action/${actionId}`;    
+    return this.http
+      .get<ContractResult>(this.httpRoute + path)
+      .pipe(first());
+  }
+
   deleteContract(contractId: number) {
     return this.http.delete(this.httpRoute + `/${contractId}`);
   }
@@ -75,6 +85,12 @@ interface ContractPaginationContent {
   itemsPerPage: number;
   totalItems: number;
   totalPages: number;
+}
+
+interface ContractResult {
+  message: string;
+  code: number;
+  content: Contract[];
 }
 
 export interface CreateContractDto {
