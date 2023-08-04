@@ -110,8 +110,19 @@
       *ngIf="createActionForm.get('securityType')?.value === 1"
       class="span-4"
     >
-      Oauth2 Client Security
+      Oauth2 Client Credentials Grant
     </h4>
+
+    <span
+      *ngIf="createActionForm.get('securityType')?.value === 1"
+      class="span-4"
+    >
+      This option allows you to configure an automatic token generation against an endpoint that
+      must meet the oauth2 specification like field names, conten-type, access_token in response, etc. More details here: 
+      <a href="https://datatracker.ietf.org/doc/html/rfc6749#section-4.4" target="_blank">4.4. Client Credentials Grant</a> 
+      
+    </span>    
+
     <mat-form-field
       class="span-4"
       *ngIf="createActionForm.get('securityType')?.value === 1"

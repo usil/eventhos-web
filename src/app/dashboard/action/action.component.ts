@@ -92,7 +92,7 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
   ];
   securityTypes = [
     { name: 'custom', code: 0 },
-    { name: 'oauth2 client', code: 1 },
+    { name: 'oauth2 client_credentials', code: 1 },
   ];
   producerSystems: System[] = [];
   generateIdentifier$: Subscription;

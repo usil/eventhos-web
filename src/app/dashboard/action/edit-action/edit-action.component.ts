@@ -27,7 +27,7 @@ export class EditActionComponent implements OnInit, OnDestroy {
   objectKeys = Object.keys;
   securityTypes = [
     { name: 'custom', code: 0 },
-    { name: 'oauth2 client', code: 1 },
+    { name: 'oauth2 client_credentials', code: 1 },
   ];
   operations = ['select', 'new', 'update', 'delete'];
   methods = ['get', 
