@@ -138,7 +138,7 @@ export class EditActionComponent implements OnInit, OnDestroy {
           value: action.httpConfiguration?.rawFunctionBody ?? undefined,
           disabled: true,
         },
-        Validators.compose([this.nodeJsValidator])
+        Validators.compose([])
       ),
       securityType: this.formBuilder.control(
         securityCode,
@@ -253,15 +253,6 @@ export class EditActionComponent implements OnInit, OnDestroy {
     return null;
   }
 
-  nodeJsValidator(control: AbstractControl) {
-    const regex = /(import|require|fs|new|from)+/gi;
-
-    if (regex.test(control.value)) {
-      return { nodeJSInvalid: "import, require, fs, from or new is invalid" };
-    }
-    return null;
-  }
-
   ngOnInit(): void {}
 
   getErrorMessage(formControlName: string) {
@@ -273,11 +264,6 @@ export class EditActionComponent implements OnInit, OnDestroy {
       return this.editActionForm
         .get(formControlName)
         ?.getError('jsonInvalid');
-    }
-    if (this.editActionForm.get(formControlName)?.hasError('nodeJSInvalid')) {
-      return this.editActionForm
-        .get(formControlName)
-        ?.getError('nodeJSInvalid');
     }
 
     if (this.editActionForm.get(formControlName)?.hasError('secretInvalid')) {

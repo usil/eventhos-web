@@ -158,7 +158,7 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
       ),
       rawFunctionBody: this.formBuilder.control(
         { value: '', disabled: true },
-        Validators.compose([this.nodeJsValidator])
+        Validators.compose([])
       ),
       securityType: this.formBuilder.control(
         '',
@@ -274,14 +274,6 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
       JSON.parse(control.value);
     } catch (error: any) {
       return { jsonInvalid: error.message };
-    }
-    return null;
-  }
-
-  nodeJsValidator(control: AbstractControl) {
-    const regex = /(import|require|fs|new|from)+/gi;
-    if (regex.test(control.value)) {
-      return { nodeJSInvalid: "import, require, fs, from or new is invalid" };
     }
     return null;
   }
@@ -439,11 +431,6 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
       return this.createActionForm
         .get(formControlName)
         ?.getError('jsonInvalid');
-    }
-    if (this.createActionForm.get(formControlName)?.hasError('nodeJSInvalid')) {
-      return this.createActionForm
-        .get(formControlName)
-        ?.getError('nodeJSInvalid');
     }
 
     if (this.createActionForm.get(formControlName)?.hasError('secretInvalid')) {
