@@ -215,11 +215,7 @@
       </button>
 
       <div
-        *ngIf="
-          editActionForm.get('method')?.value === 'post' ||
-          editActionForm.get('method')?.value === 'put' ||
-          editActionForm.get('method')?.value === 'patch'
-        "
+        *ngIf="['post','put','get','delete'].includes(editActionForm.get('method')?.value)"
         class="span-4 radial-input"
       >
         <label>Input Type: </label>
@@ -230,9 +226,7 @@
       </div>
       <h4
         *ngIf="
-          (editActionForm.get('method')?.value === 'post' ||
-          editActionForm.get('method')?.value === 'put' ||
-          editActionForm.get('method')?.value === 'patch') &&
+          (['post','put','get','delete'].includes(editActionForm.get('method')?.value)) &&
           editActionForm.get('inputType')?.value === 'function'
         "
         class="span-4"
@@ -241,9 +235,7 @@
       </h4>
       <mat-form-field
         *ngIf="
-          (editActionForm.get('method')?.value === 'post' ||
-          editActionForm.get('method')?.value === 'put' ||
-          editActionForm.get('method')?.value === 'patch') &&
+          (['post','put','get','delete'].includes(editActionForm.get('method')?.value)) &&
           editActionForm.get('inputType')?.value === 'function'
         "
         class="span-4"
@@ -271,9 +263,7 @@
 
       <h4
         *ngIf="
-          (editActionForm.get('method')?.value === 'post' ||
-          editActionForm.get('method')?.value === 'put' ||
-          editActionForm.get('method')?.value === 'patch') &&
+          (['post','put','get','delete'].includes(editActionForm.get('method')?.value)) &&
           editActionForm.get('inputType')?.value === 'raw'
         "
         class="span-4"
@@ -282,9 +272,7 @@
       </h4>
       <mat-form-field
         *ngIf="
-          (editActionForm.get('method')?.value === 'post' ||
-          editActionForm.get('method')?.value === 'put' ||
-          editActionForm.get('method')?.value === 'patch') &&
+          (['post','put','get','delete'].includes(editActionForm.get('method')?.value)) &&
           editActionForm.get('inputType')?.value === 'raw'
         "
         class="span-4"

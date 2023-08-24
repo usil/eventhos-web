@@ -55,6 +55,10 @@
         }}</mat-icon>
       </button>
       <mat-hint>Put your password</mat-hint>
+      <mat-error *ngIf="createUserForm.get('password')?.invalid">{{
+        getErrorMessage("password")
+      }}</mat-error>
+      
     </mat-form-field>
     <div class="select-role">
       <mat-form-field class="forms-field" appearance="fill">

@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { BasicRole, RoleService } from 'src/app/dashboard/services/role.service';
 import { UserService } from 'src/app/dashboard/services/user.service';
+import { CommonService } from '../../../common/common.service';
 
 @Component({
   selector: 'create-user',
@@ -16,6 +17,7 @@ export class CreateUserComponent implements OnInit {
   roles: BasicRole[] = [];
   rolesList: BasicRole[] = [];
   hidePassword = true;
+  commonService = new CommonService();
 
   constructor(
     public dialogRef: MatDialogRef<CreateUserComponent>,
@@ -59,26 +61,14 @@ export class CreateUserComponent implements OnInit {
         '',
         Validators.compose([
           Validators.required,
-          Validators.pattern(/^[a-zA-Z0-9]+$/),
+          Validators.pattern(/^[a-zA-Z0-9_\.]+$/),
           Validators.minLength(4),
           Validators.maxLength(20),
         ])
       ),
       password: this.formBuilder.control(
         '',
-        Validators.compose([
-          Validators.required,
-          Validators.pattern(
-            /^[a-zA-Z0-9\d@$!%*#?&]*[A-Z]+[a-zA-Z0-9\d@$!%*#?&]*$/
-          ),
-          Validators.pattern(
-            /^[a-zA-Z0-9\d@$!%*#?&]*[0-9]+[a-zA-Z0-9\d@$!%*#?&]*$/
-          ),
-          Validators.pattern(
-            /^[a-zA-Z0-9\d@$!%*#?&]*[a-z]+[a-zA-Z0-9\d@$!%*#?&]*$/
-          ),
-          Validators.minLength(6),
-        ])
+        Validators.compose([this.commonService.passwordPatternValidator])
       ),
       role: this.formBuilder.control(''),
     });
@@ -107,6 +97,15 @@ export class CreateUserComponent implements OnInit {
   closeDialog() {
     this.dialogRef.close();
   }
+
+  getErrorMessage(formControlName: string) {
+
+    if (this.createUserForm.get(formControlName)?.hasError('invalidPassword')) {
+      return this.createUserForm
+        .get(formControlName)
+        ?.getError('invalidPassword');
+    }
+  }  
 
   createUser(createUserData: {
     name: string;

@@ -242,22 +242,13 @@
       Add header
     </button>
     <h4
-      *ngIf="
-        createActionForm.get('method')?.value === 'post' ||
-        createActionForm.get('method')?.value === 'put' ||
-        createActionForm.get('method')?.value === 'patch'
-      "
+      *ngIf="['post','put','get','delete'].includes(createActionForm.get('method')?.value)"
       class="span-4"
     >
       Body
     </h4>
     <div
-      *ngIf="
-        createActionForm.get('method')?.value === 'post' ||
-        createActionForm.get('method')?.value === 'put' ||
-        createActionForm.get('method')?.value === 'patch'
-
-      "
+      *ngIf="['post','put','get','delete'].includes(createActionForm.get('method')?.value)"
       class="span-4 radial-input"
     >
       <label>Input Type: </label>
@@ -269,9 +260,7 @@
     </div>
     <mat-form-field
       *ngIf="
-        (createActionForm.get('method')?.value === 'post' ||
-          createActionForm.get('method')?.value === 'put' || 
-          createActionForm.get('method')?.value === 'patch' ) &&
+        (['post','put','get','delete'].includes(createActionForm.get('method')?.value) ) &&
         createActionForm.get('bodyInput')?.value == 'function'
       "
       class="span-4"
@@ -299,9 +288,7 @@
 
     <mat-form-field
       *ngIf="
-        (createActionForm.get('method')?.value === 'post' ||
-          createActionForm.get('method')?.value === 'put' || 
-          createActionForm.get('method')?.value === 'patch' ) &&
+        (['post','put','get','delete'].includes(createActionForm.get('method')?.value) ) &&
         createActionForm.get('bodyInput')?.value == 'raw'
       "
       class="span-4"
@@ -329,9 +316,7 @@
     </mat-form-field>
     <div
       *ngIf="
-        (createActionForm.get('method')?.value === 'post' ||
-          createActionForm.get('method')?.value === 'put' ||
-          createActionForm.get('method')?.value === 'patch') &&
+        (['post','put','get','delete'].includes(createActionForm.get('method')?.value)) &&
         createActionForm.get('bodyInput')?.value === 'keyValue'
       "
       formArrayName="body"
@@ -361,9 +346,7 @@
     </div>
     <button
       *ngIf="
-        (createActionForm.get('method')?.value === 'post' ||
-          createActionForm.get('method')?.value === 'put' ||
-          createActionForm.get('method')?.value === 'patch') &&
+        (['post','put','get','delete'].includes(createActionForm.get('method')?.value)) &&
         createActionForm.get('bodyInput')?.value === 'keyValue'
       "
       (click)="addBodyPair()"

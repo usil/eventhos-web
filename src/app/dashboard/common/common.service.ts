@@ -32,6 +32,33 @@ export class CommonService {
     return null;
   }
 
+
+  passwordPatternValidator(control: AbstractControl) {
+
+    if(control.value==null) return null;
+
+    if (control.value.length < 8) {
+      return { invalidPassword: "Your password must be at least 8 characters"};
+    }
+    if (control.value.length > 30) {
+        return { invalidPassword: "Your password must be at max 30 characters"};
+    }
+    if (control.value.search(/[a-z]/) < 0) {
+        return { invalidPassword: "Your password must contain at least one lower case letter."};
+    }
+    if (control.value.search(/[A-Z]/) < 0) {
+        return { invalidPassword: "Your password must contain at least one upper case letter."};
+    }
+    
+    if (control.value.search(/[0-9]/) < 0) {
+        return { invalidPassword: "Your password must contain at least one digit."};
+    }
+    if (control.value.search(/[!@#\$%\^&\*_-]/) < 0) {
+        return { invalidPassword: "Your password must contain at least special char: ! @ # $ % ^ & * _ -"};
+    }
+    return null;
+  }
+
   severalMailsPatternValidator(control: AbstractControl) {
 
     if(control.value==null || control.value=="") return null;

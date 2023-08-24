@@ -176,7 +176,8 @@ export class EditActionComponent implements OnInit, OnDestroy {
     if (
       action.httpConfiguration.method === 'post' ||
       action.httpConfiguration.method === 'put' ||
-      action.httpConfiguration.method === 'patch' 
+      action.httpConfiguration.method === 'get'||
+      action.httpConfiguration.method === 'delete' 
     ) {
       this.editActionForm.get('rawBody')?.enable();
       this.editActionForm.get('rawFunctionBody')?.enable();
@@ -204,7 +205,7 @@ export class EditActionComponent implements OnInit, OnDestroy {
     this.methodChangeSubscription$ = this.editActionForm
       .get('method')
       ?.valueChanges.subscribe((changeValue) => {
-        if (changeValue === 'post' || changeValue === 'put' || changeValue === 'patch') {
+        if (changeValue === 'post' || changeValue === 'put' || changeValue === 'get' || changeValue === 'delete') {
           this.editActionForm.get('rawBody')?.enable();
           this.editActionForm.get('rawFunctionBody')?.enable();
         } else {
