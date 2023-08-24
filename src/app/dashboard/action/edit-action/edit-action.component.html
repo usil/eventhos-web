@@ -336,6 +336,15 @@
       >
         Add url query param
       </button>
+      <h3 class="span-4">Reply to</h3>
+      <mat-form-field appearance="fill">
+        <mat-label>Reply to</mat-label>
+        <input formControlName="reply_to" matInput placeholder="Event identifier" />
+        <mat-hint>Event identifier</mat-hint>
+        <mat-error *ngIf="editActionForm.get('reply_to')?.invalid">{{
+          getErrorMessage("reply_to")
+        }}</mat-error>
+      </mat-form-field>      
       <button
         [disabled]="editActionForm.invalid"
         type="submit"

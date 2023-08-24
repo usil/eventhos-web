@@ -122,6 +122,9 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
         { value: '', disabled: true },
         Validators.compose([Validators.required])
       ),
+      reply_to: this.formBuilder.control(
+        { value: '', disabled: false },
+      ),      
       system_id: this.formBuilder.control(
         '',
         Validators.compose([Validators.required])

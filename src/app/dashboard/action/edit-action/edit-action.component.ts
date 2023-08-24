@@ -107,6 +107,9 @@ export class EditActionComponent implements OnInit, OnDestroy {
           Validators.maxLength(45),
         ])
       ),
+      reply_to: this.formBuilder.control(
+        action.reply_to
+      ),      
       operation: this.formBuilder.control(
         action.operation,
         Validators.compose([Validators.required])

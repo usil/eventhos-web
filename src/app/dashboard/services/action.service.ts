@@ -94,6 +94,7 @@ export interface CreateActionDto {
   clientSecret?: string;
   clientId?: number;
   rawFunctionBody: string;
+  reply_to: string;
 }
 
 export interface EditActionDto {
@@ -109,6 +110,7 @@ export interface EditActionDto {
   queryUrlParams: { key: string; value: string | number }[];
   clientSecret?: string;
   clientId?: number;
+  reply_to?: string;
 }
 
 export interface Action {
@@ -119,6 +121,7 @@ export interface Action {
   operation: string;
   description: string;
   deleted: boolean;
+  reply_to:string;
   created_at: Date;
   updated_at: Date;
 }
@@ -135,6 +138,7 @@ export interface FullAction {
   operation: string;
   description: string;
   deleted: boolean;
+  reply_to:string;
   httpConfiguration: {
     rawFunctionBody?: string;
     url: string;
