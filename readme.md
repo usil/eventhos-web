@@ -66,6 +66,10 @@ The artifact **eventhos-api** is required to use this web. To start the api foll
 - https://github.com/usil/eventhos-api#manual-start-developers
 - https://github.com/usil/eventhos-api#manual-start-production
 
+## Contributions
+
+Check this https://github.com/usil/eventhos-api/wiki/Contributions
+
 ## Contributors
 
 <table>
