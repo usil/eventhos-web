@@ -19,6 +19,7 @@ import {
   FormArray,
   FormGroupDirective,
   AbstractControl,
+  FormControl,
 } from '@angular/forms';
 import {
   Subscription,
@@ -32,11 +33,14 @@ import {
   BehaviorSubject,
   first,
   skip,
+  distinctUntilChanged,
+  debounceTime,
 } from 'rxjs';
 import { System, SystemService } from '../services/system.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
+import { CommonService } from '../common/common.service';
 @Component({
   selector: 'app-action',
   templateUrl: './action.component.html',
@@ -69,7 +73,7 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
   errorMessage!: string | undefined;
 
   createActionForm: FormGroup;
-  operations = ['select', 'new', 'update', 'delete', 'execution'];
+  operations = ['new', 'update', 'delete', 'execution', 'other'];
   methods = ['get', 
     'post', 
     'put', 
@@ -88,7 +92,7 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
   ];
   securityTypes = [
     { name: 'custom', code: 0 },
-    { name: 'oauth2 client', code: 1 },
+    { name: 'oauth2 client_credentials', code: 1 },
   ];
   producerSystems: System[] = [];
   generateIdentifier$: Subscription;
@@ -98,8 +102,13 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
   queryFormArray: FormArray;
   bodyFormArray: FormArray;
   hide = true;
+  searchActionForm: FormGroup;
+  wordSearchChange$: Subscription;
+  wordSearch = "";
 
   reload = new BehaviorSubject<number>(0);
+
+  commonService = new CommonService();
 
   constructor(
     private actionService: ActionService,
@@ -113,6 +122,9 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
         { value: '', disabled: true },
         Validators.compose([Validators.required])
       ),
+      reply_to: this.formBuilder.control(
+        { value: '', disabled: false },
+      ),      
       system_id: this.formBuilder.control(
         '',
         Validators.compose([Validators.required])
@@ -147,6 +159,10 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
         { value: '{}', disabled: true },
         Validators.compose([Validators.required, this.jsonParseValidator])
       ),
+      rawFunctionBody: this.formBuilder.control(
+        { value: '', disabled: true },
+        Validators.compose([])
+      ),
       securityType: this.formBuilder.control(
         '',
         Validators.compose([Validators.required])
@@ -161,11 +177,7 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
       ),
       clientSecret: this.formBuilder.control(
         { value: '', disabled: true },
-        Validators.compose([
-          Validators.required,
-          Validators.pattern(/^[a-zA-Z0-9_\.\-]+$/),
-          Validators.minLength(1),
-        ])
+        Validators.compose([this.commonService.secretPatternValidator])
       ),
       clientId: this.formBuilder.control(
         { value: '', disabled: true },
@@ -176,18 +188,44 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
       queryUrlParams: this.formBuilder.array([]),
     });
 
+    this.searchActionForm = this.formBuilder.group({
+      wordSearch: this.formBuilder.control(''),
+    });
+
+    this.wordSearchChange$ = this.searchActionForm
+      .get('wordSearch')
+      ?.valueChanges.pipe(distinctUntilChanged(), debounceTime(750))
+      .subscribe((changeValue) => {
+        this.wordSearch = changeValue;
+        this.paginator.pageIndex = 0;
+        this.reload.next(this.reload.value + 1);
+      }) as Subscription;
+
     this.headersFormArray = this.createActionForm.get('headers') as FormArray;
 
     this.bodyInputType$ = this.createActionForm
       .get('bodyInput')
-      ?.valueChanges.subscribe((value: 'raw' | 'keyValue') => {
+      ?.valueChanges.subscribe((value: 'raw' | 'keyValue' | 'function') => {
         if (value === 'keyValue') {
           this.createActionForm.get('body')?.enable();
           this.createActionForm.get('rawBody')?.disable();
-          return;
+          this.createActionForm.get('rawBody')?.reset();
+          this.createActionForm.get('rawFunctionBody')?.disable()
+          this.createActionForm.get('rawFunctionBody')?.reset()
+        } else if ( value === "raw") {
+          this.createActionForm.get('body')?.disable();
+          this.createActionForm.get('body')?.reset()
+          this.createActionForm.get('rawFunctionBody')?.disable()
+          this.createActionForm.get('rawFunctionBody')?.reset()
+          this.createActionForm.get('rawBody')?.enable();
+        } else {
+          this.createActionForm.get('body')?.disable();
+          this.createActionForm.get('body')?.reset();
+          this.createActionForm.get('rawBody')?.disable();
+          this.createActionForm.get('rawBody')?.reset();
+          this.createActionForm.get('rawFunctionBody')?.enable()
+
         }
-        this.createActionForm.get('body')?.disable();
-        this.createActionForm.get('rawBody')?.enable();
       }) as Subscription;
 
     this.queryFormArray = this.createActionForm.get(
@@ -202,8 +240,8 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
     ).subscribe({
       next: () => {
         let name = this.createActionForm.get('name')?.value as string;
-        if (name && name !== '') {
-          const type = this.createActionForm.get('operation')?.value as string;
+        const type = this.createActionForm.get('operation')?.value as string;
+        if ((name && name !== '') && (type && type !== '')) {          
           name = name.trim();
           name = name.replace(' ', '_');
           name = name.toLocaleLowerCase();
@@ -261,7 +299,8 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
               this.sort.active,
               this.sort.direction,
               this.paginator.pageIndex,
-              this.pageSize
+              this.pageSize,
+              {wordSearch: this.wordSearch}
             )
             .pipe(
               catchError((err) => {
@@ -295,7 +334,7 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
     if (keyEvent.key === 'Tab') {
       const startPost = rawBodyTextArea.selectionStart;
       keyEvent.preventDefault();
-      const rawBodyRef = this.createActionForm.get('rawBody');
+      const rawBodyRef = this.createActionForm.get(rawBodyTextArea as unknown as string);
       const originalValue = rawBodyRef?.value as string;
 
       rawBodyRef?.setValue(
@@ -383,6 +422,7 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
     this.changeType$?.unsubscribe();
     this.roleDataSubscription?.unsubscribe();
     this.bodyInputType$?.unsubscribe();
+    this.wordSearchChange$?.unsubscribe()
   }
 
   getErrorMessage(formControlName: string) {
@@ -395,6 +435,12 @@ export class ActionComponent implements OnInit, OnDestroy, AfterViewInit {
         .get(formControlName)
         ?.getError('jsonInvalid');
     }
+
+    if (this.createActionForm.get(formControlName)?.hasError('secretInvalid')) {
+      return this.createActionForm
+        .get(formControlName)
+        ?.getError('secretInvalid');
+    }    
 
     return this.createActionForm.get(formControlName)?.hasError('email')
       ? 'Not a valid email'

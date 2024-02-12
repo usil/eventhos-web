@@ -16,6 +16,14 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatCardModule } from '@angular/material/card';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
+
+
 @NgModule({
   exports: [
     MatToolbarModule,
@@ -35,6 +43,11 @@ import { MatTabsModule } from '@angular/material/tabs';
     MatPaginatorModule,
     MatProgressSpinnerModule,
     MatCardModule,
+    MatAutocompleteModule,
+    MatExpansionModule,
+    MatDialogModule,
+    MatCheckboxModule,
+    MatTooltipModule
   ],
 })
 export class DashBoardMaterials {}

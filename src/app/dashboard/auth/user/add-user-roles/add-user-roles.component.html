@@ -1,0 +1,52 @@
+<h2 mat-dialog-title>Modify roles of {{ user.name }}</h2>
+<form [formGroup]="addRolesForm" (ngSubmit)="updateRoles()">
+  <div mat-dialog-content>
+    <div class="error-display" *ngIf="errorMessage">
+      <h5>{{ errorMessage }}</h5>
+    </div>
+    <div class="select-role">
+      <mat-form-field class="forms-field" appearance="fill">
+        <mat-label>Select A Role</mat-label>
+        <mat-select name="role" formControlName="role">
+          <mat-option [value]="role" *ngFor="let role of roles">{{
+            role.identifier
+          }}</mat-option>
+        </mat-select>
+        <mat-hint>Select a role and add it</mat-hint>
+      </mat-form-field>
+      <button type="button" (click)="addRoleToList()" mat-stroked-button>
+        +
+      </button>
+    </div>
+    <div *ngFor="let role of rolesList" class="roles-list">
+      <div class="role-title">
+        <h3>{{ role.identifier }}</h3>
+      </div>
+      <button
+        (click)="removeRoleToList(role)"
+        color="warn"
+        type="button"
+        mat-stroked-button
+      >
+        -
+      </button>
+    </div>
+  </div>
+  <div align="end" mat-dialog-actions>
+    <button
+      (click)="closeDialog()"
+      type="button"
+      color="warn"
+      mat-stroked-button
+      [disabled]="dialogRef.disableClose"
+    >
+      Cancel</button
+    ><button
+      [disabled]="!addRolesForm.valid || rolesList.length === 0"
+      color="primary"
+      mat-flat-button
+    >
+      Update
+    </button>
+  </div>
+</form>

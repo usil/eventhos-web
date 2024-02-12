@@ -18,7 +18,7 @@
     </mat-form-field>
     <mat-form-field class="span-2" appearance="fill">
       <mat-label>Name</mat-label>
-      <input formControlName="name" matInput placeholder="New System" />
+      <input formControlName="name" matInput placeholder="Contract name" />
       <mat-hint>Contract name</mat-hint>
       <mat-error *ngIf="createContractForm.get('name')?.invalid">{{
         getErrorMessage("name")
@@ -34,7 +34,7 @@
     </mat-form-field>
     <mat-form-field class="span-6" appearance="fill">
       <mat-label>When in the producer...</mat-label>
-      <mat-select formControlName="producerId">
+      <mat-select formControlName="producerId" (selectionChange)="onProducerSelectionChange($event)" >
         <mat-option *ngFor="let producer of producers" [value]="producer.id">{{
           producer.name
         }}</mat-option>
@@ -46,9 +46,9 @@
     </mat-form-field>
     <mat-form-field class="span-6" appearance="fill">
       <mat-label>This event occurs...</mat-label>
-      <mat-select formControlName="eventId">
+      <mat-select formControlName="eventId" (selectionChange)="onEventSelectionChange($event)" >
         <mat-option *ngFor="let event of events" [value]="event.id"
-          >{{ event.operation }} | {{ event.name }}
+          >{{ event.operation }} : {{ event.name }}
         </mat-option>
       </mat-select>
       <mat-hint>The event produced by the system</mat-hint>
@@ -58,7 +58,7 @@
     </mat-form-field>
     <mat-form-field class="span-6" appearance="fill">
       <mat-label>Then in the consumer...</mat-label>
-      <mat-select formControlName="consumerId">
+      <mat-select formControlName="consumerId" (selectionChange)="onConsumerSelectionChange($event)" >
         <mat-option *ngFor="let consumer of consumers" [value]="consumer.id">{{
           consumer.name
         }}</mat-option>
@@ -70,9 +70,9 @@
     </mat-form-field>
     <mat-form-field class="span-6" appearance="fill">
       <mat-label>Execute this action...</mat-label>
-      <mat-select formControlName="actionId">
+      <mat-select formControlName="actionId" (selectionChange)="onActionSelectionChange($event)" >
         <mat-option *ngFor="let action of actions" [value]="action.id"
-          >{{ action.operation }} | {{ action.name }}
+          >{{ action.operation }} : {{ action.name }}
         </mat-option>
       </mat-select>
       <mat-hint>The subscribed action to the event</mat-hint>
@@ -83,7 +83,10 @@
     <mat-form-field class="span-6" appearance="fill">
       <mat-label>Mail recipients on error</mat-label>
       <input formControlName="mailRecipientsOnError" type="text" matInput placeholder="user@gmail.com,user2@outlook.com,user3@usil.edu.pe" />
-      <mat-hint>Receptors when there are errors</mat-hint>
+      <mat-hint>In case of contract execution error, these mails will be notified. Default is the admin mail</mat-hint>
+      <mat-error *ngIf="createContractForm.get('mailRecipientsOnError')?.invalid">{{
+        getErrorMessage("mailRecipientsOnError")
+      }}</mat-error>
     </mat-form-field>
     <button
       [disabled]="
@@ -100,6 +103,13 @@
 </section>
 <section class="show-table">
   <h3>Contracts List</h3>
+  <form [formGroup]="searchContractForm" class="search">
+    <mat-form-field appearance="fill">
+      <mat-label>Search by name, producer, producer event, subscriber, subscriber action</mat-label>
+      <input formControlName="wordSearch" matInput placeholder="name, producer, producer event, subscriber, subscriber action" />
+      <mat-hint>Search by name, producer, producer event, subscriber, subscriber action</mat-hint>
+    </mat-form-field>
+  </form>
   <div class="container-table mat-elevation-z8">
     <div class="loading-shade" *ngIf="isLoadingResults">
       <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
@@ -165,6 +175,7 @@
               (click)="openEditDialog(row)"
               color="primary"
               mat-stroked-button
+              class="mat-button"
             >
               Edit
             </button>
@@ -172,6 +183,7 @@
               (click)="openDeleteDialog(row)"
               color="warn"
               mat-stroked-button
+              class="mat-button"
             >
               Delete
             </button>

@@ -3,6 +3,8 @@ import { DeleteContractComponent } from './delete-contract/delete-contract.compo
 import {
   BehaviorSubject,
   catchError,
+  debounceTime,
+  distinctUntilChanged,
   first,
   map,
   merge,
@@ -12,6 +14,7 @@ import {
   startWith,
   Subscription,
   switchMap,
+  firstValueFrom
 } from 'rxjs';
 import {
   Contract,
@@ -23,6 +26,7 @@ import {
   FormGroup,
   FormGroupDirective,
   Validators,
+  AbstractControl,
 } from '@angular/forms';
 import { Component, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import { System, SystemService } from '../services/system.service';
@@ -31,7 +35,8 @@ import { Action } from '../services/action.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
-
+import { CommonService } from '../common/common.service';
+import { MatSelectChange } from '@angular/material/select';
 @Component({
   selector: 'app-contract',
   templateUrl: './contract.component.html',
@@ -76,7 +81,19 @@ export class ContractComponent implements OnDestroy, AfterViewInit {
 
   producerId$: Subscription;
   consumerId$: Subscription;
-  generateIdentifier$: Subscription;
+
+  searchContractForm: FormGroup;
+  wordSearchChange$: Subscription;
+  wordSearch = ""
+  selectedProducerName : string | undefined;
+  selectedEventName!: string | undefined;
+  selectedConsumerName!: string | undefined;
+  selectedActionName!: string | undefined;
+
+  selectedEventId!: string | undefined;
+  selectedActionId!: string | undefined;
+
+  commonService = new CommonService();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -84,14 +101,27 @@ export class ContractComponent implements OnDestroy, AfterViewInit {
     private contractService: ContractService,
     public dialog: MatDialog
   ) {
+
+    this.searchContractForm = this.formBuilder.group({
+      wordSearch: this.formBuilder.control(''),
+    });
+
+    this.wordSearchChange$ = this.searchContractForm
+      .get('wordSearch')
+      ?.valueChanges.pipe(distinctUntilChanged(), debounceTime(750))
+      .subscribe((changeValue) => {
+        this.wordSearch = changeValue;
+        this.paginator.pageIndex = 0;
+        this.reload.next(this.reload.value + 1);
+      }) as Subscription;
     this.createContractForm = this.formBuilder.group({
       name: this.formBuilder.control(
         '',
         Validators.compose([
           Validators.required,
-          Validators.pattern(/^[a-zA-Z0-9_\.\-\/\s]+$/),
+          Validators.pattern(/^[a-zA-Z0-9_=>:\.\-\/\s]+$/),
           Validators.minLength(1),
-          Validators.maxLength(45),
+          Validators.maxLength(190),
         ])
       ),
       order: this.formBuilder.control(
@@ -125,9 +155,7 @@ export class ContractComponent implements OnDestroy, AfterViewInit {
       ),
       mailRecipientsOnError: this.formBuilder.control(
         '',
-        Validators.compose([
-          // Validators.pattern(//),
-        ])
+        Validators.compose([this.commonService.severalMailsPatternValidator])
       )
     });
 
@@ -184,28 +212,6 @@ export class ContractComponent implements OnDestroy, AfterViewInit {
           },
         });
       }) as Subscription;
-
-    this.generateIdentifier$ = merge(
-      this.createContractForm.get('name')?.valueChanges as Observable<any>,
-      this.createContractForm.get('eventId')?.valueChanges as Observable<any>,
-      this.createContractForm.get('actionId')?.valueChanges as Observable<any>
-    ).subscribe({
-      next: () => {
-        let name = this.createContractForm.get('name')?.value as string;
-        if (name && name !== '') {
-          const actionId = this.createContractForm.get('actionId')
-            ?.value as string;
-          const eventId = this.createContractForm.get('eventId')
-            ?.value as string;
-          name = name.trim();
-          name = name.replace(' ', '_');
-          name = name.toLocaleLowerCase();
-          this.createContractForm
-            .get('identifier')
-            ?.setValue(`${name}_${eventId || 0}_${actionId || 0}`);
-        }
-      },
-    });
   }
 
   handleError(err: any) {
@@ -234,7 +240,8 @@ export class ContractComponent implements OnDestroy, AfterViewInit {
               this.sort.active,
               this.sort.direction,
               this.paginator.pageIndex,
-              this.pageSize
+              this.pageSize,
+              {wordSearch: this.wordSearch}
             )
             .pipe(
               catchError((err) => {
@@ -257,19 +264,34 @@ export class ContractComponent implements OnDestroy, AfterViewInit {
         })
       )
       .subscribe((data) => {
-        console.log(data);
         this.contracts = data;
       });
   }
   ngOnDestroy(): void {
-    this.generateIdentifier$?.unsubscribe();
     this.consumerId$.unsubscribe();
     this.producerId$.unsubscribe();
+    this.wordSearchChange$?.unsubscribe()
   }
 
-  createContract(contractForm: CreateContractDto) {
+  async createContract(contractForm: CreateContractDto) {
     const identifier = this.createContractForm.get('identifier')?.value;
     this.createContractForm.disable();
+
+    const contractsByEventIdAndActionId = await firstValueFrom(
+        this.contractService.findContractsByEventIdAndActionId(contractForm.eventId, contractForm.actionId));
+    
+    if(contractsByEventIdAndActionId && contractsByEventIdAndActionId.code === 200000 
+        && contractsByEventIdAndActionId.content.length>0){
+          this.errorMessage = 
+          `Failed. A contract already exist for this event (${this.selectedEventName}) and this action (${this.selectedActionName}). Try again usiung another values.`;
+          this.createContractForm.enable();
+          this.createContractForm.get('name')?.reset();
+          this.createContractForm.get('identifier')?.disable();
+          this.createContractForm.get('eventId')?.disable();
+          this.createContractForm.get('actionId')?.disable();         
+          return;
+    }
+
     this.contractService
       .createContract({ ...contractForm, identifier })
       .subscribe({
@@ -309,10 +331,47 @@ export class ContractComponent implements OnDestroy, AfterViewInit {
       return 'Minimum is 0';
     }
 
+    if (this.createContractForm.get(formControlName)?.hasError('invalidMailsPattern')) {
+      return this.createContractForm
+        .get(formControlName)
+        ?.getError('invalidMailsPattern');
+    }      
+
     return this.createContractForm.get(formControlName)?.hasError('email')
       ? 'Not a valid email'
       : '';
   }
+
+  onProducerSelectionChange(event: MatSelectChange) {
+    this.selectedProducerName = event.source.triggerValue;
+    this.generateIdentifierAndName();
+  }  
+
+  onEventSelectionChange(event: MatSelectChange) {
+    this.selectedEventName = event.source.triggerValue;
+    this.selectedEventId = event.value;
+    this.generateIdentifierAndName();
+  }  
+  
+  onConsumerSelectionChange(event: MatSelectChange) {
+    this.selectedConsumerName = event.source.triggerValue;
+    this.generateIdentifierAndName();
+  }    
+
+  onActionSelectionChange(event: MatSelectChange) {
+    this.selectedActionName = event.source.triggerValue;
+    this.selectedActionId = event.value;
+    this.generateIdentifierAndName();
+  }
+
+  generateIdentifierAndName() {
+    this.createContractForm
+    .get('identifier')
+    ?.setValue(`${this.selectedEventId || 0}_${this.selectedActionId || 0}`);
+    this.createContractForm
+    .get('name')
+    ?.setValue(`${this.selectedProducerName || ' '} -> ${this.selectedEventName || ' '} = ${this.selectedConsumerName || ' '} -> ${this.selectedActionName || ' '}`); 
+  }  
 
   openDeleteDialog(contract: Contract) {
     const deleteContractDialogRef = this.dialog.open(DeleteContractComponent, {

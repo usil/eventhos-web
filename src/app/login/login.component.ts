@@ -24,24 +24,14 @@ export class LoginComponent {
         Validators.compose([
           Validators.required,
           Validators.pattern(/^[a-zA-Z0-9]+$/),
-          Validators.minLength(4),
-          Validators.maxLength(20),
+          Validators.minLength(5)
         ])
       ),
       password: this.formBuilder.control(
         '',
         Validators.compose([
           Validators.required,
-          Validators.pattern(
-            /^[a-zA-Z0-9\d@$!%*#?&]*[A-Z]+[a-zA-Z0-9\d@$!%*#?&]*$/
-          ),
-          Validators.pattern(
-            /^[a-zA-Z0-9\d@$!%*#?&]*[\d]+[a-zA-Z0-9\d@$!%*#?&]*$/
-          ),
-          Validators.pattern(
-            /^[a-zA-Z0-9\d@$!%*#?&]*[a-z]+[a-zA-Z0-9\d@$!%*#?&]*$/
-          ),
-          Validators.minLength(6),
+          Validators.minLength(5)
         ])
       ),
     });
@@ -55,7 +45,7 @@ export class LoginComponent {
         } else {
           this.errorMessage = 'Unknown Error';
         }
-        console.log(this.errorMessage);
+        // console.log(this.errorMessage);
       },
       next: () => {
         this.router.navigate(['/dashboard']);

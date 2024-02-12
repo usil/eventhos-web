@@ -1,13 +1,13 @@
 FROM node:14
-
 WORKDIR /app
-COPY package.json .
-COPY package-lock.json .
-
-RUN npm install
 COPY . ./
-
+RUN git config --system url."https://github".insteadOf "git://github"
+RUN npm cache clear --force
+RUN npm install
 RUN npm run build
 
 EXPOSE 2110
-ENTRYPOINT ["npm","run","start"]
+
+COPY DockerfileEntryPoint.sh /usr/local/bin/DockerfileEntryPoint.sh
+RUN chmod 744 /usr/local/bin/DockerfileEntryPoint.sh
+ENTRYPOINT ["DockerfileEntryPoint.sh"]

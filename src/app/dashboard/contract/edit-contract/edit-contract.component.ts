@@ -6,6 +6,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Contract } from '../../services/contract.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { CommonService } from '../../common/common.service';
 
 @Component({
   selector: 'app-edit-contract',
@@ -15,6 +16,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 export class EditContractComponent implements OnInit {
   editContractForm: FormGroup;
   errorMessage!: string | undefined;
+
+  commonService = new CommonService();
 
   constructor(
     private contractService: ContractService,
@@ -27,9 +30,9 @@ export class EditContractComponent implements OnInit {
         this.contract.name,
         Validators.compose([
           Validators.required,
-          Validators.pattern(/^[a-zA-Z0-9_\.\-\/\s]+$/),
+          Validators.pattern(/^[a-zA-Z0-9_=>:\.\-\/\s]+$/),
           Validators.minLength(1),
-          Validators.maxLength(45),
+          Validators.maxLength(190),
         ])
       ),
       order: this.formBuilder.control(
@@ -47,9 +50,7 @@ export class EditContractComponent implements OnInit {
       ),
       mailRecipientsOnError: this.formBuilder.control(
         this.contract.mailRecipientsOnError,
-        Validators.compose([
-          // Validators.pattern(//),
-        ])
+        Validators.compose([this.commonService.severalMailsPatternValidator])
       )
     });
   }
@@ -85,6 +86,12 @@ export class EditContractComponent implements OnInit {
     if (this.editContractForm.get(formControlName)?.hasError('required')) {
       return 'You must enter a value';
     }
+
+    if (this.editContractForm.get(formControlName)?.hasError('invalidMailsPattern')) {
+      return this.editContractForm
+        .get(formControlName)
+        ?.getError('invalidMailsPattern');
+    }        
 
     return this.editContractForm.get(formControlName)?.hasError('email')
       ? 'Not a valid email'

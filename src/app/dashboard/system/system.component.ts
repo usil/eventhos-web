@@ -58,6 +58,7 @@ export class SystemComponent implements OnInit, OnDestroy, AfterViewInit {
 
   systemTypes = [
     'API',
+    'CLI',
     'CMS',
     'CRM',
     'DESKTOP',
@@ -74,7 +75,8 @@ export class SystemComponent implements OnInit, OnDestroy, AfterViewInit {
     'SAAS',
     'SCHEDULER',
     'SPA',
-    'WEB'
+    'WEB',
+    'OTHER'
   ];
 
   loading = false;

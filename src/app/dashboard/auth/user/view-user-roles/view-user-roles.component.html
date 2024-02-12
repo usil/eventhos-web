@@ -1,0 +1,35 @@
+<h2 class="primary-color" mat-dialog-title>{{ userTitle }}</h2>
+<div mat-dialog-content>
+  <div class="accordion-container">
+    <mat-accordion>
+      <mat-expansion-panel *ngFor="let role of user.roles">
+        <mat-expansion-panel-header>
+          <mat-panel-title> {{ role.identifier }} </mat-panel-title>
+        </mat-expansion-panel-header>
+        <h4>Grouped by application resource</h4>
+        <mat-list>
+          <div *ngFor="let option of role.resources">
+            <div mat-subheader>{{ option.applicationResourceName }}</div>
+            <mat-list-item *ngFor="let allowed of option.allowed">
+              <mat-icon mat-list-icon>vpn_key</mat-icon>
+              <div mat-line>
+                {{ option.applicationResourceName }}:{{ allowed }}
+              </div>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+          </div>
+        </mat-list>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+</div>
+<div align="end" mat-dialog-actions>
+  <button
+    (click)="closeDialog()"
+    type="button"
+    color="primary"
+    mat-stroked-button
+  >
+    Ok
+  </button>
+</div>

@@ -13,6 +13,7 @@ import {
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { CommonService } from '../../common/common.service';
 
 @Component({
   selector: 'app-edit-action',
@@ -23,9 +24,10 @@ export class EditActionComponent implements OnInit, OnDestroy {
   action!: FullAction;
   errorMessage!: string | undefined;
   editActionForm!: FormGroup;
+  objectKeys = Object.keys;
   securityTypes = [
     { name: 'custom', code: 0 },
-    { name: 'oauth2 client', code: 1 },
+    { name: 'oauth2 client_credentials', code: 1 },
   ];
   operations = ['select', 'new', 'update', 'delete'];
   methods = ['get', 
@@ -49,6 +51,10 @@ export class EditActionComponent implements OnInit, OnDestroy {
   queryFormArray!: FormArray;
   changeType$!: Subscription;
   methodChangeSubscription$!: Subscription;
+  bodyInputType$!: Subscription;
+
+  commonService = new CommonService();
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -75,7 +81,7 @@ export class EditActionComponent implements OnInit, OnDestroy {
         });
     } else {
       this.router.navigate(['/dashboard/action']);
-    }
+    };
   }
 
   addForm(action: FullAction) {
@@ -101,6 +107,9 @@ export class EditActionComponent implements OnInit, OnDestroy {
           Validators.maxLength(45),
         ])
       ),
+      reply_to: this.formBuilder.control(
+        action.reply_to
+      ),      
       operation: this.formBuilder.control(
         action.operation,
         Validators.compose([Validators.required])
@@ -117,12 +126,22 @@ export class EditActionComponent implements OnInit, OnDestroy {
         action.httpConfiguration.method,
         Validators.compose([Validators.required])
       ),
+      inputType: this.formBuilder.control(
+        Object.keys(action.httpConfiguration.data).length > 0 ? "raw" : action.httpConfiguration?.rawFunctionBody ? "function" : "raw",
+      ),
       rawBody: this.formBuilder.control(
         {
           value: JSON.stringify(action.httpConfiguration.data, null, 4),
           disabled: true,
         },
         Validators.compose([Validators.required, this.jsonParseValidator])
+      ),
+      rawFunctionBody: this.formBuilder.control(
+        {
+          value: action.httpConfiguration?.rawFunctionBody ?? undefined,
+          disabled: true,
+        },
+        Validators.compose([])
       ),
       securityType: this.formBuilder.control(
         securityCode,
@@ -143,11 +162,7 @@ export class EditActionComponent implements OnInit, OnDestroy {
             : '',
           disabled: true,
         },
-        Validators.compose([
-          Validators.required,
-          Validators.pattern(/^[a-zA-Z0-9_\.\-]+$/),
-          Validators.minLength(1),
-        ])
+        Validators.compose([this.commonService.secretPatternValidator])
       ),
       clientId: this.formBuilder.control(
         {
@@ -164,9 +179,11 @@ export class EditActionComponent implements OnInit, OnDestroy {
     if (
       action.httpConfiguration.method === 'post' ||
       action.httpConfiguration.method === 'put' ||
-      action.httpConfiguration.method === 'patch' 
+      action.httpConfiguration.method === 'get'||
+      action.httpConfiguration.method === 'delete' 
     ) {
       this.editActionForm.get('rawBody')?.enable();
+      this.editActionForm.get('rawFunctionBody')?.enable();
     }
     if (action.security.type === 'oauth2_client') {
       this.editActionForm.get('clientId')?.enable();
@@ -179,13 +196,26 @@ export class EditActionComponent implements OnInit, OnDestroy {
         .get('clientId')
         ?.setValue(action.security.httpConfiguration?.data['client_id']);
     }
+    this.bodyInputType$ = this.editActionForm
+      .get('inputType')
+      ?.valueChanges.subscribe((value: 'raw' | 'function') => {
+        if (value == 'raw') {
+          this.editActionForm.get('rawFunctionBody')?.reset();
+        } else {
+          this.editActionForm.get('rawBody')?.setValue("{}");
+        }
+      }) as Subscription
     this.methodChangeSubscription$ = this.editActionForm
       .get('method')
       ?.valueChanges.subscribe((changeValue) => {
-        if (changeValue === 'post' || changeValue === 'put' || changeValue === 'patch') {
+        if (changeValue === 'post' || changeValue === 'put' || changeValue === 'get' || changeValue === 'delete') {
           this.editActionForm.get('rawBody')?.enable();
+          this.editActionForm.get('rawFunctionBody')?.enable();
         } else {
           this.editActionForm.get('rawBody')?.disable();
+          this.editActionForm.get('rawFunctionBody')?.disable();
+          this.editActionForm.get('rawBody')?.setValue("{}");
+          this.editActionForm.get('rawFunctionBody')?.reset();
         }
       }) as Subscription;
     this.headersFormArray = this.editActionForm.get('headers') as FormArray;
@@ -233,6 +263,18 @@ export class EditActionComponent implements OnInit, OnDestroy {
     if (this.editActionForm.get(formControlName)?.hasError('required')) {
       return 'You must enter a value';
     }
+
+    if (this.editActionForm.get(formControlName)?.hasError('jsonInvalid')) {
+      return this.editActionForm
+        .get(formControlName)
+        ?.getError('jsonInvalid');
+    }
+
+    if (this.editActionForm.get(formControlName)?.hasError('secretInvalid')) {
+      return this.editActionForm
+        .get(formControlName)
+        ?.getError('secretInvalid');
+    }        
 
     return this.editActionForm.get(formControlName)?.hasError('email')
       ? 'Not a valid email'

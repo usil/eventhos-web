@@ -1,0 +1,38 @@
+<div>
+  <div class="profile-container" *ngIf="user">
+    <div class="header">
+      <h1>{{ user.name }} Profile</h1>
+      <h4>#{{ user.id }}</h4>
+    </div>
+    <section>
+      <h3>Roles</h3>
+      <mat-accordion>
+        <mat-expansion-panel *ngFor="let role of user.roles">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              #{{ role.id }} | Role Name: {{ role.identifier }}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <mat-list role="list">
+            <mat-list-item
+              *ngFor="let resource of role.resources"
+              role="listitem"
+              >{{ resource.applicationResourceName }} | Options:
+              {{ resource.allowed.join(",") }}</mat-list-item
+            >
+          </mat-list>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <div class="actions">
+        <button
+          (click)="openChangePasswordDialog()"
+          type="button"
+          mat-flat-button
+          color="accent"
+        >
+          Change Password
+        </button>
+      </div>
+    </section>
+  </div>
+</div>

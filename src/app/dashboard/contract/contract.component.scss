@@ -1,13 +1,8 @@
 table {
   width: 100%;
-  .actions {
-    button:last-child {
-      margin-left: 0.5rem;
-    }
-  }
   th,
   td {
-    min-width: 10%;
+    padding-right: 15px;
   }
   .roles-column {
     button:last-child {
@@ -42,10 +37,22 @@ table {
   }
 }
 
-td,
-th {
-  width: calc((100% - 33px) / 6);
+.mat-column-id {
+  width: 7%;
 }
+
+.mat-column-name {
+  width: 20%;
+}
+
+.mat-column-actions{
+  text-align: center;
+}
+
+.mat-button {
+  width: 50%;
+}
+
 
 .small-column {
   width: 32px;
@@ -96,4 +103,11 @@ h3 {
 
 .show-table {
   margin-top: 2rem;
+}
+
+.search {
+  display: grid;
+  grid-template-columns: 1fr 1fr 0.2fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
 }

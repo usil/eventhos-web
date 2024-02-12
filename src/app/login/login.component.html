@@ -25,7 +25,7 @@
                 </mat-error>
                 <mat-error
                   *ngIf="loginForm.get('username')?.hasError('minlength')"
-                  >At least 4 characters.
+                  >At least 5 characters.
                 </mat-error>
               </mat-form-field>
             </mat-grid-tile>
@@ -52,12 +52,9 @@
                   }}</mat-icon>
                 </button>
                 <mat-hint>Put your password</mat-hint>
-                <mat-error *ngIf="loginForm.get('password')?.hasError('pattern')"
-                  >Password should have at least 1 number and 1 uppercase.
-                </mat-error>
                 <mat-error
                   *ngIf="loginForm.get('password')?.hasError('minlength')"
-                  >At least 6 characters.
+                  >At least 5 characters.
                 </mat-error>
               </mat-form-field>
             </mat-grid-tile>

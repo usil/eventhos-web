@@ -29,11 +29,25 @@ export class ContractService {
     activeSort: string,
     order: string,
     pageIndex: number,
-    itemsPerPage: number
+    itemsPerPage: number,
+    filters?: {wordSearch: string}
   ) {
     let queryString = `?activeSort=${activeSort}&order=${order}&pageIndex=${pageIndex}&itemsPerPage=${itemsPerPage}`;
+    if (filters && filters?.wordSearch && filters?.wordSearch !== "") {
+      queryString += `&wordSearch=${filters.wordSearch}`;
+    }
     return this.http
       .get<ContractPaginationResult>(this.httpRoute + queryString)
+      .pipe(first());
+  }
+
+  findContractsByEventIdAndActionId(
+    eventId: number,
+    actionId: number
+  ) {
+    let path = `/event/${eventId}/action/${actionId}`;    
+    return this.http
+      .get<ContractResult>(this.httpRoute + path)
       .pipe(first());
   }
 
@@ -71,6 +85,12 @@ interface ContractPaginationContent {
   itemsPerPage: number;
   totalItems: number;
   totalPages: number;
+}
+
+interface ContractResult {
+  message: string;
+  code: number;
+  content: Contract[];
 }
 
 export interface CreateContractDto {

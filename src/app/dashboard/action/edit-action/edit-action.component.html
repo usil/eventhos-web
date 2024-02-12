@@ -19,7 +19,7 @@
           getErrorMessage("name")
         }}</mat-error>
       </mat-form-field>
-      <mat-form-field class="span-2" appearance="fill">
+      <!-- <mat-form-field class="span-2" appearance="fill">
         <mat-label>Operation</mat-label>
         <mat-select formControlName="operation">
           <mat-option
@@ -29,6 +29,19 @@
           >
         </mat-select>
         <mat-hint>Select the action operation type</mat-hint>
+        <mat-error *ngIf="editActionForm.get('operation')?.invalid">{{
+          getErrorMessage("operation")
+        }}</mat-error>
+      </mat-form-field> -->
+      <mat-form-field appearance="fill">
+        <mat-label>Operation</mat-label>
+        <input formControlName="operation" matInput type="text" [matAutocomplete]="auto"/>
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let operation of operations" [value]="operation">
+            {{operation}}
+          </mat-option>
+        </mat-autocomplete>
+        <mat-hint>Select or write the action operation type</mat-hint>
         <mat-error *ngIf="editActionForm.get('operation')?.invalid">{{
           getErrorMessage("operation")
         }}</mat-error>
@@ -128,10 +141,10 @@
         >
           <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
         </button>
-        <mat-hint>Put the client secret</mat-hint>
+        <mat-hint>The client_secret is a secret known only to the application and the authorization server</mat-hint>
         <mat-error *ngIf="editActionForm.get('clientSecret')?.invalid">{{
           getErrorMessage("clientSecret")
-        }}</mat-error>
+        }}</mat-error>        
       </mat-form-field>
       <h4
         *ngIf="editActionForm.get('securityType')?.value === 3"
@@ -200,11 +213,58 @@
       >
         Add header
       </button>
+
+      <div
+        *ngIf="['post','put','get','delete'].includes(editActionForm.get('method')?.value)"
+        class="span-4 radial-input"
+      >
+        <label>Input Type: </label>
+        <mat-radio-group formControlName="inputType">
+          <mat-radio-button value="raw">Raw</mat-radio-button>
+          <mat-radio-button value="function">Code</mat-radio-button>
+        </mat-radio-group>
+      </div>
       <h4
         *ngIf="
-          editActionForm.get('method')?.value === 'post' ||
-          editActionForm.get('method')?.value === 'put' ||
-          editActionForm.get('method')?.value === 'patch'
+          (['post','put','get','delete'].includes(editActionForm.get('method')?.value)) &&
+          editActionForm.get('inputType')?.value === 'function'
+        "
+        class="span-4"
+      >
+        Raw function body
+      </h4>
+      <mat-form-field
+        *ngIf="
+          (['post','put','get','delete'].includes(editActionForm.get('method')?.value)) &&
+          editActionForm.get('inputType')?.value === 'function'
+        "
+        class="span-4"
+        appearance="fill"
+      >
+        <mat-label>Raw function body</mat-label>
+        <textarea
+          #rawFunctionBody
+          id="action-raw-function-body"
+          (keydown)="tapKeyPressedInTextarea($event, rawFunctionBody)"
+          spellcheck="false"
+          [ngStyle]="{
+            height: '15rem',
+            'overflow-y': 'scroll',
+            resize: 'none',
+            'font-size': '18px'
+          }"
+          formControlName="rawFunctionBody"
+          matInput
+        ></textarea>
+        <mat-error *ngIf="editActionForm.get('rawFunctionBody')?.invalid">{{
+          getErrorMessage("rawFunctionBody")
+        }}</mat-error>
+      </mat-form-field>
+
+      <h4
+        *ngIf="
+          (['post','put','get','delete'].includes(editActionForm.get('method')?.value)) &&
+          editActionForm.get('inputType')?.value === 'raw'
         "
         class="span-4"
       >
@@ -212,10 +272,8 @@
       </h4>
       <mat-form-field
         *ngIf="
-          editActionForm.get('method')?.value === 'post' ||
-          editActionForm.get('method')?.value === 'put' ||
-          editActionForm.get('method')?.value === 'patch'
-
+          (['post','put','get','delete'].includes(editActionForm.get('method')?.value)) &&
+          editActionForm.get('inputType')?.value === 'raw'
         "
         class="span-4"
         appearance="fill"
@@ -223,6 +281,7 @@
         <mat-label>Raw Body</mat-label>
         <textarea
           #rawBody
+          id="action-raw-body"
           (keydown)="tapKeyPressedInTextarea($event, rawBody)"
           spellcheck="false"
           [ngStyle]="{
@@ -239,6 +298,8 @@
           getErrorMessage("rawBody")
         }}</mat-error>
       </mat-form-field>
+
+
       <h4 class="span-4">Query Url Params</h4>
       <div formArrayName="queryUrlParams" class="span-4">
         <div
@@ -275,6 +336,15 @@
       >
         Add url query param
       </button>
+      <h3 class="span-4">Reply to</h3>
+      <mat-form-field appearance="fill">
+        <mat-label>Reply to</mat-label>
+        <input formControlName="reply_to" matInput placeholder="Event identifier" />
+        <mat-hint>Event identifier</mat-hint>
+        <mat-error *ngIf="editActionForm.get('reply_to')?.invalid">{{
+          getErrorMessage("reply_to")
+        }}</mat-error>
+      </mat-form-field>      
       <button
         [disabled]="editActionForm.invalid"
         type="submit"

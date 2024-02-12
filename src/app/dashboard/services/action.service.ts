@@ -22,9 +22,13 @@ export class ActionService {
     activeSort: string,
     order: string,
     pageIndex: number,
-    itemsPerPage: number
+    itemsPerPage: number,
+    filters?: {wordSearch: string}
   ) {
     let queryString = `?activeSort=${activeSort}&order=${order}&pageIndex=${pageIndex}&itemsPerPage=${itemsPerPage}`;
+    if (filters && filters.wordSearch && filters.wordSearch !== "") {
+      queryString += `&wordSearch=${filters.wordSearch}`;
+    }
     return this.http
       .get<ActionPaginationResult>(this.httpRoute + queryString)
       .pipe(first());
@@ -89,6 +93,8 @@ export interface CreateActionDto {
   queryUrlParams: { key: string; value: string | number }[];
   clientSecret?: string;
   clientId?: number;
+  rawFunctionBody: string;
+  reply_to: string;
 }
 
 export interface EditActionDto {
@@ -104,6 +110,7 @@ export interface EditActionDto {
   queryUrlParams: { key: string; value: string | number }[];
   clientSecret?: string;
   clientId?: number;
+  reply_to?: string;
 }
 
 export interface Action {
@@ -114,8 +121,13 @@ export interface Action {
   operation: string;
   description: string;
   deleted: boolean;
+  reply_to:string;
   created_at: Date;
   updated_at: Date;
+}
+
+export interface ActionWithSystem extends Action {
+  system_name: string
 }
 
 export interface FullAction {
@@ -126,7 +138,9 @@ export interface FullAction {
   operation: string;
   description: string;
   deleted: boolean;
+  reply_to:string;
   httpConfiguration: {
+    rawFunctionBody?: string;
     url: string;
     method: string;
     headers: Record<any, string | string[]>;

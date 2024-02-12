@@ -14,7 +14,10 @@ export class EventsLogsService {
     order: string,
     systemId?: number,
     fromTime?: string,
-    toTime?: string
+    toTime?: string,
+    idSearch?: string,
+    eventIdentifierSearch?: string,
+    state?: string
   ): Observable<ReceivedEventFullResponse> {
     const params: Record<string, any> = { pageIndex, order, itemsPerPage: 10 };
     if (systemId) {
@@ -23,6 +26,15 @@ export class EventsLogsService {
     if (fromTime && toTime) {
       params['fromTime'] = fromTime;
       params['toTime'] = toTime;
+    }
+    if(idSearch) {
+      params['idSearch'] = idSearch;
+    }
+    if(eventIdentifierSearch) {
+      params['eventIdentifierSearch'] = eventIdentifierSearch;
+    }
+    if(state) {
+      params['state'] = state;
     }
     return this.http
       .get<ReceivedEventFullResponse>(this.httpRoute, {

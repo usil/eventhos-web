@@ -15,7 +15,7 @@ fetch('/settings.json')
     environment.api = config.api;
   })
   .catch((error) => {
-    console.log(error);
+    // console.log(error);
   })
   .finally(() => {
     platformBrowserDynamic()
