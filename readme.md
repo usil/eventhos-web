@@ -70,10 +70,9 @@ Also you can use docker following [this](https://github.com/usil/eventhos-web/wi
 
 ## Usage
 
-The artifact **eventhos-api** is required to use this web. To start the api following one of these
+The main use case could be found [here](https://github.com/usil/eventhos-web/wiki/SendEvent)
 
-- https://github.com/usil/eventhos-api#manual-start-developers
-- https://github.com/usil/eventhos-api#manual-start-production
+A complete user guide is in the [wiki](https://github.com/usil/eventhos-web/wiki)
 
 ## Security
 
@@ -83,6 +82,11 @@ The authentication and authorization are managed by the api. Check [this](https:
 ## How to Contribute
 
 Check this https://github.com/usil/eventhos-api/wiki/Contributions
+
+## License
+
+[MIT](./LICENSE)
+
 
 ## Contributors
 
