@@ -10,9 +10,19 @@ Here a minimalist High Level Diagram
 
 To take a deep look into how eventhos works check the [documentation](https://github.com/usil/eventhos/wiki).
 
-> In this repository you will find the code of the web artifact called **eventhos-web**
+## How it works?
+
+Basically you have to identify the producers (webhooks) and consumers (apis). Then using th UI you can make a contract between the incoming event produced by a webhook (source system) to the rest api in in the target system. So with this you will have a real time integration between the producer and consumer systems without the complexity of kafka or similars.
+
+![image](https://github.com/usil/eventhos/assets/3322836/2fafd3ab-5ad0-4cd8-a413-78caa15069a2)
+
+More uses cases and deep explanation [here](https://github.com/usil/eventhos/wiki/Real-Use-Cases) and [here](https://github.com/usil/eventhos-web/wiki/SendEvent)
+
 
 ## Demo
+
+
+> In this repository you will find the code of the web artifact called **eventhos-web**. You will need the [api](https://github.com/usil/eventhos-api) to get all the eventhos platform ready to use or develop
 
 To build and start this platform you need knowledge about nodejs, mysql, angular, etc. To get your own version in less than 3 minutes, follow this guide:
 
