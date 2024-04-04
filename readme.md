@@ -2,7 +2,7 @@
 
 ## What is eventhos?
 
-Eventhos is an open source platform that some principles of Event Driven Architectures to improve the integration or choreography between company systems.
+Eventhos is an open source platform that applies event-driven architecture principles to allow the user to orchestrate their system integrations using a simple user interface instead of complicated publisher and subscriber source codes in applications. You only need webhooks and rest APIs to integrate all your systems.
 
 Here a minimalist High Level Diagram
 
@@ -10,9 +10,20 @@ Here a minimalist High Level Diagram
 
 To take a deep look into how eventhos works check the [documentation](https://github.com/usil/eventhos/wiki).
 
-In this repository you will find the code of the artifact called **eventhos-web**
+> In this repository you will find the code of the web artifact called **eventhos-web**
 
-## Technologies Used
+## Demo
+
+To build and start this platform you need knowledge about nodejs, mysql, angular, etc. To get your own version in less than 3 minutes, follow this guide:
+
+https://github.com/usil/eventhos?tab=readme-ov-file#usage-get-last-stable-version-default-secrets
+
+If you don't have errors, you will be able to see the home page at the `http://localhost:2110`
+
+![image](https://github.com/usil/eventhos-web/assets/3322836/07394895-047a-428c-8dbf-72175f40f45e)
+
+
+## Technologies
 
 - Angular 13
 - Webpack 5
@@ -23,7 +34,7 @@ In this repository you will find the code of the artifact called **eventhos-web*
 
 ## Environment variables
 
-Following the [third commandment](https://12factor.net/config) we use environment variables to handle the configurations
+Following the [third commandment of 12factor](https://12factor.net/config) we use environment variables to handle the configurations
 
 | Variable                             | Description                                    | Default Value |
 | ------------------------------------ | ---------------------------------------------- | ------------- |
@@ -32,10 +43,6 @@ Following the [third commandment](https://12factor.net/config) we use environmen
 Variables are defined in **src/settings.json**
 
 More details about configurations [here](https://github.com/usil/eventhos-web/wiki/settings).
-
-## Security
-
-The authentication and authorization are managed by the api. Check [this](https://github.com/usil/eventhos-api#security) to get the login credentials
 
 ## Manual start (developers)
 
@@ -59,6 +66,8 @@ npm run start
 ```
 By default the app runs in the **2110** port.
 
+Also you can use docker following [this](https://github.com/usil/eventhos-web/wiki/deployment_docker) guide
+
 ## Usage
 
 The artifact **eventhos-api** is required to use this web. To start the api following one of these
@@ -66,7 +75,12 @@ The artifact **eventhos-api** is required to use this web. To start the api foll
 - https://github.com/usil/eventhos-api#manual-start-developers
 - https://github.com/usil/eventhos-api#manual-start-production
 
-## Contributions
+## Security
+
+The authentication and authorization are managed by the api. Check [this](https://github.com/usil/eventhos-api#security) to get the login credentials
+
+
+## How to Contribute
 
 Check this https://github.com/usil/eventhos-api/wiki/Contributions
 
