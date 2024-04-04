@@ -19,6 +19,21 @@ Basically you have to identify the producers (webhooks) and consumers (apis). Th
 More uses cases and deep explanation [here](https://github.com/usil/eventhos/wiki/Real-Use-Cases) and [here](https://github.com/usil/eventhos-web/wiki/SendEvent)
 
 
+## Features
+
+- Register all systems (producers and  consumers)
+- Create contracts between your systems
+- Ouath2 Security
+- Manuel retry  on error
+- Event Dashboard to see the received events and all the details (request/response)
+- Reply-To option
+- Json binding to match between the webhook json and target api json
+- Vanilla javascript to binding to match between the webhook json and target api json
+- Mail on error with the details
+- User Management
+
+More details [here](https://github.com/usil/eventhos/wiki/Features)
+
 ## Demo
 
 
