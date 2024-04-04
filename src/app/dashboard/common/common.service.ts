@@ -66,7 +66,7 @@ export class CommonService {
     //TODO: tld used in mails could be more than 10 chars length  and there is no limit of levels
     // improve this regex
     
-    if (control.value.search(/^[a-zA-Z_\d\.]+@[a-zA-Z_\.]+?\.[a-zA-Z]{2,10}(\s*,\s*[a-zA-Z_\d\.]+@[a-zA-Z_\.]+?\.[a-zA-Z\.]{2,10})*$/) < 0) {
+    if (control.value.search(/^[a-zA-Z_\d\.]+@[a-zA-Z_\-\.]+?\.[a-zA-Z]{2,10}(\s*,\s*[a-zA-Z_\d\.]+@[a-zA-Z_\-\.]+?\.[a-zA-Z\.]{2,10})*$/) < 0) {
       return { invalidMailsPattern: "It should contains valid emails separated with comas"};
     }
 
