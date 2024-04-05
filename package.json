@@ -1,6 +1,7 @@
 {
   "name": "eventhos-web",
   "version": "1.0.1",
+  "description": "The web of eventhos platform",
   "scripts": {
     "ng": "ng",
     "dev": "ng serve",
