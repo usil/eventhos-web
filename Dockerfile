@@ -1,4 +1,4 @@
-FROM node:14
+FROM node:20.12.2
 WORKDIR /app
 COPY . ./
 RUN git config --system url."https://github".insteadOf "git://github"

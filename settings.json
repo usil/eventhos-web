@@ -1,4 +1,5 @@
 {
   "title": "Eventhos",
-  "api": "${EVENTHOS_API_BASE_URL}"
+  "api": "${EVENTHOS_API_BASE_URL}",
+  "rawSensibleParams": "${RAW_SENSIBLE_PARAMS}"
 }
