@@ -13,6 +13,7 @@ fetch('/settings.json')
   .then((config) => {
     environment.title = config.title;
     environment.api = config.api;
+    environment.rawSensibleParams = config.rawSensibleParams;
   })
   .catch((error) => {
     // console.log(error);

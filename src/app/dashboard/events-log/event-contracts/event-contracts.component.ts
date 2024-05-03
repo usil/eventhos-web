@@ -1,3 +1,4 @@
+import { NgModule } from '@angular/core';
 import {
   EventsLogsService,
   ReceivedEvent,
@@ -49,10 +50,6 @@ export class EventContractsComponent implements OnInit {
     } else {
       this.router.navigate(['/dashboard/events-logs']);
     }
-  }
-
-  parseJson(objToParse: Record<string, any>) {
-    return JSON.stringify(objToParse, null, 4);
   }
 
   ngOnInit(): void {}

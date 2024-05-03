@@ -22,9 +22,8 @@
         <mat-label>Received request</mat-label>
         <textarea
           disabled
-          [value]="parseJson(receivedEvent.received_request)"
           matInput
-        ></textarea>
+        >{{ receivedEvent.received_request | safeJson }}</textarea>
       </mat-form-field>
     </mat-card-content>
   </mat-card>

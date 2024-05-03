@@ -6,7 +6,7 @@ import {
 } from '@angular/material/datepicker';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LOCALE_ID, NgModule } from '@angular/core';
-import { CommonModule, JsonPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { DashboardComponent } from './dashboard.component';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashBoardMaterials } from './material/material.module';
@@ -78,7 +78,7 @@ import { UserProfileComponent as AuthUserProfileComponent } from './auth/user-pr
 import { ClipboardModule } from 'ngx-clipboard';
 import { HttpClientModule } from '@angular/common/http';
 import { ChangePasswordComponent } from './auth/user-profile/change-password/change-password.component';
-
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -136,7 +136,8 @@ import { ChangePasswordComponent } from './auth/user-profile/change-password/cha
     // UserProfileComponent,
     AuthUserProfileComponent,
     ChangePasswordComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    
   ],
   imports: [
     CommonModule,
@@ -148,7 +149,8 @@ import { ChangePasswordComponent } from './auth/user-profile/change-password/cha
     MatMomentDateModule,
     MatDatepickerModule,
     ClipboardModule,
-    HttpClientModule
+    HttpClientModule,
+    SharedModule
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'es-PE' },
@@ -159,6 +161,6 @@ import { ChangePasswordComponent } from './auth/user-profile/change-password/cha
       deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
     },
     { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
-  ],
+  ]
 })
 export class DashboardModule {}

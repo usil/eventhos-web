@@ -6,6 +6,7 @@ export const environment = {
   title: '',
   production: false,
   api: '',
+  rawSensibleParams: '',
 };
 
 /*
